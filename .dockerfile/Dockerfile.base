@@ -1,0 +1,8 @@
+FROM python:3.7.3-slim
+ENV LANG C.UTF-8
+RUN apt -y update &&\
+    apt -y dist-upgrade
+RUN apt -y install gcc nginx supervisor
+
+COPY .requirements /tmp/requirements
+RUN pip3 install -r /tmp/requirements/production.txt

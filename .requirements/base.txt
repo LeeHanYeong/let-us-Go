@@ -1,0 +1,20 @@
+# Django
+django
+django-ckeditor
+django-json-secrets
+django-modeladmin-reorder
+django-phonenumber-field
+django-sass-processor
+django-storages
+
+# DRF
+djangorestframework
+drf-writable-nested
+
+# DB
+psycopg2-binary
+
+# Others
+jinja2
+pillow
+phonenumberslite

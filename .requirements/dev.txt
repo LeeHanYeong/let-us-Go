@@ -1,0 +1,9 @@
+-r ./production.txt
+
+# Django
+django-compressor
+django-debug-toolbar
+django-extensions
+
+# Others
+libsass
