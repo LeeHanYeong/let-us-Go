@@ -6,5 +6,8 @@ django-debug-toolbar
 django-extensions
 django-sslserver
 
+# AWS
+awsebcli
+
 # Others
 libsass
