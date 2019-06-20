@@ -57,7 +57,19 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    )
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'djangorestframework_camel_case.parser.CamelCaseFormParser',
+        'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 # AWS
@@ -111,6 +123,7 @@ CKEDITOR_CONFIGS = {
 INSTALLED_APPS = [
     'members.apps.MembersConfig',
     'seminars.apps.SeminarsConfig',
+    'sponsors.apps.SponsorsConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -120,8 +133,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_extensions',
+    'django_filters',
+    'drf_yasg',
     'markdownx',
     'rest_framework',
+    'rest_framework.authtoken',
     'phonenumber_field',
     'sass_processor',
 ]
@@ -142,7 +158,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-
+            TEMPLATES_DIR,
         ],
         'APP_DIRS': True,
         'OPTIONS': {

@@ -4,6 +4,7 @@
 django-compressor
 django-debug-toolbar
 django-extensions
+django-sslserver
 
 # Others
 libsass

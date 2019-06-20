@@ -1,4 +1,5 @@
 /app/kakao_zipcode
+.sass-cache/
 
 # ignore directories
 /.secrets

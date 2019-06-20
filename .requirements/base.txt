@@ -1,6 +1,7 @@
 # Django
 django
 django-ckeditor
+django-filter
 django-json-secrets
 django-markdownx
 django-modeladmin-reorder
@@ -10,7 +11,9 @@ django-storages
 
 # DRF
 djangorestframework
+djangorestframework-camel-case
 drf-writable-nested
+drf-yasg
 
 # DB
 psycopg2-binary

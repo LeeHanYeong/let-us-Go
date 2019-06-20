@@ -8,7 +8,7 @@ User = get_user_model()
 
 class Seminar(TimeStampedModel):
     name = models.CharField('세미나명', max_length=100)
-    start_at = models.DateTimeField('세미나 시작일시', blank=True, null=True)
+    start_at = models.DateTimeField('세미나 시작일시', blank=True, null=True, db_index=True)
     end_at = models.DateTimeField('세미나 종료일시', blank=True, null=True)
     address1 = models.CharField('주소', max_length=200, help_text='도로명/지번 주소')
     address2 = models.CharField('상세주소', max_length=100, help_text='건물명/층/호수/상세장소 등')
@@ -22,6 +22,7 @@ class Seminar(TimeStampedModel):
     class Meta:
         verbose_name = '세미나'
         verbose_name_plural = f'{verbose_name} 목록'
+        ordering = ('-start_at',)
 
 
 class Session(TimeStampedModel):

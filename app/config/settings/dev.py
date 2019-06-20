@@ -11,6 +11,7 @@ ALLOWED_HOSTS += [
 WSGI_APPLICATION = 'config.wsgi.dev.application'
 INSTALLED_APPS += [
     'debug_toolbar',
+    'sslserver',
 ]
 MIDDLEWARE += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',

@@ -15,14 +15,44 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from drf_yasg import openapi
+from drf_yasg.renderers import ReDocRenderer as BaseReDocRenderer, OpenAPIRenderer
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
 admin.site.site_title = 'let us:Go!'
 admin.site.site_header = 'let us:Go! 관리자 페이지'
 
+BaseSchemaView = get_schema_view(
+    openapi.Info(
+        title='let us: Go! API',
+        default_version='v1',
+        description='let us: Go! API Documentation',
+        contact=openapi.Contact(email='dev@lhy.kr'),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
+
+class ReDocRenderer(BaseReDocRenderer):
+    template = 'docs/redoc.html'
+
+
+class RedocSchemaView(BaseSchemaView):
+    renderer_classes = (ReDocRenderer, OpenAPIRenderer)
+
+
+urlpatterns_apis_v1 = [
+    path('seminars/', include('seminars.urls')),
+]
 urlpatterns = [
+    re_path(r'^redoc/$', RedocSchemaView.as_cached_view(cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
+
+    path('api/v1/', include(urlpatterns_apis_v1)),
 ]
 if settings.DEBUG:
     try:
