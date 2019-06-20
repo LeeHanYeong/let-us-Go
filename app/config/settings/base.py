@@ -36,12 +36,12 @@ STATICFILES_DIRS = [STATIC_DIR]
 # Auth
 AUTH_USER_MODEL = 'members.User'
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
     'members.backends.SettingsBackend',
 ]
 DEFAULT_USERS = {
     'dev@lhy.kr': {
-        'password': 'pbkdf2_sha256$120000$6bRc6EXjatPi$KjmUANv30sG+5rJBeozHndl2EEw2aLGoCdpkpDSRArk=',
+        'password': 'pbkdf2_sha256$150000$89oDFBSARLc8$Jsv1BlODbmILIiENOq3/2cvQM4663zW+clxzm52Fo28=',
         'last_name': '이',
         'first_name': '한영',
         'type': 'email',
@@ -110,6 +110,7 @@ CKEDITOR_CONFIGS = {
 # Application definition
 INSTALLED_APPS = [
     'members.apps.MembersConfig',
+    'seminars.apps.SeminarsConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -119,6 +120,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_extensions',
+    'markdownx',
     'rest_framework',
     'phonenumber_field',
     'sass_processor',

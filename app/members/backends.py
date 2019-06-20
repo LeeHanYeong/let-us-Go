@@ -10,17 +10,22 @@ __all__ = (
 
 
 class SettingsBackend:
-    def authenticate(self, request, email=None, password=None):
-        email_valid = email in settings.DEFAULT_USERS.keys()
-        user_dict = settings.DEFAULT_USERS.get(email, {})
+    def authenticate(self, request, username=None, password=None):
+        email_valid = username in settings.DEFAULT_USERS.keys()
+        user_dict = settings.DEFAULT_USERS.get(username, {})
 
         password_valid = check_password(password, user_dict.get('password', ''))
         if email_valid and password_valid:
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get(email=username)
             except User.DoesNotExist:
-                user = User(email=email, **user_dict)
-                user.save()
+                user = User.objects.update_or_create(
+                    email=username,
+                    defaults={
+                        'username': username,
+                        **user_dict,
+                    }
+                )[0]
             return user
         return None
 

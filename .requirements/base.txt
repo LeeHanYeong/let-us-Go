@@ -2,6 +2,7 @@
 django
 django-ckeditor
 django-json-secrets
+django-markdownx
 django-modeladmin-reorder
 django-phonenumber-field
 django-sass-processor
