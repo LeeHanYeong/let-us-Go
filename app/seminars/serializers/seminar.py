@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from members.serializers import UserSerializer
 from ..models import Seminar, Session
 
 
@@ -19,6 +20,8 @@ class SeminarSerializer(serializers.ModelSerializer):
 
 
 class SessionSerializer(serializers.ModelSerializer):
+    speaker = UserSerializer()
+
     class Meta:
         model = Session
         fields = (
@@ -55,6 +58,8 @@ class SeminarDetailSerializer(serializers.ModelSerializer):
 
 
 class SessionDetailSerializer(serializers.ModelSerializer):
+    speaker = UserSerializer()
+
     class Meta:
         model = Session
         fields = (
