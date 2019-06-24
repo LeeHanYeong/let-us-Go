@@ -3,15 +3,11 @@
         {
             "essential": true,
             "image": "azelf/letusgo:nginx",
-            "memory": 1024,
+            "memory": 300,
             "mountPoints": [
                 {
                     "containerPath": "/srv/project/.static",
                     "sourceVolume": "Static"
-                },
-                {
-                    "containerPath": "/etc/nginx/conf.d/custom.conf",
-                    "sourceVolume": "__DockerfileNginxNginx_Settings_Conf"
                 }
             ],
             "name": "nginx",
@@ -19,22 +15,21 @@
                 {
                     "containerPort": 80,
                     "hostPort": 80
-                },
-                {
-                    "containerPort": 443,
-                    "hostPort": 443
                 }
+            ],
+            "links": [
+                "web"
             ]
         },
         {
             "command": [
                 "bash",
                 "-c",
-                "python3 manage.py collectstatic --noinput && gunicorn config.wsgi.production:application --bind 0.0.0.0:8000 --chdir /srv/project/app"
+                "python3 manage.py collectstatic --noinput && gunicorn config.wsgi.production:application --bind 0.0.0.0:8000 --chdir /srv/project/app --access-logfile /var/log/gunicorn-access.log --error-logfile /var/log/gunicorn-error.log"
             ],
             "essential": true,
             "image": "347809506342.dkr.ecr.ap-northeast-2.amazonaws.com/letusgo:django",
-            "memory": 1024,
+            "memory": 400,
             "mountPoints": [
                 {
                     "containerPath": "/srv/project/.static",
@@ -51,12 +46,7 @@
                 "sourcePath": "static"
             },
             "name": "Static"
-        },
-        {
-            "host": {
-                "sourcePath": "./.dockerfile/nginx/nginx.settings.conf"
-            },
-            "name": "__DockerfileNginxNginx_Settings_Conf"
         }
-    ]
+    ],
+    "AWSEBDockerrunVersion": 2
 }

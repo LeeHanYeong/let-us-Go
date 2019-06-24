@@ -3,24 +3,24 @@ version: '2.4'
 services:
   web:
     image: "347809506342.dkr.ecr.ap-northeast-2.amazonaws.com/letusgo:django"
+    restart: always
     command: >
       bash -c "python3 manage.py collectstatic --noinput &&
-      gunicorn config.wsgi.production:application --bind 0.0.0.0:8000 --chdir /srv/project/app"
+      gunicorn config.wsgi.production:application --bind 0.0.0.0:8000 --chdir /srv/project/app --access-logfile /var/log/gunicorn-access.log --error-logfile /var/log/gunicorn-error.log"
     expose:
       - 8000
     volumes:
       - static:/srv/project/.static
-    mem_limit: 1g
+    mem_limit: 400m
 
   nginx:
     image: azelf/letusgo:nginx
+    restart: always
     volumes:
       - static:/srv/project/.static
-      - "./.dockerfile/nginx/nginx.settings.conf:/etc/nginx/conf.d/custom.conf"
     ports:
       - 80:80
-      - 443:443
-    mem_limit: 1g
+    mem_limit: 300m
     depends_on:
       - web
 
