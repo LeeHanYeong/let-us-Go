@@ -14,11 +14,6 @@ DEBUG = False or (
         and platform.system() != 'Linux'
 )
 
-# SSL
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE = True
-
 # WSGI
 WSGI_APPLICATION = 'config.wsgi.production.application'
 
@@ -66,3 +61,11 @@ def get_linux_ec2_private_ip():
 private_ip = get_linux_ec2_private_ip()
 if private_ip:
     ALLOWED_HOSTS.append(private_ip)
+
+    # SSL
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+else:
+    DEBUG = True
+    ALLOWED_HOSTS.append('localhost')

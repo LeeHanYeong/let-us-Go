@@ -1,6 +1,7 @@
 # Django
 django
 django-ckeditor
+django-extensions
 django-filter
 django-json-secrets
 django-markdownx
