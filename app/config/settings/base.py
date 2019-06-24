@@ -124,6 +124,7 @@ INSTALLED_APPS = [
     'members.apps.MembersConfig',
     'seminars.apps.SeminarsConfig',
     'sponsors.apps.SponsorsConfig',
+    'utils',
 
     'django.contrib.admin',
     'django.contrib.auth',
