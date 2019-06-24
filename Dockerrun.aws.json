@@ -1,0 +1,62 @@
+{
+    "containerDefinitions": [
+        {
+            "essential": true,
+            "image": "azelf/letusgo:nginx",
+            "memory": 1024,
+            "mountPoints": [
+                {
+                    "containerPath": "/srv/project/.static",
+                    "sourceVolume": "Static"
+                },
+                {
+                    "containerPath": "/etc/nginx/conf.d/custom.conf",
+                    "sourceVolume": "__DockerfileNginxNginx_Settings_Conf"
+                }
+            ],
+            "name": "nginx",
+            "portMappings": [
+                {
+                    "containerPort": 80,
+                    "hostPort": 80
+                },
+                {
+                    "containerPort": 443,
+                    "hostPort": 443
+                }
+            ]
+        },
+        {
+            "command": [
+                "bash",
+                "-c",
+                "python3 manage.py collectstatic --noinput && gunicorn config.wsgi.production:application --bind 0.0.0.0:8000 --chdir /srv/project/app"
+            ],
+            "essential": true,
+            "image": "347809506342.dkr.ecr.ap-northeast-2.amazonaws.com/letusgo:django",
+            "memory": 1024,
+            "mountPoints": [
+                {
+                    "containerPath": "/srv/project/.static",
+                    "sourceVolume": "Static"
+                }
+            ],
+            "name": "web"
+        }
+    ],
+    "family": "",
+    "volumes": [
+        {
+            "host": {
+                "sourcePath": "static"
+            },
+            "name": "Static"
+        },
+        {
+            "host": {
+                "sourcePath": "./.dockerfile/nginx/nginx.settings.conf"
+            },
+            "name": "__DockerfileNginxNginx_Settings_Conf"
+        }
+    ]
+}

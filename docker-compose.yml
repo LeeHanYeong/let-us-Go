@@ -1,0 +1,28 @@
+version: '2.4'
+
+services:
+  web:
+    image: "347809506342.dkr.ecr.ap-northeast-2.amazonaws.com/letusgo:django"
+    command: >
+      bash -c "python3 manage.py collectstatic --noinput &&
+      gunicorn config.wsgi.production:application --bind 0.0.0.0:8000 --chdir /srv/project/app"
+    expose:
+      - 8000
+    volumes:
+      - static:/srv/project/.static
+    mem_limit: 1g
+
+  nginx:
+    image: azelf/letusgo:nginx
+    volumes:
+      - static:/srv/project/.static
+      - "./.dockerfile/nginx/nginx.settings.conf:/etc/nginx/conf.d/custom.conf"
+    ports:
+      - 80:80
+      - 443:443
+    mem_limit: 1g
+    depends_on:
+      - web
+
+volumes:
+  static:

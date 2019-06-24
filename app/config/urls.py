@@ -20,6 +20,7 @@ from drf_yasg import openapi
 from drf_yasg.renderers import ReDocRenderer as BaseReDocRenderer, OpenAPIRenderer
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from . import views
 
 admin.site.site_title = 'let us:Go!'
 admin.site.site_header = 'let us:Go! 관리자 페이지'
@@ -47,12 +48,16 @@ class RedocSchemaView(BaseSchemaView):
 urlpatterns_apis_v1 = [
     path('seminars/', include('seminars.urls')),
 ]
+urlpatterns_apis = [
+    path('v1/', include(urlpatterns_apis_v1)),
+]
 urlpatterns = [
     re_path(r'^redoc/$', RedocSchemaView.as_cached_view(cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
+    path('', views.IndexView.as_view(), name='index'),
 
-    path('api/v1/', include(urlpatterns_apis_v1)),
+    path('api/', include(urlpatterns_apis)),
 ]
 if settings.DEBUG:
     try:
