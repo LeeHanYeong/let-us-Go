@@ -20,6 +20,9 @@ WSGI_APPLICATION = 'config.wsgi.production.application'
 # Static
 DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
 
+# django-cors-headers
+CORS_ORIGIN_ALLOW_ALL = True
+
 # Sentry
 sentry_sdk.init(
     dsn=secrets['SENTRY_DSN'],
