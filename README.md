@@ -1,5 +1,13 @@
 # let us:Go!
 
+## API 설명
+
+### Authentication
+
+
+
+
+
 ## Trouble shooting
 
 ### RDS Database생성시
