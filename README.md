@@ -4,7 +4,7 @@
 
 ### Authentication
 
-사용자 인증이 필요한 경우, Token인증을 사용합니다. Token인증에는 아래 라이브러리를 사용하고 있습니다.
+사용자 인증이 필요한 경우, Token인증을 사용합니다. Token인증에는 아래 라이브러리를 사용하고 있습니다.  
 [DRF Authentication - Token](https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication)
 
 
@@ -16,9 +16,9 @@
 
 ```json
 {
-	"username": "string",
-	"email": "user@example.com",
-	"password": "string"
+  "username": "string",
+  "email": "user@example.com",
+  "password": "string"
 }
 ```
 
