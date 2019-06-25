@@ -12,6 +12,7 @@ django-storages
 
 # DRF
 djangorestframework
+djangorestframework-api-key
 djangorestframework-camel-case
 django-cors-headers
 django-oauth-toolkit
