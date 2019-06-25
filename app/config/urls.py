@@ -55,7 +55,7 @@ urlpatterns = [
     re_path(r'^redoc/$', RedocSchemaView.as_cached_view(cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
-    path('health-check/', views.HealthCheckView.as_view(), name='health-check'),
+    path('health/', views.HealthCheckView.as_view(), name='health-check'),
     path('', views.IndexView.as_view(), name='index'),
 
     path('api/', include(urlpatterns_apis)),

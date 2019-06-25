@@ -6,6 +6,7 @@ import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--build', action='store_true')
+parser.add_argument('--run', action='store_true')
 args = parser.parse_args()
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +27,13 @@ if __name__ == '__main__':
     run('docker push azelf/letusgo:base')
     if args.build:
         exit(0)
+
     run('python app/manage.py collectstatic --noinput')
+    if args.run:
+        run('docker build -t letusgo .')
+        run('docker run --rm -it -p 8000:80 letusgo')
+        exit(0)
+
     run('git add -A')
     run('git add -f .secrets/')
     run('git add -f .static/')

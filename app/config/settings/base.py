@@ -22,6 +22,8 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 SECRETS_DIR = os.path.join(ROOT_DIR, '.secrets')
+LOG_DIR = os.path.join(ROOT_DIR, '.log')
+os.makedirs(LOG_DIR, exist_ok=True)
 import_secrets()
 
 ALLOWED_HOSTS = []
@@ -203,3 +205,45 @@ TIME_ZONE = 'Asia/Seoul'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+LOGGING = {
+    'version': 1,
+    'formatters': {
+        'default': {
+            'format': '[%(levelname)s] %(name)s (%(asctime)s)\n\t%(message)s'
+        },
+    },
+    'handlers': {
+        'file_error': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'ERROR',
+            'filename': os.path.join(LOG_DIR, 'error.log'),
+            'formatter': 'default',
+            'maxBytes': 1048576,
+            'backupCount': 10,
+        },
+        'file_info': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'INFO',
+            'filename': os.path.join(LOG_DIR, 'info.log'),
+            'formatter': 'default',
+            'maxBytes': 1048576,
+            'backupCount': 10,
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'INFO',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': [
+                'file_error',
+                'file_info',
+                'console',
+            ],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    }
+}
