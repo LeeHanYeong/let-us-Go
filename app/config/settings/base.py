@@ -63,6 +63,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ),
     'DEFAULT_PARSER_CLASSES': (
         'djangorestframework_camel_case.parser.CamelCaseFormParser',
@@ -72,6 +73,12 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework_api_key.permissions.HasAPIKey',
+    # ],
+    'JSON_UNDERSCOREIZE': {
+        'no_underscore_before_number': True,
+    },
 }
 
 # AWS
@@ -123,6 +130,7 @@ CKEDITOR_CONFIGS = {
 
 # Application definition
 INSTALLED_APPS = [
+    'attends.apps.AttendsConfig',
     'members.apps.MembersConfig',
     'seminars.apps.SeminarsConfig',
     'sponsors.apps.SponsorsConfig',
@@ -138,14 +146,20 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'drf_yasg',
+    'corsheaders',
     'markdownx',
+    'rest_auth',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_api_key',
+    'oauth2_provider',
     'phonenumber_field',
     'sass_processor',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

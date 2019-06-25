@@ -19,3 +19,6 @@ MIDDLEWARE += [
 
 # django-debug-toolbar
 INTERNAL_IPS = ['127.0.0.1']
+
+# django-cors-headers
+CORS_ORIGIN_ALLOW_ALL = True

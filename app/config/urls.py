@@ -46,6 +46,8 @@ class RedocSchemaView(BaseSchemaView):
 
 
 urlpatterns_apis_v1 = [
+    re_path(r'rest-auth/', include('rest_auth.urls')),
+    path('members/', include('members.urls')),
     path('seminars/', include('seminars.urls')),
 ]
 urlpatterns_apis = [
@@ -53,6 +55,8 @@ urlpatterns_apis = [
 ]
 urlpatterns = [
     re_path(r'^redoc/$', RedocSchemaView.as_cached_view(cache_timeout=0), name='schema-redoc'),
+    re_path(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
     path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
     path('health/', views.HealthCheckView.as_view(), name='health-check'),

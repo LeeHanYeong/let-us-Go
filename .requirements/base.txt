@@ -13,6 +13,9 @@ django-storages
 # DRF
 djangorestframework
 djangorestframework-camel-case
+django-cors-headers
+django-oauth-toolkit
+django-rest-auth
 drf-writable-nested
 drf-yasg
 
