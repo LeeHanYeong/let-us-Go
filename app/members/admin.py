@@ -16,7 +16,7 @@ class UserAdmin(BaseUserAdmin):
         }),
         ('개인정보', {
             'fields': (
-                'first_name', 'last_name', 'phone_number',
+                'first_name', 'last_name', 'nickname', 'phone_number',
             )
         }),
         ('권한', {

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser, UserManager as BaseUserManager
+from django.core.exceptions import ValidationError
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
@@ -7,7 +8,12 @@ from utils.models import DeleteModel, DeleteModelManager
 
 
 class UserManager(DeleteModelManager, BaseUserManager):
-    pass
+    def create_user(self, email, username=None, password=None, **extra_fields):
+        if extra_fields.get('type') == User.TYPE_EMAIL:
+            username = email
+        elif username is None:
+            raise ValidationError('사용자 생성 필수값(username)이 주어지지 않았습니다')
+        return super().create_user(username, email, password, **extra_fields)
 
 
 class User(AbstractUser, TimeStampedModel, DeleteModel):
@@ -18,7 +24,8 @@ class User(AbstractUser, TimeStampedModel, DeleteModel):
         (TYPE_EMAIL, '이메일'),
     )
     type = models.CharField('유형', max_length=10, choices=TYPE_CHOICES, default=TYPE_EMAIL)
-    nickname = models.CharField('닉네임', max_length=20, unique=True, null=True)
+    nickname = models.CharField('닉네임', max_length=20, unique=True)
+    email = models.EmailField('이메일', unique=True)
     phone_number = PhoneNumberField('전화번호', blank=True)
 
     REQUIRED_FIELDS = ('email',)

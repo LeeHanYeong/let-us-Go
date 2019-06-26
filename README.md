@@ -1,5 +1,12 @@
 # let us:Go!
 
+## API Update
+
+- 190626
+  - UserAttribute AvailableCheck (회원가입시 속성가능여부(중복체크)) API추가
+
+
+
 ## API 설명
 
 ### Authentication

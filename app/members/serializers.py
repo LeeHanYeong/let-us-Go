@@ -15,6 +15,11 @@ class UserSerializer(serializers.ModelSerializer):
             'phone_number',
         )
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['phone_number'] = instance.phone_number.as_national
+        return ret
+
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(help_text='비밀번호')
@@ -31,6 +36,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'email',
             'phone_number',
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].required = False
 
     def validate(self, data):
         if not data.get('nickname'):
@@ -57,3 +66,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'email',
             'phone_number',
         )
+
+    def to_representation(self, instance):
+        return UserSerializer(instance).data
+
+
+class UserAttributeAvailableSerializer(serializers.Serializer):
+    attribute_name = serializers.CharField()
+    value = serializers.CharField()
