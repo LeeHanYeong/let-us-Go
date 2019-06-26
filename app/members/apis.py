@@ -1,4 +1,5 @@
 from django.utils.decorators import method_decorator
+from drf_yasg.openapi import Response as APIResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -17,8 +18,17 @@ from .serializers import (
     name='post',
     decorator=swagger_auto_schema(
         operation_summary='UserAttribute Available Check',
-        operation_description='사용자 생성 시 속성값 사용가능(중복)여부 체크'
-    )
+        operation_description='사용자 생성 시 속성값 사용가능(중복)여부 체크',
+        responses={
+            status.HTTP_200_OK: APIResponse(
+                description='',
+                examples={
+                    'application/json': {
+                        'exists': True,
+                    }}
+            ),
+        }
+    ),
 )
 class UserAttributeAvailableAPIView(generics.GenericAPIView):
     queryset = User.objects.all()
@@ -44,7 +54,10 @@ class UserAttributeAvailableAPIView(generics.GenericAPIView):
     name='post',
     decorator=swagger_auto_schema(
         operation_summary='User Create',
-        operation_description='사용자 생성'
+        operation_description='사용자 생성',
+        responses={
+            status.HTTP_200_OK: UserSerializer(),
+        }
     )
 )
 class UserCreateAPIView(generics.CreateAPIView):
@@ -67,7 +80,10 @@ class UserCreateAPIView(generics.CreateAPIView):
     name='patch',
     decorator=swagger_auto_schema(
         operation_summary='User Update',
-        operation_description='사용자 정보 수정'
+        operation_description='사용자 정보 수정',
+        responses={
+            status.HTTP_200_OK: UserSerializer(),
+        }
     )
 )
 @method_decorator(
