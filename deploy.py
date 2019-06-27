@@ -28,7 +28,6 @@ if __name__ == '__main__':
     if args.build:
         exit(0)
 
-    # run('python app/manage.py collectstatic --noinput')
     if args.run:
         run('docker build -t letusgo .')
         run('docker run --rm -it -p 8000:80 --name letusgo letusgo')

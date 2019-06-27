@@ -23,7 +23,9 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 SECRETS_DIR = os.path.join(ROOT_DIR, '.secrets')
 LOG_DIR = os.path.join(ROOT_DIR, '.log')
+TEMP_DIR = os.path.join(ROOT_DIR, '.temp')
 os.makedirs(LOG_DIR, exist_ok=True)
+os.makedirs(TEMP_DIR, exist_ok=True)
 import_secrets()
 
 ALLOWED_HOSTS = []
@@ -96,6 +98,9 @@ AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_REGION_NAME = 'ap-northeast-2'
 AWS_DEFAULT_ACL = None
 
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 # Date/Time Format
 DATE_FORMAT = 'Y-m-d'
 DATETIME_FORMAT = 'Y-m-d'
@@ -152,10 +157,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
 
     'adminsortable2',
     'django_extensions',

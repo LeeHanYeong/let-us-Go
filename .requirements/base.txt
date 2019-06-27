@@ -1,7 +1,6 @@
 # Django
 django
 django-admin-sortable2
-django-allauth
 django-ckeditor
 django-extensions
 django-filter
@@ -24,6 +23,8 @@ drf-yasg
 
 # DB
 psycopg2-binary
+
+# Google
 
 # Others
 jinja2

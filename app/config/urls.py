@@ -71,7 +71,6 @@ urlpatterns_apis = [
     path('v1/', include(urlpatterns_apis_v1)),
 ]
 urlpatterns = [
-    re_path(r'^accounts/', include('allauth.urls')),
     re_path(r'^doc/$', RedocSchemaView.as_cached_view(cache_timeout=0), name='schema-redoc'),
     re_path(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 

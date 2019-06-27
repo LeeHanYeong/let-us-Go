@@ -11,4 +11,6 @@ awsebcli
 container-transform
 
 # Others
+ipython
+notebook
 libsass

@@ -1,6 +1,9 @@
+import string
+
 from django.contrib.auth.models import AbstractUser, UserManager as BaseUserManager
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.crypto import get_random_string
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -52,3 +55,15 @@ class User(AbstractUser, TimeStampedModel, DeleteModel):
         deleted_name = f'deleted_{deleted_count:05d}'
         self.username = deleted_name
         self.nickname = deleted_name
+
+
+class EmailValidation(TimeStampedModel):
+    user = models.OneToOneField(
+        User, verbose_name='사용자', on_delete=models.CASCADE, blank=True, null=True)
+    email = models.EmailField('이메일')
+    code = models.CharField('인증코드', max_length=50)
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = get_random_string(6, allowed_chars=string.digits)
+        super().save(*args, **kwargs)
