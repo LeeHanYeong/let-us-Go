@@ -2,6 +2,18 @@
 
 ## API Update
 
+- 190627
+  - Track추가
+    - Seminar List, Seminar Detail의 Reponse변경
+  - Seminar의 속성 삭제, 추가
+    - [삭제] sessionSet
+    - [추가] trackSet
+    - [삭제] entryFee -> Track으로 이동
+  - Attend의 속성 삭제, 변경, 추가
+    - [삭제] seminar
+    - [추가] track
+    - [변경] type -> discountType (할인 구분 [일반, 학생])
+    - [추가] applicantType (지원자 구분 [일반, 스태프])
 - 190626
   - UserAttribute AvailableCheck (회원가입시 속성가능여부(중복체크)) API추가
 
