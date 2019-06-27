@@ -1,5 +1,7 @@
 # Django
 django
+django-admin-sortable2
+django-allauth
 django-ckeditor
 django-extensions
 django-filter
