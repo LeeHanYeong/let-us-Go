@@ -16,14 +16,15 @@ class UserAdmin(BaseUserAdmin):
         }),
         ('개인정보', {
             'fields': (
-                'first_name', 'last_name', 'nickname', 'phone_number',
+                'name', 'nickname', 'phone_number',
             )
         }),
         ('권한', {
             'fields': (
+                'is_staff',
                 'groups',
             )
-        })
+        }),
     )
     add_fieldsets = (
         (None, {
@@ -34,7 +35,13 @@ class UserAdmin(BaseUserAdmin):
         }),
         ('개인정보', {
             'fields': (
-                'first_name', 'last_name', 'phone_number', 'birth_date',
+                'name', 'nickname', 'phone_number',
             )
-        })
+        }),
+        ('권한', {
+            'fields': (
+                'is_staff',
+                'groups',
+            )
+        }),
     )

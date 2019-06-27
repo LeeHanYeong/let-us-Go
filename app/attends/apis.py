@@ -1,9 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics, permissions
-from rest_framework.generics import get_object_or_404
-from rest_framework.views import APIView
+from rest_framework import generics
 
 from .models import Attend
 from .serializers import (
@@ -56,7 +54,7 @@ class AttendListCreateAPIView(generics.ListCreateAPIView):
 @method_decorator(
     name='patch',
     decorator=swagger_auto_schema(
-        operation_summary='Attend Create',
+        operation_summary='Attend Update',
         operation_description='지원서 정보 수정'
     )
 )

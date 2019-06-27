@@ -2,35 +2,48 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from members.serializers import UserSerializer
-from seminars.serializers import SeminarSerializer
+from seminars.serializers import TrackDetailSerializer
 from .models import Attend
+
+ATTEND_FIELDS = (
+    'pk',
+    'is_canceled',
+    'track',
+    'status',
+    'user',
+    'name',
+
+    'applicant_type',
+    'applicant_type_display',
+    'discount_type',
+    'discount_type_display',
+
+    'is_attend_after_party',
+)
 
 
 class AttendSerializer(serializers.ModelSerializer):
-    seminar = SeminarSerializer()
+    track = TrackDetailSerializer()
     user = UserSerializer()
+
+    applicant_type_display = serializers.CharField(
+        source='get_applicant_type_display', help_text='지원자 구분의 display name')
+    discount_type_display = serializers.CharField(
+        source='get_discount_type_display', help_text='할인 구분의 display name')
 
     class Meta:
         model = Attend
-        fields = (
-            'pk',
-            'is_canceled',
-            'seminar',
-            'status',
-            'user',
-            'name',
-            'type',
-            'is_attend_after_party',
-        )
+        fields = ATTEND_FIELDS
 
 
 class AttendCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attend
         fields = (
-            'seminar',
+            'track',
             'name',
-            'type',
+            'applicant_type',
+            'discount_type',
             'is_attend_after_party',
         )
 
@@ -45,21 +58,10 @@ class AttendCreateSerializer(serializers.ModelSerializer):
         return AttendDetailSerializer(instance).data
 
 
-class AttendDetailSerializer(serializers.ModelSerializer):
-    seminar = SeminarSerializer()
-    user = UserSerializer()
-
+class AttendDetailSerializer(AttendSerializer):
     class Meta:
         model = Attend
-        fields = (
-            'pk',
-            'seminar',
-            'is_canceled',
-            'user',
-            'name',
-            'type',
-            'is_attend_after_party',
-        )
+        fields = ATTEND_FIELDS
 
 
 class AttendUpdateSerializer(serializers.ModelSerializer):

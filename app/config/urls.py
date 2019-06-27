@@ -13,17 +13,32 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from collections import OrderedDict
+
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include, re_path
 from drf_yasg import openapi
+from drf_yasg.generators import OpenAPISchemaGenerator
 from drf_yasg.renderers import ReDocRenderer as BaseReDocRenderer, OpenAPIRenderer
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+
 from . import views
 
 admin.site.site_title = 'let us:Go!'
 admin.site.site_header = 'let us:Go! 관리자 페이지'
+
+
+class SchemaGenerator(OpenAPISchemaGenerator):
+    def get_paths_object(self, paths: OrderedDict):
+        # '{'문자열을 더 우선순위로 둠
+        # /seminars/{id}/가
+        # /seminars/tracks/ 보다 우선순위가 되도록 설정
+        paths = dict(
+            sorted(paths.items(), key=lambda item: [char for char in item[0] if char != '{']))
+        return super().get_paths_object(paths)
+
 
 BaseSchemaView = get_schema_view(
     openapi.Info(
@@ -34,6 +49,7 @@ BaseSchemaView = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+    generator_class=SchemaGenerator,
 )
 
 
@@ -55,6 +71,7 @@ urlpatterns_apis = [
     path('v1/', include(urlpatterns_apis_v1)),
 ]
 urlpatterns = [
+    re_path(r'^accounts/', include('allauth.urls')),
     re_path(r'^doc/$', RedocSchemaView.as_cached_view(cache_timeout=0), name='schema-redoc'),
     re_path(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 

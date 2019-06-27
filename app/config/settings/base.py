@@ -27,6 +27,7 @@ os.makedirs(LOG_DIR, exist_ok=True)
 import_secrets()
 
 ALLOWED_HOSTS = []
+SITE_ID = 1
 
 # Static
 STATIC_URL = '/static/'
@@ -40,6 +41,7 @@ AUTH_USER_MODEL = 'members.User'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'members.backends.SettingsBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 DEFAULT_USERS = {
     'dev@lhy.kr': {
@@ -80,6 +82,13 @@ REST_FRAMEWORK = {
         'no_underscore_before_number': True,
     },
 }
+SWAGGER_SETTINGS = {
+    'OPERATIONS_SORTER': 'alpha',
+    'TAGS_SORTER': 'alpha',
+}
+# REDOC_SETTINGS = {
+#     'SORT_PROPS_ALPHABETICALLY': True,
+# }
 
 # AWS
 AWS_AUTO_CREATE_BUCKET = True
@@ -142,7 +151,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'adminsortable2',
     'django_extensions',
     'django_filters',
     'drf_yasg',

@@ -1,76 +1,96 @@
 from rest_framework import serializers
 
-from members.serializers import UserSerializer
-from ..models import Seminar, Session
+from ..models import Seminar, Session, Speaker, Track
+
+SEMINAR_FIELDS = (
+    'pk',
+    'name',
+    'start_at',
+    'end_at',
+    'address1',
+    'address2',
+    'after_party_fee',
+)
+TRACK_FIELDS = (
+    'pk',
+    'name',
+    'location',
+    'total_attend_count',
+    'attend_count',
+    'entry_fee',
+)
+SESSION_FIELDS = (
+    'pk',
+    'level',
+    'level_display',
+    'name',
+    'short_description',
+    'description',
+    'speaker_alt_text',
+    'start_time',
+    'end_time',
+
+    'speaker',
+)
+SPEAKER_FIELDS = (
+    'pk',
+    'name',
+    'email',
+    'phone_number',
+    'img_profile',
+    'facebook',
+    'github',
+)
+
+
+class SpeakerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Speaker
+        fields = SPEAKER_FIELDS
 
 
 class SeminarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seminar
-        fields = (
-            'pk',
-            'name',
-            'start_at',
-            'end_at',
-            'address1',
-            'address2',
-            'entry_fee',
-            'after_party_fee',
-        )
+        fields = SEMINAR_FIELDS
+
+
+class TrackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Track
+        fields = TRACK_FIELDS
 
 
 class SessionSerializer(serializers.ModelSerializer):
-    speaker = UserSerializer()
+    level_display = serializers.CharField(source='get_level_display')
+    speaker = SpeakerSerializer()
 
     class Meta:
         model = Session
-        fields = (
-            'pk',
-            'level',
-            'name',
-            'short_description',
-            'description',
-            'speaker_alt_text',
-            'start_time',
-            'end_time',
-
-            'speaker',
-        )
+        fields = SESSION_FIELDS
 
 
-class SeminarDetailSerializer(serializers.ModelSerializer):
-    session_set = SessionSerializer(many=True)
+class SessionDetailSerializer(SessionSerializer):
+    pass
+
+
+class TrackDetailSerializer(serializers.ModelSerializer):
+    seminar = SeminarSerializer()
+    session_set = SessionDetailSerializer(many=True)
 
     class Meta:
-        model = Seminar
-        fields = (
-            'pk',
-            'name',
-            'start_at',
-            'end_at',
-            'address1',
-            'address2',
-            'entry_fee',
-            'after_party_fee',
-
+        model = Track
+        fields = TRACK_FIELDS + (
+            'seminar',
             'session_set',
         )
 
 
-class SessionDetailSerializer(serializers.ModelSerializer):
-    speaker = UserSerializer()
+class SeminarDetailSerializer(serializers.ModelSerializer):
+    track_set = TrackDetailSerializer(many=True)
 
     class Meta:
-        model = Session
-        fields = (
-            'pk',
-            'level',
-            'name',
-            'short_description',
-            'description',
-            'speaker_alt_text',
-            'start_time',
-            'end_time',
-
-            'speaker',
+        model = Seminar
+        fields = SEMINAR_FIELDS + (
+            'track_set',
         )

@@ -23,8 +23,11 @@ class User(AbstractUser, TimeStampedModel, DeleteModel):
         (TYPE_FACEBOOK, '페이스북'),
         (TYPE_EMAIL, '이메일'),
     )
+    first_name = None
+    last_name = None
+    name = models.CharField('이름', max_length=20, blank=True)
     type = models.CharField('유형', max_length=10, choices=TYPE_CHOICES, default=TYPE_EMAIL)
-    nickname = models.CharField('닉네임', max_length=20, unique=True)
+    nickname = models.CharField('닉네임', max_length=20, unique=True, blank=True, null=True)
     email = models.EmailField('이메일', unique=True)
     phone_number = PhoneNumberField('전화번호', blank=True)
 
@@ -39,9 +42,10 @@ class User(AbstractUser, TimeStampedModel, DeleteModel):
         verbose_name = '사용자'
         verbose_name_plural = f'{verbose_name} 목록'
 
-    @property
-    def name(self):
-        return f'{self.last_name}{self.first_name}'
+    def save(self, *args, **kwargs):
+        if self.type == self.TYPE_EMAIL:
+            self.username = self.email
+        super().save(*args, **kwargs)
 
     def perform_delete(self):
         deleted_count = User.objects.filter(is_deleted=True).count()
