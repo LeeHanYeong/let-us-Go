@@ -27,6 +27,7 @@ psycopg2-binary
 # Google
 
 # Others
+boto3
 jinja2
 pillow
 phonenumberslite

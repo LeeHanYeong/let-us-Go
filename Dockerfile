@@ -14,4 +14,5 @@ RUN         cp -f   /srv/project/.config/supervisord.conf \
 WORKDIR     /srv/project/app
 EXPOSE      80
 RUN         python3 manage.py collectstatic --noinput
+RUN         python3 manage.py migrate --noinput
 CMD         supervisord -n

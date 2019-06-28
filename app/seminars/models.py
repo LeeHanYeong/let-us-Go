@@ -36,10 +36,11 @@ class Track(TimeStampedModel):
     attend_count = models.IntegerField('신청인원', default=0)
 
     entry_fee = models.PositiveIntegerField('참가비', blank=True, null=True)
+    entry_fee_student = models.PositiveIntegerField('학생 참가비', blank=True, null=True)
     order = models.PositiveIntegerField('순서', default=0, blank=False, null=False)
 
     def __str__(self):
-        return self.name
+        return f'{self.seminar.name} | {self.name}'
 
     class Meta:
         verbose_name = '트랙'
@@ -73,7 +74,7 @@ class Session(TimeStampedModel):
     end_time = models.TimeField('종료시간', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.track.seminar.name} | {self.track.name} | {self.name}'
 
     class Meta:
         verbose_name = '세션'

@@ -18,6 +18,7 @@ TRACK_FIELDS = (
     'total_attend_count',
     'attend_count',
     'entry_fee',
+    'entry_fee_student',
 )
 SESSION_FIELDS = (
     'pk',

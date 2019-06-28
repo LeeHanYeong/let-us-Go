@@ -1,7 +1,7 @@
 from django.utils.decorators import method_decorator
 from drf_yasg.openapi import Response as APIResponse
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 
 from .models import User
@@ -105,3 +105,12 @@ class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(auto_schema=None)
     def put(self, request, *args, **kwargs):
         super().put(request, *args, **kwargs)
+
+
+class UserProfileAPIView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user

@@ -8,6 +8,9 @@ ALLOWED_HOSTS += [
     '127.0.0.1',
 ]
 
+# Static
+DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
+
 WSGI_APPLICATION = 'config.wsgi.dev.application'
 INSTALLED_APPS += [
     'debug_toolbar',
