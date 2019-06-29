@@ -83,7 +83,8 @@ urlpatterns = [
 
     path('api/', include(urlpatterns_apis)),
 ]
-if os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings.dev':
+SETTINGS_MODULE = os.environ.get('DJANGO_SETTINGS_MODULE')
+if SETTINGS_MODULE in ('config.settings', 'config.settings.dev'):
     try:
         import debug_toolbar
 
