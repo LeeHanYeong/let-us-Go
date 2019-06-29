@@ -26,9 +26,10 @@ if __name__ == '__main__':
     run('docker build -t azelf/letusgo:base -f .dockerfile/Dockerfile.base .')
     run('git archive --format=tar.gz master -o ./master.tar')
 
-    if args.build and not args.run:
+    if args.build or args.run:
         run('docker build -t letusgo .')
-        exit(0)
+        if args.build:
+            exit(0)
 
     if args.run:
         run('docker run --rm -it -p 8000:80 --name letusgo letusgo')

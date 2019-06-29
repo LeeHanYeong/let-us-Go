@@ -12,9 +12,6 @@ RUN         rm -rf  /etc/nginx/sites-available/* &&\
             cp -a   /srv/dev/.config/nginx*.conf \
                     /etc/nginx/conf.d/
 
-RUN         cp -f   /srv/dev/.config/supervisord.conf \
-                    /etc/supervisor/conf.d/
-
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_dev
 WORKDIR     /srv/dev/app
 RUN         python3 manage.py collectstatic --noinput
@@ -25,5 +22,6 @@ WORKDIR     /srv/master/app
 RUN         python3 manage.py collectstatic --noinput
 RUN         python3 manage.py migrate --noinput
 
+WORKDIR     /srv/dev
+CMD         supervisord -c /srv/dev/.config/supervisord.conf -n
 EXPOSE      80
-CMD         supervisord -n
