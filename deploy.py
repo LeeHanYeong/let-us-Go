@@ -24,16 +24,17 @@ def run(cmd, **kwargs):
 
 if __name__ == '__main__':
     run('docker build -t azelf/letusgo:base -f .dockerfile/Dockerfile.base .')
-    run('docker push azelf/letusgo:base')
+    run('git archive --format=tar.gz master -o ./master.tar')
+    run('docker build -t letusgo .')
+
     if args.build:
         exit(0)
 
     if args.run:
-        run('docker build -t letusgo .')
         run('docker run --rm -it -p 8000:80 --name letusgo letusgo')
         exit(0)
 
-    run('git archive --format=tar master -o ./master.zip')
+    run('docker push azelf/letusgo:base')
     run('git add -A')
     run('git add -f .secrets/')
     run('git add -f master.zip')
