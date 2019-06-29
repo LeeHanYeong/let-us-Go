@@ -34,6 +34,8 @@ SITE_ID = 1
 # Static
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
+MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 STATICFILES_DIRS = [STATIC_DIR]
 
 # Auth

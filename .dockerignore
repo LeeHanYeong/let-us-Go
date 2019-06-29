@@ -2,6 +2,5 @@
 /.media
 /.git
 /.log
-/app
 !/master.tar
 !/dev.tar
