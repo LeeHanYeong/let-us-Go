@@ -33,7 +33,7 @@ if __name__ == '__main__':
         run('docker run --rm -it -p 8000:80 --name letusgo letusgo')
         exit(0)
 
-    run('git archive master -o ./master.zip')
+    run('git archive --format=tar master -o ./master.zip')
     run('git add -A')
     run('git add -f .secrets/')
     run('git add -f master.zip')

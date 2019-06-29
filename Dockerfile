@@ -2,7 +2,7 @@ FROM        azelf/letusgo:base
 
 COPY        . /srv/dev
 WORKDIR     /srv/dev
-RUN         unzip master.zip -d /srv/master
+RUN         tar -xzvf master.zip -C /srv/master
 
 COPY        .secrets /srv/master
 
