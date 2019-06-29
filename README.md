@@ -2,6 +2,9 @@
 
 ## API Update
 
+- 190629
+  - Token얻는 API변경 (`/rest-auth/login/` -> `/auth/token/`)
+    - Token key값과 User정보를 함께 반환
 - 190627
   - Track추가
     - Seminar List, Seminar Detail의 Reponse변경
@@ -63,9 +66,9 @@ Authorization: Token a129b636dc3f352f864398b471f17b43bb4ce352
 
 ### API 사용과정 설명
 
-#### 1. 세미나 목록 받아오기 (Seminar List)
+#### 1. 세미나 상세 받아오기 (Seminar Detail)
 
-[API - Seminar List](https://letusgo.lhy.kr/doc/#operation/seminars_list) 에 GET요청, 세미나 목록 수신
+[API - Seminar Detail](https://letusgo.lhy.kr/doc/#operation/seminars_read) 에 GET요청(id에 0) 가장 최신의 세미나 정보 수신
 
 #### 2. 회원가입 (User Create)
 
@@ -73,7 +76,7 @@ Authorization: Token a129b636dc3f352f864398b471f17b43bb4ce352
 
 #### 3. Token 받아오기 (rest-auth_login_create)
 
-[API - rest-auth_login_create](https://letusgo.lhy.kr/doc/#operation/rest-auth_login_create) 에 POST요청, Token수신
+[API - Auth_AuthToken](https://letusgo.lhy.kr/doc/#operation/auth_token_create) 에 POST요청, Token과 User정보수신
 
 #### 4. 인증(Authenticate)된 상태로 신청서 작성 (Attend Create)
 

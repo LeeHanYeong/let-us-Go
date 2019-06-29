@@ -25,9 +25,9 @@ def run(cmd, **kwargs):
 if __name__ == '__main__':
     run('docker build -t azelf/letusgo:base -f .dockerfile/Dockerfile.base .')
     run('git archive --format=tar.gz master -o ./master.tar')
-    run('docker build -t letusgo .')
 
-    if args.build:
+    if args.build and not args.run:
+        run('docker build -t letusgo .')
         exit(0)
 
     if args.run:
@@ -36,8 +36,8 @@ if __name__ == '__main__':
 
     run('docker push azelf/letusgo:base')
     run('git add -A')
+    run('git add -f master.tar')
     run('git add -f .secrets/')
-    run('git add -f master.zip')
     run('eb deploy --staged &')
     run('sleep 7')
     run('git reset HEAD', stdout=subprocess.DEVNULL)
