@@ -73,3 +73,4 @@ if private_ip:
 else:
     DEBUG = True
     ALLOWED_HOSTS.append('localhost')
+    ALLOWED_HOSTS.append('dev.localhost')
