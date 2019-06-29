@@ -83,15 +83,15 @@ class UserCreateAPIView(generics.CreateAPIView):
         operation_description='사용자 정보 수정',
         responses={
             status.HTTP_200_OK: UserSerializer(),
-        }
-    )
+        },
+    ),
 )
 @method_decorator(
     name='delete',
     decorator=swagger_auto_schema(
         operation_summary='User Delete',
-        operation_description='사용자 삭제(탈퇴)'
-    )
+        operation_description='사용자 삭제(탈퇴)',
+    ),
 )
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
