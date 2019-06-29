@@ -1,3 +1,4 @@
+from rest_auth.serializers import TokenSerializer, LoginSerializer
 from rest_framework import serializers
 
 from .models import User
@@ -74,3 +75,12 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 class UserAttributeAvailableSerializer(serializers.Serializer):
     attribute_name = serializers.CharField()
     value = serializers.CharField()
+
+
+class AuthTokenSerializer(TokenSerializer):
+    user = UserSerializer()
+
+    class Meta(TokenSerializer.Meta):
+        fields = TokenSerializer.Meta.fields + (
+            'user',
+        )

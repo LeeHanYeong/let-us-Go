@@ -18,6 +18,7 @@ DEBUG = False or (
 WSGI_APPLICATION = 'config.wsgi.production.application'
 
 # Static
+MEDIA_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
 
 # django-cors-headers

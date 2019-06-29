@@ -1,3 +1,10 @@
+# branch
+/master.zip
+/master
+/dev.zip
+/dev
+
+/temp
 /app/kakao_zipcode
 .sass-cache/
 *.ipynb

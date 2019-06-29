@@ -9,6 +9,7 @@ ALLOWED_HOSTS += [
 ]
 
 # Static
+MEDIA_LOCATION = 'media_dev'
 DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
 
 WSGI_APPLICATION = 'config.wsgi.dev.application'

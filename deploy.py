@@ -33,9 +33,10 @@ if __name__ == '__main__':
         run('docker run --rm -it -p 8000:80 --name letusgo letusgo')
         exit(0)
 
+    run('git archive master -o ./master.zip')
     run('git add -A')
     run('git add -f .secrets/')
-    run('git add -f .static/')
+    run('git add -f master.zip')
     run('eb deploy --staged &')
     run('sleep 7')
     run('git reset HEAD', stdout=subprocess.DEVNULL)

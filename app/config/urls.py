@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
 from collections import OrderedDict
 
 from django.conf import settings
@@ -24,6 +25,7 @@ from drf_yasg.renderers import ReDocRenderer as BaseReDocRenderer, OpenAPIRender
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
+from members.urls import members_patterns, auth_patterns
 from . import views
 
 admin.site.site_title = 'let us:Go!'
@@ -35,7 +37,7 @@ class SchemaGenerator(OpenAPISchemaGenerator):
         # '{'문자열을 더 우선순위로 둠
         # /seminars/{id}/가
         # /seminars/tracks/ 보다 우선순위가 되도록 설정
-        paths = dict(
+        paths = OrderedDict(
             sorted(paths.items(), key=lambda item: [char for char in item[0] if char != '{']))
         return super().get_paths_object(paths)
 
@@ -62,9 +64,9 @@ class RedocSchemaView(BaseSchemaView):
 
 
 urlpatterns_apis_v1 = [
-    re_path(r'rest-auth/', include('rest_auth.urls')),
     path('attends/', include('attends.urls')),
-    path('members/', include('members.urls')),
+    path('auth/', include(auth_patterns)),
+    path('members/', include(members_patterns)),
     path('seminars/', include('seminars.urls')),
 ]
 urlpatterns_apis = [
@@ -81,10 +83,13 @@ urlpatterns = [
 
     path('api/', include(urlpatterns_apis)),
 ]
-if settings.DEBUG:
+if os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings.dev':
     try:
         import debug_toolbar
 
         urlpatterns = [path('__debug__/', include(debug_toolbar.urls))] + urlpatterns
+        urlpatterns_apis_v1 += [
+            re_path(r'rest-auth/', include('rest_auth.urls')),
+        ]
     except ModuleNotFoundError:
         pass
