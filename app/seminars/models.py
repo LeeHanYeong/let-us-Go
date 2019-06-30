@@ -16,6 +16,9 @@ class Seminar(TimeStampedModel):
 
     after_party_fee = models.PositiveIntegerField('회식비', blank=True, null=True)
 
+    img_sponsors_web = models.ImageField('스폰서 이미지(웹)', upload_to='seminar', blank=True)
+    img_sponsors_mobile = models.ImageField('스폰서 이미지(모바일)', upload_to='seminar', blank=True)
+
     def __str__(self):
         return self.name
 

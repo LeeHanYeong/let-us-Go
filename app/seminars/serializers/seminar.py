@@ -10,6 +10,8 @@ SEMINAR_FIELDS = (
     'address1',
     'address2',
     'after_party_fee',
+    'img_sponsors_web',
+    'img_sponsors_mobile',
 )
 TRACK_FIELDS = (
     'pk',
