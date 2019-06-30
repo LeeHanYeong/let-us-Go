@@ -18,7 +18,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        ret['phone_number'] = instance.phone_number.as_national
+        try:
+            ret['phone_number'] = instance.phone_number.as_national
+        except AttributeError:
+            pass
         return ret
 
 
