@@ -74,20 +74,10 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework_api_key.permissions.HasAPIKey',
-    # ],
     'JSON_UNDERSCOREIZE': {
         'no_underscore_before_number': True,
     },
 }
-SWAGGER_SETTINGS = {
-    'OPERATIONS_SORTER': 'alpha',
-    'TAGS_SORTER': 'alpha',
-}
-# REDOC_SETTINGS = {
-#     'SORT_PROPS_ALPHABETICALLY': True,
-# }
 
 # AWS
 AWS_AUTO_CREATE_BUCKET = True
