@@ -14,7 +14,7 @@ from ..serializers import TrackSerializer, TrackDetailSerializer
     )
 )
 class TrackListAPIView(generics.ListAPIView):
-    Track.objects.all()
+    queryset = Track.objects.all()
     serializer_class = TrackSerializer
 
 
@@ -26,5 +26,5 @@ class TrackListAPIView(generics.ListAPIView):
     )
 )
 class TrackRetrieveAPIView(generics.RetrieveAPIView):
-    Track.objects.all()
+    queryset = Track.objects.all()
     serializer_class = TrackDetailSerializer
