@@ -12,15 +12,15 @@ RUN         rm -rf  /etc/nginx/sites-available/* &&\
             cp -a   /srv/dev/.config/nginx*.conf \
                     /etc/nginx/conf.d/
 
-ENV         DJANGO_SETTINGS_MODULE=config.settings.production_dev
 WORKDIR     /srv/dev/app
-RUN         python3  manage.py collectstatic --noinput
-RUN         python3 manage.py migrate --noinput
+RUN         DJANGO_SETTINGS_MODULE=config.settings.production_dev python3 manage.py collectstatic --noinput
+#RUN         DJANGO_SETTINGS_MODULE=config.settings.production_dev python3 manage.py migrate --noinput
 
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_master
 WORKDIR     /srv/master/app
 RUN         python3 manage.py collectstatic --noinput
-RUN         python3 manage.py migrate --noinput
+#RUN         python3 manage.py migrate --noinput
+
 
 WORKDIR     /srv/dev
 CMD         supervisord -c /srv/dev/.config/supervisord.conf -n
