@@ -14,7 +14,7 @@ RUN         rm -rf  /etc/nginx/sites-available/* &&\
 
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_dev
 WORKDIR     /srv/dev/app
-RUN         python3 manage.py collectstatic --noinput
+RUN         python3  manage.py collectstatic --noinput
 RUN         python3 manage.py migrate --noinput
 
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_master

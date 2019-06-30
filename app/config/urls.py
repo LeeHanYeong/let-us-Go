@@ -16,7 +16,6 @@ Including another URLconf
 import os
 from collections import OrderedDict
 
-from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include, re_path
 from drf_yasg import openapi
