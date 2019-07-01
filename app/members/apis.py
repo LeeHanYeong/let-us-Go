@@ -11,6 +11,8 @@ from rest_framework import generics, status, permissions
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
+from utils.drf import errors
+from utils.drf.doc import ResponseErrors
 from .models import User, EmailVerification
 from .permissions import IsUserSelf
 from .serializers import (
@@ -64,6 +66,17 @@ class UserAttributeAvailableAPIView(generics.GenericAPIView):
         operation_description='사용자 생성',
         responses={
             status.HTTP_200_OK: UserSerializer(),
+            status.HTTP_400_BAD_REQUEST: APIResponse(
+                description='실패',
+                examples={
+                    **ResponseErrors(
+                        '이메일 인증 관련',
+                        errors.EMAIL_SEND_FAILED,
+                        errors.EMAIL_VERIFICATION_INCOMPLETED,
+                        errors.EMAIL_VERIFICATION_NOT_EXISTS,
+                    ),
+                }
+            ),
         }
     )
 )

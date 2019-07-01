@@ -76,6 +76,9 @@ REST_FRAMEWORK = {
     'JSON_UNDERSCOREIZE': {
         'no_underscore_before_number': True,
     },
+    'EXCEPTION_HANDLER': 'utils.drf.exceptions.custom_exception_handler',
+    # 'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler'
+
 }
 
 # AWS
