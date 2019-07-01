@@ -14,4 +14,5 @@ members_patterns = (
 auth_patterns = (
     [
         path('token/', apis.AuthTokenAPIView.as_view()),
+        path('email-verification/', apis.EmailVerificationCreateAPIView.as_view()),
     ], 'auth')

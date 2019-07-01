@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style type="text/css">
+      .ReadMsgBody{ width: 100%; }
+      .ExternalClass{ width: 100%; }
+      .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100%; }
+      table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { -ms-interpolation-mode: bicubic; }
+      body, table, td, p, a, li, blockquote { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+    </style>
+    <title>{{ subject }}</title>
+</head>
+<body>
+    <h1>{{ subject }}</h1><br/>
+    <a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'email-validation' code %}">인증을 완료하려면 아래 이 링크를 클릭해주세요</a>
+</body>
+</html>

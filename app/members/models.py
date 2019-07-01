@@ -1,8 +1,12 @@
 import string
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager as BaseUserManager
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils.crypto import get_random_string
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
@@ -57,13 +61,63 @@ class User(AbstractUser, TimeStampedModel, DeleteModel):
         self.nickname = deleted_name
 
 
-class EmailValidation(TimeStampedModel):
+class EmailValidationManager(models.Manager):
+    def create(self, **kwargs):
+        instance, created = super().update_or_create(
+            **kwargs, defaults={
+                'status_verification': EmailVerification.WAIT,
+                'status_send': EmailVerification.WAIT,
+            })
+        if not created:
+            instance.reset_code()
+        return instance
+
+
+class EmailVerification(TimeStampedModel):
+    WAIT, SUCCEED, FAILED = 'wait', 'succeed', 'failed'
+    CHOICES_STATUS = (
+        (WAIT, '대기'),
+        (SUCCEED, '성공'),
+        (FAILED, '실패'),
+    )
     user = models.OneToOneField(
-        User, verbose_name='사용자', on_delete=models.CASCADE, blank=True, null=True)
-    email = models.EmailField('이메일')
+        User, verbose_name='사용자', on_delete=models.CASCADE,
+        related_name='email_verification', blank=True, null=True,
+    )
+    email = models.EmailField('이메일', unique=True)
     code = models.CharField('인증코드', max_length=50)
 
-    def save(self, *args, **kwargs):
+    status_verification = models.CharField('인증상태', choices=CHOICES_STATUS, default=WAIT, max_length=10)
+    status_send = models.CharField('발송상태', choices=CHOICES_STATUS, default=WAIT, max_length=10)
+
+    objects = EmailValidationManager()
+
+    class Meta:
+        verbose_name = '이메일 인증'
+        verbose_name_plural = f'{verbose_name} 목록'
+        ordering = ('-pk',)
+
+    def __str__(self):
+        return '{user}{email} (발송: {send}, 인증: {verification})'.format(
+            user=f'{self.user.name} | ' if self.user else '',
+            email=self.email,
+            send=self.get_status_send_display(),
+            verification=self.get_status_verification_display(),
+        )
+
+    def save(self, **kwargs):
         if not self.code:
             self.code = get_random_string(6, allowed_chars=string.digits)
-        super().save(*args, **kwargs)
+        super().save(**kwargs)
+
+    def reset_code(self):
+        self.code = get_random_string(6, allowed_chars=string.digits)
+        self.save()
+
+    @property
+    def is_verification_completed(self):
+        return self.status_verification == self.SUCCEED
+
+    @property
+    def is_send_succeed(self):
+        return self.status_send == self.SUCCEED

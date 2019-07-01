@@ -1,18 +1,23 @@
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from drf_yasg.openapi import Response as APIResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_auth.views import LoginView
 from rest_framework import generics, status, permissions
+from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
-from .models import User
+from .models import User, EmailVerification
 from .permissions import IsUserSelf
 from .serializers import (
     UserSerializer,
     UserCreateSerializer,
     UserUpdateSerializer,
     UserAttributeAvailableSerializer,
-    AuthTokenSerializer)
+    AuthTokenSerializer, EmailVerificationCreateSerializer)
 
 
 @method_decorator(
@@ -108,6 +113,13 @@ class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         super().put(request, *args, **kwargs)
 
 
+@method_decorator(
+    name='get',
+    decorator=swagger_auto_schema(
+        operation_summary='User Profile',
+        operation_description='사용자 프로필 (인증필요, 인증되어있는 경우 자신의 정보)'
+    )
+)
 class UserProfileAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -130,3 +142,31 @@ class UserProfileAPIView(generics.RetrieveAPIView):
 class AuthTokenAPIView(LoginView):
     def get_response_serializer(self):
         return AuthTokenSerializer
+
+
+class EmailVerificationCreateAPIView(generics.CreateAPIView):
+    queryset = EmailVerification.objects.all()
+    serializer_class = EmailVerificationCreateSerializer
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        subject = 'let us: Go! 회원가입 이메일 인증 안내메일입니다'
+        result = send_mail(
+            subject=subject,
+            message=subject,
+            html_message=render_to_string(
+                template_name='members/email-validation.jinja2',
+                context={
+                    'subject': subject,
+                    'site': get_current_site(self.request),
+                    'code': instance.code,
+                },
+                request=self.request,
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[instance.email],
+        )
+        instance.status_send = EmailVerification.SUCCEED if result == 1 else EmailVerification.FAILED
+        instance.save()
+        if result == 0:
+            raise APIException('인증 이메일 발송에 실패했습니다')
