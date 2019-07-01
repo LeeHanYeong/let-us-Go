@@ -69,9 +69,6 @@ urlpatterns_apis_v1 = [
     path('members/', include(members_patterns)),
     path('seminars/', include('seminars.urls')),
 ]
-urlpatterns_apis = [
-    path('v1/', include(urlpatterns_apis_v1)),
-]
 urlpatterns = [
     re_path(r'^doc/$', RedocSchemaView.as_cached_view(cache_timeout=0), name='schema-redoc'),
     re_path(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
@@ -82,7 +79,7 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('email-validation/<str:code>/', views_members.EmailValidationView.as_view(), name='email-validation'),
 
-    path('api/', include(urlpatterns_apis)),
+    path('v1/', include(urlpatterns_apis_v1)),
 ]
 SETTINGS_MODULE = os.environ.get('DJANGO_SETTINGS_MODULE')
 if SETTINGS_MODULE in ('config.settings', 'config.settings.dev'):
