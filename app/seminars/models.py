@@ -82,7 +82,7 @@ class Session(TimeStampedModel):
     class Meta:
         verbose_name = '세션'
         verbose_name_plural = f'{verbose_name} 목록'
-        ordering = ('-start_time',)
+        ordering = ('start_time',)
 
 
 class Speaker(TimeStampedModel):

@@ -1,9 +1,9 @@
 from django.conf import settings
-from rest_auth.serializers import TokenSerializer, LoginSerializer
-from rest_framework import serializers, status
+from rest_auth.serializers import TokenSerializer
+from rest_framework import serializers
 
 from utils.drf import errors
-from utils.drf.exceptions import ValidationError, APIException
+from utils.drf.exceptions import ValidationError
 from .models import User, EmailVerification
 
 
@@ -57,12 +57,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
             email_verification = EmailVerification.objects.get(email=data.get('email', ''))
             if not email_verification.is_verification_completed:
                 if not email_verification.is_send_succeed:
-                    raise ValidationError(errors.EMAIL_SEND_FAILED_MSG, errors.EMAIL_SEND_FAILED)
+                    raise ValidationError(errors.EMAIL_SEND_FAILED)
                 else:
-                    raise ValidationError(errors.EMAIL_VERIFICATION_INCOMPLETED_MSG, errors.EMAIL_VERIFICATION_INCOMPLETED)
+                    raise ValidationError(errors.EMAIL_VERIFICATION_INCOMPLETED)
 
         except EmailVerification.DoesNotExist:
-            raise ValidationError(errors.EMAIL_VERIFICATION_NOT_EXISTS_MSG, errors.EMAIL_VERIFICATION_NOT_EXISTS)
+            raise ValidationError(errors.EMAIL_VERIFICATION_NOT_EXISTS)
 
         data['password'] = data['password2']
         del data['password1']

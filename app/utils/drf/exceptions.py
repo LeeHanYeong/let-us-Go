@@ -5,6 +5,7 @@ from rest_framework.exceptions import APIException as BaseAPIException, Permissi
 from rest_framework.response import Response
 from rest_framework.views import set_rollback
 
+from utils.drf.errors import Error
 from . import errors
 
 
@@ -13,6 +14,8 @@ def _get_message(detail):
         return '\n'.join([_get_message(item) for item in detail])
     elif isinstance(detail, dict):
         return '\n'.join([_get_message(value) for key, value in detail.items()])
+    elif isinstance(detail, Error):
+        return detail.message
     text = force_text(detail)
     return text
 
@@ -31,8 +34,8 @@ def custom_exception_handler(exc, context):
             headers['Retry-After'] = '%d' % getattr(exc, 'wait')
 
         data = {
-            'code': getattr(exc, 'errors', errors.UNDEFINED).code,
-            'detail': exc.detail,
+            'code': getattr(exc.detail, 'code', errors.UNDEFINED.code),
+            'detail': getattr(exc.detail, 'message', exc.detail),
             'message': _get_message(exc.detail),
         }
         set_rollback()
@@ -41,11 +44,16 @@ def custom_exception_handler(exc, context):
 
 
 class APIException(BaseAPIException):
-    def __init__(self, error=None, detail=None, code=None):
-        self.error = error or errors.UNDEFINED
-        super().__init__(detail, status.HTTP_500_INTERNAL_SERVER_ERROR)
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+    def __init__(self, detail=None, code=None):
+        super().__init__(detail, code)
+        if isinstance(detail, Error):
+            self.detail = detail
 
 
 class ValidationError(APIException):
-    def __init__(self, error=None, detail=None, code=status.HTTP_400_BAD_REQUEST):
-        super().__init__(error=error, detail=detail, code=code)
+    status_code = status.HTTP_400_BAD_REQUEST
+
+    def __init__(self, detail=None, code=None):
+        super().__init__(detail, code)
