@@ -62,19 +62,19 @@ class Session(TimeStampedModel):
         Track, on_delete=models.CASCADE,
         verbose_name='트랙', related_name='session_set',
     )
-    level = models.CharField('레벨', choices=CHOICES_LEVEL, max_length=5, blank=True)
+    level = models.CharField('레벨', choices=CHOICES_LEVEL, max_length=5, blank=True, db_index=True)
     name = models.CharField('세션명', max_length=50)
     short_description = models.CharField('세션 설명(간략)', max_length=200, blank=True)
     description = MarkdownxField('세션 설명', help_text='Markdown', blank=True)
     speaker = models.ForeignKey(
         'seminars.Speaker', verbose_name='발표자', on_delete=models.SET_NULL,
-        related_name='session_set', blank=True, null=True,
+        related_name='session_set', blank=True, null=True, db_index=True,
     )
     speaker_alt_text = models.CharField(
         '발표자 대체 텍스트', max_length=50, help_text='발표자가 없는 세션의 경우 대체될 텍스트입니다', blank=True,
     )
-    start_time = models.TimeField('시작시간', blank=True, null=True)
-    end_time = models.TimeField('종료시간', blank=True, null=True)
+    start_time = models.TimeField('시작시간', blank=True, null=True, db_index=True)
+    end_time = models.TimeField('종료시간', blank=True, null=True, db_index=True)
 
     def __str__(self):
         return f'{self.track.seminar.name} | {self.track.name} | {self.name}'
@@ -82,6 +82,7 @@ class Session(TimeStampedModel):
     class Meta:
         verbose_name = '세션'
         verbose_name_plural = f'{verbose_name} 목록'
+        ordering = ('-start_time',)
 
 
 class Speaker(TimeStampedModel):
