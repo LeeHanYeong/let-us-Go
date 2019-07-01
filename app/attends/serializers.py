@@ -10,7 +10,6 @@ ATTEND_FIELDS = (
     'is_canceled',
     'track',
     'status',
-    'user',
     'name',
 
     'applicant_type',
@@ -24,8 +23,6 @@ ATTEND_FIELDS = (
 
 class AttendSerializer(serializers.ModelSerializer):
     track = TrackDetailSerializer()
-    user = UserSerializer()
-
     applicant_type_display = serializers.CharField(
         source='get_applicant_type_display', help_text='지원자 구분의 display name')
     discount_type_display = serializers.CharField(
@@ -37,31 +34,44 @@ class AttendSerializer(serializers.ModelSerializer):
 
 
 class AttendCreateSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Attend
         fields = (
             'track',
+            'user',
             'name',
             'applicant_type',
             'discount_type',
             'is_attend_after_party',
         )
 
-    def create(self, validated_data):
-        user = validated_data['user']
-        seminar = validated_data['seminar']
-        if Attend.objects.filter(user=user, seminar=seminar).exists():
+    def validate_track(self, value):
+        return value
+
+    def validate_user(self, value):
+        return value
+
+    def validate(self, attrs):
+        user = attrs['user']
+        track = attrs['track']
+        if Attend.objects.filter(user=user, track=track).exists():
             raise ValidationError('이미 신청내역이 있습니다')
-        super().create(validated_data)
+        return attrs
 
     def to_representation(self, instance):
         return AttendDetailSerializer(instance).data
 
 
 class AttendDetailSerializer(AttendSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Attend
-        fields = ATTEND_FIELDS
+        fields = ATTEND_FIELDS + (
+            'user',
+        )
 
 
 class AttendUpdateSerializer(serializers.ModelSerializer):

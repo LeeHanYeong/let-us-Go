@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
+from rest_framework import generics, permissions
 
 from .models import Attend
 from .serializers import (
@@ -29,8 +29,13 @@ User = get_user_model()
     )
 )
 class AttendListCreateAPIView(generics.ListCreateAPIView):
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsAuthenticated]
+        return super().get_permissions()
+
     def get_queryset(self):
-        queryset = Attend.objects.select_related('seminar', 'user')
+        queryset = Attend.objects.select_related('track', 'user')
         if self.request.user.is_authenticated:
             return queryset.filter(user=self.request.user)
         return queryset.none()
@@ -41,7 +46,7 @@ class AttendListCreateAPIView(generics.ListCreateAPIView):
         return AttendSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, context={'request': self.request})
 
 
 @method_decorator(
