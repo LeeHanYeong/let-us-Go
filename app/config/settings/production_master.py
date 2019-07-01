@@ -68,7 +68,7 @@ if private_ip:
 
     # SSL
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = True
 else:
     DEBUG = True
