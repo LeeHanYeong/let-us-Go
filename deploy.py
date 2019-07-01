@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import shutil
 import subprocess
 
 parser = argparse.ArgumentParser()
@@ -16,6 +17,7 @@ SECRETS = json.load(open(os.path.join(SECRETS_DIR, 'base.json')))
 ACCESS_KEY = SECRETS['AWS_EB_ACCESS_KEY_ID']
 SECRET_KEY = SECRETS['AWS_EB_SECRET_ACCESS_KEY']
 ENV = dict(os.environ, AWS_ACCESS_KEY_ID=ACCESS_KEY, AWS_SECRET_ACCESS_KEY=SECRET_KEY)
+ENV['PYTHONPATH'] = ENV.get('PYENV_VIRTUAL_ENV') or ENV.get('VIRTUAL_ENV')
 
 
 def run(cmd, **kwargs):
@@ -23,8 +25,22 @@ def run(cmd, **kwargs):
 
 
 if __name__ == '__main__':
+    os.makedirs(os.path.join(ROOT_DIR, '.master'), exist_ok=True)
     run('docker build -t azelf/letusgo:base -f .dockerfile/Dockerfile.base .')
-    run('git archive --format=tar.gz master -o ./master.tar')
+
+    # master코드 분리
+    run('git archive --format=tar.gz master -o ./.master.tar')
+    run('tar -xzvf .master.tar -C ./.master')
+    os.remove(os.path.join(ROOT_DIR, '.master.tar'))
+    master_secret_dir = os.path.join(ROOT_DIR, '.master', '.secrets')
+    shutil.rmtree(master_secret_dir, ignore_errors=True)
+    shutil.copytree(SECRETS_DIR, master_secret_dir)
+
+    # migrate
+    run('DJANGO_SETTINGS_MODULE=config.settings.production_dev python app/manage.py migrate --noinput')
+    os.chdir(os.path.join(ROOT_DIR, '.master'))
+    run('DJANGO_SETTINGS_MODULE=config.settings.production_master python app/manage.py migrate --noinput')
+    os.chdir(os.path.join(ROOT_DIR))
 
     if args.build or args.run:
         run('docker build -t letusgo .')
@@ -37,7 +53,7 @@ if __name__ == '__main__':
 
     run('docker push azelf/letusgo:base')
     run('git add -A')
-    run('git add -f master.tar')
+    run('git add -f .master')
     run('git add -f .secrets')
     run('eb deploy --staged &')
     run('sleep 10')

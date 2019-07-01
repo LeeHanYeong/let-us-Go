@@ -1,12 +1,10 @@
 FROM        azelf/letusgo:base
 
 COPY        . /srv/dev
-RUN         mkdir /srv/master &&\
-            mkdir /var/log/gunicorn &&\
-            mkdir /srv/dev/.log
-RUN         tar -xzvf /srv/dev/master.tar -C /srv/master
+COPY        .master /srv/master
 
-COPY        .secrets /srv/master/.secrets
+RUN         mkdir /var/log/gunicorn &&\
+            mkdir /srv/dev/.log
 
 RUN         rm -rf  /etc/nginx/sites-available/* &&\
             rm -rf  /etc/nginx/site-enabled/* &&\
@@ -16,12 +14,10 @@ RUN         rm -rf  /etc/nginx/sites-available/* &&\
 WORKDIR     /srv/dev/app
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_dev
 RUN         python3 manage.py collectstatic --noinput
-RUN         python3 manage.py migrate --noinput
 
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_master
 WORKDIR     /srv/master/app
 RUN         python3 manage.py collectstatic --noinput
-RUN         python3 manage.py migrate --noinput
 
 WORKDIR     /srv/dev
 CMD         supervisord -c /srv/dev/.config/supervisord.conf -n
