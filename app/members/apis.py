@@ -3,6 +3,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
+from djangorestframework_camel_case.util import camel_to_underscore
 from drf_yasg.openapi import Response as APIResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_auth.views import LoginView
@@ -43,7 +44,7 @@ class UserAttributeAvailableAPIView(generics.GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            attribute_name = serializer.validated_data['attribute_name']
+            attribute_name = camel_to_underscore(serializer.validated_data['attribute_name'])
             value = serializer.validated_data['value']
             filter_kwargs = {
                 attribute_name: value,
