@@ -8,4 +8,5 @@ DEBUG = True
 MEDIA_LOCATION = 'media_dev'
 
 if not private_ip:
+    DEBUG = True
     ALLOWED_HOSTS.append('dev.letusgo.localhost')
