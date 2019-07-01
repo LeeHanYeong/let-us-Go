@@ -144,6 +144,13 @@ class AuthTokenAPIView(LoginView):
         return AuthTokenSerializer
 
 
+@method_decorator(
+    name='post',
+    decorator=swagger_auto_schema(
+        operation_summary='EmailVerification',
+        operation_description='이메일 인증<br>요청시 사용자에게 인증메일을 발송하며, 인증이 완료된 이메일로만 회원가입(UserCreate)이 성공합니다',
+    ),
+)
 class EmailVerificationCreateAPIView(generics.CreateAPIView):
     queryset = EmailVerification.objects.all()
     serializer_class = EmailVerificationCreateSerializer
