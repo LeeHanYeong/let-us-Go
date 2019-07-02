@@ -1,0 +1,16 @@
+# Node requirements
+FROM        node:lts-slim
+ENV         LANG C.UTF-8
+COPY        .front/package.json /tmp/package.json
+RUN         npm install --prefix /tmp
+WORKDIR     /tmp
+RUN         tar cfz node_modules.tar.gz node_modules
+
+COPY        .front /app
+WORKDIR     /app
+RUN         mv /tmp/node_modules.tar.gz /app/node_modules.tar.gz
+RUN         tar -xzvf node_modules.tar.gz
+
+#RUN         npm i
+#RUN         npm run export
+#CMD         npm run aa

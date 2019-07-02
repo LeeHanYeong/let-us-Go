@@ -10,4 +10,3 @@ capture_output = True
 raw_env = [
     'DJANGO_SETTINGS_MODULE=config.settings.production_dev',
 ]
-

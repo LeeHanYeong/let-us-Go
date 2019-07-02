@@ -1,7 +1,7 @@
-/.static
-/.media
 /.git
 /.log
+
+!/.front
 !/.master
 !/master.tar
 !/dev.tar

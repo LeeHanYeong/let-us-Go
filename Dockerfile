@@ -1,7 +1,8 @@
 FROM        azelf/letusgo:base
 
+# Django
 COPY        . /srv/dev
-COPY        .master /srv/master
+RUN         mv /srv/dev/.master /srv/master
 
 RUN         mkdir /var/log/gunicorn &&\
             mkdir /srv/dev/.log
@@ -13,12 +14,13 @@ RUN         rm -rf  /etc/nginx/sites-available/* &&\
 
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_dev
 WORKDIR     /srv/dev/app
-RUN         python3 manage.py collectstatic --noinput
+RUN         python manage.py collectstatic --noinput
 
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_master
 WORKDIR     /srv/master/app
-RUN         python3 manage.py collectstatic --noinput
+RUN         python manage.py collectstatic --noinput
 
+# CMD
 WORKDIR     /srv/dev
 CMD         supervisord -c /srv/dev/.config/supervisord.conf -n
 EXPOSE      80
