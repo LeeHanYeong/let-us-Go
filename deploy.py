@@ -41,6 +41,8 @@ if __name__ == '__main__':
     run('curl -sL https://deb.nodesource.com/setup_10.x > .temp/install_node.sh')
 
     # Build BaseImage
+    run('docker pull python:3.7-slim')
+    run('docker pull node:lts-slim')
     run('docker build -t azelf/letusgo:base -f .dockerfile/Dockerfile.base .')
 
     # master코드 분리
@@ -73,7 +75,6 @@ if __name__ == '__main__':
     run('docker push azelf/letusgo:base')
     run('git add -A')
     run('git add -f .master')
-    run('git add -f .static')
     run('git add -f .secrets')
     run('eb deploy --staged &')
     run('sleep 10')
