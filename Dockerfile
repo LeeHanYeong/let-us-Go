@@ -4,8 +4,9 @@ FROM        azelf/letusgo:base
 COPY        . /srv/dev
 RUN         mv /srv/dev/.master /srv/master
 
-RUN         mkdir /var/log/gunicorn &&\
-            mkdir /srv/dev/.log
+RUN         mkdir -p /var/log/gunicorn &&\
+            mkdir -p /srv/dev/.log &&\
+            mkdir -p /srv/master/.log
 
 RUN         rm -rf  /etc/nginx/sites-available/* &&\
             rm -rf  /etc/nginx/site-enabled/* &&\
