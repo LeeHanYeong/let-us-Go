@@ -6,6 +6,7 @@ import shutil
 import subprocess
 
 parser = argparse.ArgumentParser()
+parser.add_argument('env')
 parser.add_argument('--build', action='store_true')
 parser.add_argument('--run', action='store_true')
 parser.add_argument('--bash', action='store_true')
@@ -77,6 +78,6 @@ if __name__ == '__main__':
     run('git add -A')
     run('git add -f .master')
     run('git add -f .secrets')
-    run('eb deploy --staged &')
+    run(f'eb deploy --staged {args.env} &')
     run('sleep 10')
     run('git reset HEAD', stdout=subprocess.DEVNULL)

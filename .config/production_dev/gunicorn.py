@@ -1,7 +1,7 @@
 daemon = False
 chdir = '/srv/dev/app'
 bind = 'unix:/tmp/app_dev.sock'
-workers = 2
+workers = 1
 threads = 1
 timeout = 60
 accesslog = '/var/log/gunicorn/access_dev.log'
