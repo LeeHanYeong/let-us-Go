@@ -46,6 +46,7 @@ if __name__ == '__main__':
     run('docker build -t azelf/letusgo:base -f .dockerfile/Dockerfile.base .')
 
     # master코드 분리
+    run('rm -rf .master')
     os.makedirs(os.path.join(ROOT_DIR, '.master'), exist_ok=True)
     run('git archive --format=tar.gz master -o ./.master.tar')
     run('tar -xzf .master.tar -C ./.master')
