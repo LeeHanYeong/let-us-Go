@@ -28,6 +28,7 @@ psycopg2-binary
 
 # Others
 boto3
+gevent
 jinja2
 pillow
 phonenumberslite

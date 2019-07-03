@@ -6,10 +6,10 @@ import shutil
 import subprocess
 
 parser = argparse.ArgumentParser()
-parser.add_argument('env')
 parser.add_argument('--build', action='store_true')
 parser.add_argument('--run', action='store_true')
 parser.add_argument('--bash', action='store_true')
+parser.add_argument('--env', type=str, default='letusgo')
 args = parser.parse_args()
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -67,11 +67,22 @@ if __name__ == '__main__':
         if args.build:
             exit(0)
 
+    options = (
+        '-p 8000:80',
+        '--name letusgo',
+        '--memory=1024m',
+        '--memory-swap=1536m',
+        '--cpus=1',
+        'letusgo',
+    )
+    run_cmd = 'docker run --rm -it {options}'.format(
+        options=' '.join([option for option in options])
+    )
     if args.run:
-        run('docker run --rm -it -p 8000:80 --name letusgo letusgo')
+        run(f'{run_cmd}')
         exit(0)
     if args.bash:
-        run('docker run --rm -it -p 8000:80 --name letusgo letusgo /bin/bash')
+        run(f'{run_cmd} /bin/bash')
         exit(0)
 
     run('docker push azelf/letusgo:base')

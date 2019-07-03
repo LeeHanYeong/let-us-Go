@@ -3,7 +3,7 @@ FROM        python:3.7-slim AS stage-python
 ENV         LANG C.UTF-8
 RUN         apt -y update &&\
             apt -y dist-upgrade &&\
-            apt -y install -y --no-install-recommends build-essential gcc
+            apt -y install --no-install-recommends build-essential gcc
 
 RUN         python -m venv /opt/venv
 ENV         PATH /opt/venv/bin:$PATH
@@ -15,19 +15,21 @@ RUN         pip install -r /tmp/requirements/production.txt
 FROM        node:lts-slim AS stage-node
 ENV         LANG C.UTF-8
 COPY        .front/package.json /tmp/package.json
-RUN         npm install --prefix /tmp
+COPY        .front/package-lock.json /tmp/package-lock.json
+RUN         npm ci --only=production --prefix /tmp
 WORKDIR     /tmp
 RUN         tar cfz node_modules.tar.gz node_modules
 
 ### Base Image
-# Install Nginx
+# Install Nginx, Debug tools
 FROM        python:3.7-slim
 ENV         LANG C.UTF-8
 RUN         apt -y update &&\
             apt -y dist-upgrade &&\
-            apt -y install nginx
+            apt -y install nginx \
+                procps htop net-tools
 
-# Install Node
+# Install Node, pm2
 COPY        .temp/install_node.sh /tmp/
 RUN         bash /tmp/install_node.sh &&\
             apt -y install nodejs &&\
@@ -43,5 +45,6 @@ COPY        --from=stage-node /tmp/node_modules.tar.gz /tmp/node_modules.tar.gz
 COPY        .front /srv/front
 RUN         tar -xzf /tmp/node_modules.tar.gz -C /srv/front &&\
             rm /tmp/node_modules.tar.gz
+ENV         PATH /srv/front/node_modules/pm2/bin:$PATH
 WORKDIR     /srv/front
 RUN         npm run build

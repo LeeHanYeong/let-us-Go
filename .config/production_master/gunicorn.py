@@ -1,8 +1,8 @@
 daemon = False
 chdir = '/srv/master/app'
 bind = 'unix:/tmp/app.sock'
-workers = 5
-threads = 2
+worker_class = 'gevent'
+workers = 4
 timeout = 60
 accesslog = '/var/log/gunicorn/access.log'
 errorlog = '/var/log/gunicorn/error.log'
