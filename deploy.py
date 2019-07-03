@@ -63,7 +63,7 @@ if __name__ == '__main__':
     os.chdir(os.path.join(ROOT_DIR))
 
     if args.build or args.run or args.bash:
-        run('docker build -t letusgo .')
+        run('docker build -t letusgo -f Dockerfile.production .')
         if args.build:
             exit(0)
 
@@ -86,6 +86,14 @@ if __name__ == '__main__':
         exit(0)
 
     run('docker push azelf/letusgo:base')
+
+    # Push ECR
+    run('docker build -t letusgo -f Dockerfile.production .')
+    ECR_REPO = '347809506342.dkr.ecr.ap-northeast-2.amazonaws.com/letusgo:app'
+    run(f'docker tag letusgo {ECR_REPO}')
+    run(f'$(aws ecr get-login --no-include-email --region ap-northeast-2) && '
+        f'docker push {ECR_REPO}')
+
     run('git add -A')
     run('git add -f .master')
     run('git add -f .secrets')

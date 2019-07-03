@@ -8,7 +8,9 @@ RUN         apt -y update &&\
 RUN         python -m venv /opt/venv
 ENV         PATH /opt/venv/bin:$PATH
 
-COPY        .requirements /tmp/requirements
+RUN         mkdir -p /tmp/requirements
+COPY        .requirements/base.txt /tmp/requirements/base.txt
+COPY        .requirements/production.txt /tmp/requirements/production.txt
 RUN         pip install -r /tmp/requirements/production.txt
 
 # Node requirements
