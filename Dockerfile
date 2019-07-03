@@ -2,11 +2,11 @@ FROM        azelf/letusgo:base
 
 # Django
 COPY        . /srv/dev
-#RUN         mv /srv/dev/.master /srv/master
-#
-#RUN         mkdir -p /var/log/gunicorn &&\
-#            mkdir -p /srv/dev/.log &&\
-#            mkdir -p /srv/master/.log
+RUN         mv /srv/dev/.master /srv/master
+
+RUN         mkdir -p /var/log/gunicorn &&\
+            mkdir -p /srv/dev/.log &&\
+            mkdir -p /srv/master/.log
 
 RUN         rm -rf  /etc/nginx/sites-available/* &&\
             rm -rf  /etc/nginx/site-enabled/* &&\
