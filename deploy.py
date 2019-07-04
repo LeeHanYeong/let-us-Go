@@ -105,6 +105,6 @@ if __name__ == '__main__':
     run('git add -A')
     run('git add -f .master')
     run('git add -f .secrets')
-    run(f'eb deploy --staged {args.env} &')
+    run(f'eb deploy --staged --timeout 20 {args.env} &')
     run('sleep 10')
     run('git reset HEAD', stdout=subprocess.DEVNULL)
