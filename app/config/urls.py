@@ -63,11 +63,15 @@ class RedocSchemaView(BaseSchemaView):
     renderer_classes = (ReDocRenderer, OpenAPIRenderer)
 
 
+urlpatterns_apis_utils = [
+    path('front-deploy/', apis.FrontDeployAPIView.as_view(), name='front-deploy'),
+]
 urlpatterns_apis_v1 = [
     path('attends/', include('attends.urls')),
     path('auth/', include(auth_patterns)),
     path('members/', include(members_patterns)),
     path('seminars/', include('seminars.urls')),
+    path('utils/', include(urlpatterns_apis_utils)),
 ]
 urlpatterns = [
     re_path(r'^doc/$', RedocSchemaView.as_cached_view(cache_timeout=0), name='schema-redoc'),
@@ -76,7 +80,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
     path('health/', views.HealthCheckView.as_view(), name='health-check'),
-    path('front-deploy/', apis.FrontDeployAPIView.as_view(), name='front-deploy'),
     path('', views.IndexView.as_view(), name='index'),
     path('email-validation/<str:code>/', views_members.EmailValidationView.as_view(), name='email-validation'),
 
