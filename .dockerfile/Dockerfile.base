@@ -23,12 +23,12 @@ WORKDIR     /tmp
 RUN         tar cfz node_modules.tar.gz node_modules
 
 ### Base Image
-# Install Nginx, Debug tools
+# Install Nginx, Git, Debug tools
 FROM        python:3.7-slim
 ENV         LANG C.UTF-8
 RUN         apt -y update &&\
             apt -y dist-upgrade &&\
-            apt -y install nginx \
+            apt -y install nginx git \
                 procps htop net-tools
 
 # Install Node, pm2

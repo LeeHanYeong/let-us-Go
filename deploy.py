@@ -55,7 +55,7 @@ if __name__ == '__main__':
         os.chdir(FRONT_DIR)
         run('git pull')
     else:
-        run('git clone git@github.com:Yuni-Q/proj2.git .front')
+        run('git clone https://github.com/Yuni-Q/proj2.git .front')
     os.chdir(ROOT_DIR)
 
     # curl Node.js install script
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     os.chdir(os.path.join(ROOT_DIR))
 
     if args.build or args.run or args.bash:
-        run(f'docker build -t {IMAGE_PRODUCTION_LOCAL} -f Dockerfile.production .')
+        run(f'docker build -t {IMAGE_PRODUCTION_LOCAL} -f Dockerfile .')
         if args.build:
             exit(0)
 

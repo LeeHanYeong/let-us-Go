@@ -72,5 +72,4 @@ if private_ip:
     CSRF_COOKIE_SECURE = True
 else:
     DEBUG = True
-    ALLOWED_HOSTS.append('letusgo.localhost')
-
+    ALLOWED_HOSTS.append('api.localhost')
