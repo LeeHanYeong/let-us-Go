@@ -25,7 +25,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
 from members.urls import members_patterns, auth_patterns
-from . import views
+from . import views, apis
 from members import views as views_members
 
 admin.site.site_title = 'let us:Go!'
@@ -76,6 +76,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
     path('health/', views.HealthCheckView.as_view(), name='health-check'),
+    path('front-deploy/', apis.FrontDeployAPIView.as_view(), name='front-deploy'),
     path('', views.IndexView.as_view(), name='index'),
     path('email-validation/<str:code>/', views_members.EmailValidationView.as_view(), name='email-validation'),
 
