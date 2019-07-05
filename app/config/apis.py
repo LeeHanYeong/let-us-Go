@@ -11,6 +11,32 @@ from rest_framework_api_key.permissions import HasAPIKey
 FRONT_DIR = os.path.join(os.sep, 'srv', 'front')
 
 
+class Subprocess:
+    OPTIONS = {
+        'stdout': PIPE,
+        'stderr': PIPE,
+        'shell': True,
+    }
+
+    def __init__(self, name, command, options=None):
+        self.name = name
+        self.command = command
+        self.options = self.OPTIONS.copy()
+        if options:
+            self.options.update(**options)
+        self._result = None
+
+    def run(self):
+        self._result = run(self.command, **self.options)
+        return self._result
+
+    @property
+    def result(self):
+        if not self._result:
+            self.run()
+        return self._result
+
+
 class FrontDeployAPIView(APIView):
     """
     FrontDeploy
@@ -52,31 +78,6 @@ class FrontDeployAPIView(APIView):
         }
     )
     def post(self, request):
-        class Subprocess:
-            OPTIONS = {
-                'stdout': PIPE,
-                'stderr': PIPE,
-                'shell': True,
-            }
-
-            def __init__(self, name, command, options=None):
-                self.name = name
-                self.command = command
-                self.options = self.OPTIONS.copy()
-                if options:
-                    self.options.update(**options)
-                self._result = None
-
-            def run(self):
-                self._result = run(self.command, **self.options)
-                return self._result
-
-            @property
-            def result(self):
-                if not self._result:
-                    self.run()
-                return self._result
-
         os.chdir(FRONT_DIR)
         subprocess_list = (
             Subprocess('git_pull', 'git pull'),
@@ -91,6 +92,6 @@ class FrontDeployAPIView(APIView):
                 'returncode': result.returncode,
                 'stdout': result.stdout.decode('utf-8'),
                 'stderr': result.stderr.decode('utf-8'),
-            } for key, result in results.items(),
+            } for key, result in results.items()
         }
         return Response(data)
