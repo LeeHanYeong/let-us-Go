@@ -23,4 +23,4 @@ def run(cmd, **kwargs):
 
 
 if __name__ == '__main__':
-    run(f'eb create {args.env} --cname {args.env} --elb-type application --sample')
+    run(f'eb create {args.env} --cname letusgo-swap --elb-type application --sample')
