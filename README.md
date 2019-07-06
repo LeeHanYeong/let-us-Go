@@ -197,3 +197,12 @@ template0으로부터, LC_COLLATE를 따로 설정 (한글 ordering관련)
 ```
 CREATE DATABASE letusgo OWNER=lhy TEMPLATE template0 LC_COLLATE 'C';
 ```
+
+### PyPy3.6 v7.1.1 환경설정 (실패)
+
+brew설치 패키지
+
+- Pillow
+  - libtiff libjpeg webp little-cms2
+- pycopg2-binary
+  - 실패
