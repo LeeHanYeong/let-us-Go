@@ -12,7 +12,7 @@ parser.add_argument('--run', action='store_true')
 parser.add_argument('--bash', action='store_true')
 args = parser.parse_args()
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRETS_DIR = os.path.join(ROOT_DIR, '.secrets')
 
 MASTER_DIR = os.path.join(ROOT_DIR, '.master')
@@ -47,6 +47,7 @@ def run(cmd, **kwargs):
 
 
 if __name__ == '__main__':
+    os.chdir(ROOT_DIR)
     os.makedirs(os.path.join(ROOT_DIR, '.temp'), exist_ok=True)
 
     # Clone Front Project

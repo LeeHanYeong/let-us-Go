@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('env', type=str)
 args = parser.parse_args()
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRETS_DIR = os.path.join(ROOT_DIR, '.secrets')
 SECRETS = json.load(open(os.path.join(SECRETS_DIR, 'base.json')))
 
@@ -23,4 +23,5 @@ def run(cmd, **kwargs):
 
 
 if __name__ == '__main__':
+    os.chdir(ROOT_DIR)
     run(f'eb create {args.env} --cname letusgo-swap --elb-type application --sample')

@@ -26,42 +26,6 @@ from .serializers import (
 @method_decorator(
     name='post',
     decorator=swagger_auto_schema(
-        operation_summary='UserAttribute Available Check',
-        operation_description='사용자 생성 시 속성값 사용가능(중복)여부 체크',
-        responses={
-            status.HTTP_200_OK: APIResponse(
-                description='',
-                examples={
-                    'application/json': {
-                        'exists': True,
-                    }}
-            ),
-        }
-    ),
-)
-class UserAttributeAvailableAPIView(generics.GenericAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserAttributeAvailableSerializer
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            attribute_name = camel_to_underscore(serializer.validated_data['attribute_name'])
-            value = serializer.validated_data['value']
-            filter_kwargs = {
-                attribute_name: value,
-            }
-            exists = User.objects.filter(is_deleted=False, **filter_kwargs).exists()
-            data = {
-                'exists': exists,
-            }
-            return Response(data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@method_decorator(
-    name='post',
-    decorator=swagger_auto_schema(
         operation_summary='User Create',
         operation_description='사용자 생성',
         responses={
@@ -191,3 +155,39 @@ class EmailVerificationCreateAPIView(generics.CreateAPIView):
         instance.save()
         if result == 0:
             raise APIException('인증 이메일 발송에 실패했습니다')
+
+
+@method_decorator(
+    name='post',
+    decorator=swagger_auto_schema(
+        operation_summary='UserAttribute Available Check',
+        operation_description='사용자 생성 시 속성값 사용가능(중복)여부 체크',
+        responses={
+            status.HTTP_200_OK: APIResponse(
+                description='',
+                examples={
+                    'application/json': {
+                        'exists': True,
+                    }}
+            ),
+        }
+    ),
+)
+class UserAttributeAvailableAPIView(generics.GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserAttributeAvailableSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            attribute_name = camel_to_underscore(serializer.validated_data['attribute_name'])
+            value = serializer.validated_data['value']
+            filter_kwargs = {
+                attribute_name: value,
+            }
+            exists = User.objects.filter(is_deleted=False, **filter_kwargs).exists()
+            data = {
+                'exists': exists,
+            }
+            return Response(data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

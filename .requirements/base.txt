@@ -24,7 +24,10 @@ drf-yasg
 # DB
 psycopg2-binary
 
-# Google
+# Test
+pytest-cov
+pytest-django
+model_mommy
 
 # Others
 boto3
