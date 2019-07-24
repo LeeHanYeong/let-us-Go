@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Seminar, Session, Speaker, Track
+from ..models import Seminar, Session, Speaker, Track, SessionLink, SessionFile, SessionVideo
 
 SEMINAR_FIELDS = (
     'pk',
@@ -46,6 +46,38 @@ SPEAKER_FIELDS = (
 )
 
 
+class SessionVideoSerializer(serializers.ModelSerializer):
+    type_display = serializers.CharField(source='get_type_display')
+
+    class Meta:
+        model = SessionVideo
+        fields = (
+            'type',
+            'type_display',
+            'name',
+            'key',
+            'url',
+        )
+
+
+class SessionLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SessionLink
+        fields = (
+            'name',
+            'url',
+        )
+
+
+class SessionFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SessionFile
+        fields = (
+            'name',
+            'attachment',
+        )
+
+
 class SpeakerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Speaker
@@ -74,7 +106,17 @@ class SessionSerializer(serializers.ModelSerializer):
 
 
 class SessionDetailSerializer(SessionSerializer):
-    pass
+    video_set = SessionVideoSerializer(many=True)
+    link_set = SessionLinkSerializer(many=True)
+    file_set = SessionFileSerializer(many=True)
+
+    class Meta:
+        model = Session
+        fields = SESSION_FIELDS + (
+            'video_set',
+            'link_set',
+            'file_set',
+        )
 
 
 class TrackDetailSerializer(serializers.ModelSerializer):
