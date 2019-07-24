@@ -65,7 +65,7 @@ class Session(TimeStampedModel):
     level = models.CharField('레벨', choices=CHOICES_LEVEL, max_length=5, blank=True, db_index=True)
     name = models.CharField('세션명', max_length=50)
     short_description = models.CharField('세션 설명(간략)', max_length=200, blank=True)
-    description = MarkdownxField('세션 설명', help_text='Markdown', blank=True)
+    description = models.TextField('세션 설명', blank=True)
     speaker = models.ForeignKey(
         'seminars.Speaker', verbose_name='발표자', on_delete=models.SET_NULL,
         related_name='session_set', blank=True, null=True, db_index=True,
@@ -76,6 +76,8 @@ class Session(TimeStampedModel):
     start_time = models.TimeField('시작시간', blank=True, null=True, db_index=True)
     end_time = models.TimeField('종료시간', blank=True, null=True, db_index=True)
 
+    weight = models.IntegerField('비중', default=1)
+
     def __str__(self):
         return f'{self.track.seminar.name} | {self.track.name} | {self.name}'
 
@@ -83,6 +85,68 @@ class Session(TimeStampedModel):
         verbose_name = '세션'
         verbose_name_plural = f'{verbose_name} 목록'
         ordering = ('start_time',)
+
+
+class SessionVideo(models.Model):
+    TYPE_LINK, TYPE_YOUTUBE = 'link', 'youtube'
+    CHOICES_TYPE = (
+        (TYPE_LINK, '링크'),
+        (TYPE_YOUTUBE, 'YouTube'),
+    )
+    session = models.ForeignKey(
+        Session, verbose_name='세션',
+        related_name='video_set', on_delete=models.CASCADE,
+    )
+    type = models.CharField('유형', default=TYPE_LINK, choices=CHOICES_TYPE, max_length=12)
+    name = models.CharField('영상명', max_length=100)
+    key = models.CharField('영상 UniqueID', blank=True, max_length=100)
+    url = models.URLField('영상 URL', blank=True)
+
+    class Meta:
+        verbose_name = '세션 영상'
+        verbose_name_plural = f'{verbose_name} 목록'
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.key and self.url:
+            raise ValueError('영상의 ID또는 URL중 하나만 입력되어야 합니다')
+        if self.type != self.TYPE_LINK and self.url:
+            raise ValueError('링크가 아닌 유형의 경우에는 key만 허용됩니다')
+        super().save(*args, **kwargs)
+
+
+class SessionLink(models.Model):
+    session = models.ForeignKey(
+        Session, verbose_name='세션',
+        related_name='link_set', on_delete=models.CASCADE,
+    )
+    name = models.CharField('링크명', max_length=100)
+    url = models.URLField('URL', blank=True)
+
+    class Meta:
+        verbose_name = '세션 링크'
+        verbose_name_plural = f'{verbose_name} 목록'
+
+    def __str__(self):
+        return self.name
+
+
+class SessionFile(models.Model):
+    session = models.ForeignKey(
+        Session, verbose_name='세션',
+        related_name='file_set', on_delete=models.CASCADE,
+    )
+    name = models.CharField('파일명', max_length=100)
+    attachment = models.FileField('첨부파일', upload_to='session', blank=True)
+
+    class Meta:
+        verbose_name = '세션 첨부파일'
+        verbose_name_plural = f'{verbose_name} 목록'
+
+    def __str__(self):
+        return self.name
 
 
 class Speaker(TimeStampedModel):
