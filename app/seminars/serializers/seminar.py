@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from sponsors.serializers import SponsorTierDetailSerializer
 from ..models import Seminar, Session, Speaker, Track, SessionLink, SessionFile, SessionVideo
 
 SEMINAR_FIELDS = (
@@ -133,9 +134,11 @@ class TrackDetailSerializer(serializers.ModelSerializer):
 
 class SeminarDetailSerializer(serializers.ModelSerializer):
     track_set = TrackDetailSerializer(many=True)
+    sponsor_tier_set = SponsorTierDetailSerializer(many=True)
 
     class Meta:
         model = Seminar
         fields = SEMINAR_FIELDS + (
             'track_set',
+            'sponsor_tier_set',
         )
