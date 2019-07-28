@@ -188,6 +188,7 @@ class SpeakerLink(models.Model):
         related_name='link_set', verbose_name='유형', blank=True, null=True,
     )
     name = models.CharField('링크명', max_length=200)
+    url = models.URLField('URL', blank=True)
 
     class Meta:
         verbose_name = '발표자 링크'

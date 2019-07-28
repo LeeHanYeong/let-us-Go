@@ -91,8 +91,6 @@ REST_FRAMEWORK = {
         'no_underscore_before_number': True,
     },
     'EXCEPTION_HANDLER': 'utils.drf.exceptions.custom_exception_handler',
-    # 'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler'
-
 }
 
 # AWS
@@ -105,8 +103,9 @@ AWS_DEFAULT_ACL = None
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Date/Time Format
-DATE_FORMAT = 'Y-m-d'
-DATETIME_FORMAT = 'Y-m-d'
+DATE_FORMAT = 'Y년 m월 d일'
+TIME_FORMAT = 'H시 i분'
+DATETIME_FORMAT = f'{DATE_FORMAT} {TIME_FORMAT}'
 
 # Messages tags
 MESSAGE_TAGS = {
@@ -228,6 +227,16 @@ ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [
+            TEMPLATES_DIR,
+        ],
+        'APP_DIRS': False,
+        'OPTIONS': {
+            'environment': 'config.jinja2.environment',
+        },
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             TEMPLATES_DIR,
@@ -240,16 +249,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-        },
-    },
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [
-            TEMPLATES_DIR,
-        ],
-        'APP_DIRS': False,
-        'OPTIONS': {
-            'environment': 'config.jinja2.environment',
         },
     },
 ]

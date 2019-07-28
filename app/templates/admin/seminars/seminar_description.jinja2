@@ -1,0 +1,73 @@
+<div>
+    <div>
+        <a href="{{ url('admin:seminars_seminar_change', args=[seminar.pk]) }}">{{ seminar.name }}</a>
+    </div>
+    <table class="admin-list-table">
+        <tr>
+            <td>일시</td>
+            <td>{{ seminar.start_at|localtime|date }} ~ {{ seminar.end_at|localtime|time }}</td>
+        </tr>
+        <tr>
+            <td>주소</td>
+            <td>{{ seminar.address1 }} {{ seminar.address2 }}</td>
+        </tr>
+        <tr>
+            <td>회식비</td>
+            <td>{{ seminar.after_party_fee|intcomma }}원</td>
+        </tr>
+        <tr>
+            <td>트랙</td>
+            <td class="p-0">
+                <table class="admin-list-table">
+                    {% for track in seminar.track_set.all() %}
+                    <tr>
+                        <td>
+                            <a href="{{ url('admin:seminars_track_change', args=[track.pk]) }}">{{ track.name }}</a>
+                        </td>
+                        <td class="pt-0">
+                            <table class="admin-list-table">
+                                <tr>
+                                    <td>장소</td>
+                                    <td>{{ track.location }}</td>
+                                </tr>
+                                <tr>
+                                    <td>정원</td>
+                                    <td>{{ track.total_attend_count|intcomma }}명</td>
+                                </tr>
+                                <tr>
+                                    <td>참가비</td>
+                                    <td>{{ track.entry_fee|intcomma }}원</td>
+                                </tr>
+                                <tr>
+                                    <td>학생참가비</td>
+                                    <td>{{ track.entry_fee_student|intcomma }}원</td>
+                                </tr>
+                                <tr>
+                                    <td>세션 목록</td>
+                                    <td>
+                                        <table class="admin-list-table">
+                                            {% for session in track.session_set.all() %}
+                                            <tr>
+                                                <td class="fw-normal p-0 pb-1">
+                                                    <span>{{ (session.start_time|localtime).strftime('%H:%M') }} - </span>
+                                                    <span>{{ (session.end_time|localtime).strftime('%H:%M') }}</span>
+                                                    <span style="margin-left: 5px;">
+                                                        <b>
+                                                            <a href="{{ url('admin:seminars_session_change', args=[session.pk]) }}">{{ session.name }}</a>
+                                                        </b>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
