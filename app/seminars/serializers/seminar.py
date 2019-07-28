@@ -1,7 +1,17 @@
 from rest_framework import serializers
 
 from sponsors.serializers import SponsorTierDetailSerializer
-from ..models import Seminar, Session, Speaker, Track, SessionLink, SessionFile, SessionVideo
+from ..models import (
+    Seminar,
+    Session,
+    Speaker,
+    Track,
+    SessionLink,
+    SessionFile,
+    SessionVideo,
+    SpeakerLink,
+    SpeakerLinkType,
+)
 
 SEMINAR_FIELDS = (
     'pk',
@@ -42,8 +52,8 @@ SPEAKER_FIELDS = (
     'email',
     'phone_number',
     'img_profile',
-    'facebook',
-    'github',
+
+    'link_set',
 )
 
 
@@ -79,7 +89,32 @@ class SessionFileSerializer(serializers.ModelSerializer):
         )
 
 
+class SpeakerLinkTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SpeakerLinkType
+        fields = (
+            'pk',
+            'name',
+            'img_icon',
+        )
+
+
+class SpeakerLinkSerializer(serializers.ModelSerializer):
+    type = SpeakerLinkTypeSerializer()
+
+    class Meta:
+        model = SpeakerLink
+        fields = (
+            'pk',
+            'type',
+            'name',
+            'url',
+        )
+
+
 class SpeakerSerializer(serializers.ModelSerializer):
+    link_set = SpeakerLinkSerializer(many=True)
+
     class Meta:
         model = Speaker
         fields = SPEAKER_FIELDS
