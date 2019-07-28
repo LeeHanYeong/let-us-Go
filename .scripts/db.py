@@ -32,11 +32,20 @@ def run(cmd, **kwargs):
 
 if __name__ == '__main__':
     os.chdir(ROOT_DIR)
+    if args.production:
+        TARGET_DB_NAME = DATABASE_NAME
+        DUMP_DB_NAME = DATABASE_NAME_DEV
+    elif args.dev:
+        TARGET_DB_NAME = DATABASE_NAME_DEV
+        DUMP_DB_NAME = DATABASE_NAME
+    else:
+        raise ValueError('--production또는 --dev옵션을 사용하십시오')
+
     if args.command == 'dump':
-        run(f'pg_dump -h {DATABASE_HOST} {DATABASE_NAME} > db.dump')
+        run(f'pg_dump -h {DATABASE_HOST} {TARGET_DB_NAME} > db.dump')
     elif args.command == 'load':
-        run(f'pg_dump -h {DATABASE_HOST} {DATABASE_NAME} > db.dump')
-        run(f'dropdb -h {DATABASE_HOST} {DATABASE_NAME_DEV}')
-        run(f'createdb -h {DATABASE_HOST} --owner=lhy --template=template0 --lc-collate="C" {DATABASE_NAME_DEV}')
-        run(f'psql -h {DATABASE_HOST} {DATABASE_NAME_DEV} < db.dump')
+        run(f'pg_dump -h {DATABASE_HOST} {DUMP_DB_NAME} > db.dump')
+        run(f'dropdb -h {DATABASE_HOST} {TARGET_DB_NAME}')
+        run(f'createdb -h {DATABASE_HOST} --owner=lhy --template=template0 --lc-collate="C" {TARGET_DB_NAME}')
+        run(f'psql -h {DATABASE_HOST} {TARGET_DB_NAME} < db.dump')
         os.remove('db.dump')
