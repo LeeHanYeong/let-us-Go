@@ -1,0 +1,26 @@
+.p-0 {
+  padding: 0 !important; }
+
+.pt-0 {
+  padding-top: 0 !important; }
+
+.pb-1 {
+  padding-bottom: 0.1em !important; }
+
+.m-0 {
+  margin: 0 !important; }
+
+.fw-normal {
+  font-weight: normal !important; }
+
+table.admin-list-table {
+  border: none; }
+  table.admin-list-table tr td {
+    font-size: 12px;
+    font-weight: normal;
+    border-bottom: none;
+    padding: 5px 10px 0; }
+  table.admin-list-table tr td:first-of-type {
+    font-weight: bold; }
+
+/*# sourceMappingURL=custom.css.map */
