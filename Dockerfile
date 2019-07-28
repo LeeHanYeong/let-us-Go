@@ -9,7 +9,7 @@ RUN         mkdir -p /var/log/gunicorn &&\
             mkdir -p /srv/master/.log
 
 RUN         rm -rf  /etc/nginx/sites-available/* &&\
-            rm -rf  /etc/nginx/site-enabled/* &&\
+            rm -rf  /etc/nginx/sites-enabled/* &&\
             cp -a   /srv/dev/.config/nginx*.conf \
                     /etc/nginx/conf.d/
 
