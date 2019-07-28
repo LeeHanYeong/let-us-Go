@@ -31,7 +31,7 @@ class Sponsor(TimeStampedModel):
         related_name='sponsor_set', on_delete=models.CASCADE,
     )
     name = models.CharField('스폰서명', max_length=30)
-    logo = models.ImageField('CI로고', upload_to='sponsors', blank=True)
+    logo = models.FileField('CI로고', upload_to='sponsors', blank=True)
 
     def __str__(self):
         return self.name
@@ -39,3 +39,7 @@ class Sponsor(TimeStampedModel):
     class Meta:
         verbose_name = '스폰서'
         verbose_name_plural = f'{verbose_name} 목록'
+        ordering = (
+            'tier__seminar',
+            'tier__order',
+        )
