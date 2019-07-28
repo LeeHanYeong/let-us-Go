@@ -1,8 +1,11 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
+from django.template.loader import render_to_string
 from django.utils.html import format_html
-from markdownx.admin import MarkdownxModelAdmin
+from easy_thumbnails.fields import ThumbnailerField
+from easy_thumbnails.widgets import ImageClearableFileInput
 
+from utils.django.admin import ThumbnailAdminMixin
 from .models import Seminar, Track, Session, Speaker, SessionVideo, SessionLink, SessionFile
 
 
@@ -38,7 +41,10 @@ class SessionFileAdmin(admin.ModelAdmin):
 
 @admin.register(Seminar)
 class SeminarAdmin(admin.ModelAdmin):
-    pass
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            'track_set',
+        )
 
 
 @admin.register(Track)
@@ -61,8 +67,20 @@ class SessionAdmin(admin.ModelAdmin):
 
 
 @admin.register(Speaker)
-class SpeakerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'admin_session_set',)
+class SpeakerAdmin(ThumbnailAdminMixin):
+    list_display = ('name', 'img_profile_thumbnail', 'admin_session_set',)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            'session_set',
+            'session_set__track',
+            'session_set__track__seminar',
+        )
+
+    def img_profile_thumbnail(self, obj):
+        return render_to_string('admin/thumbnail.html', {
+            'image': obj.img_profile,
+        })
 
     def admin_session_set(self, obj):
         sessions = '\n'.join([
@@ -70,4 +88,5 @@ class SpeakerAdmin(admin.ModelAdmin):
         ])
         return format_html(f'<div>{sessions}</div>')
 
+    img_profile_thumbnail.short_description = '프로필 이미지'
     admin_session_set.short_description = '발표한 세션 목록'

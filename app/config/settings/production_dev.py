@@ -4,9 +4,12 @@ secrets = import_secrets()
 
 DEBUG = True
 
-# Static
-MEDIA_LOCATION = 'media_dev'
+# WSGI
+WSGI_APPLICATION = 'config.wsgi.production_dev.application'
 
 if not private_ip:
     DEBUG = True
-    ALLOWED_HOSTS.append('dev.api.localhost')
+    ALLOWED_HOSTS += [
+        'localhost',
+        'dev.api.localhost',
+    ]
