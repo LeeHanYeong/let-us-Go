@@ -15,20 +15,10 @@ DEBUG = False or (
 ) or os.environ.get('DEBUG') == 'True'
 
 # WSGI
-WSGI_APPLICATION = 'config.wsgi.production.application'
-
-# Static
-MEDIA_LOCATION = 'media'
-DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
+WSGI_APPLICATION = 'config.wsgi.production_master.application'
 
 # django-cors-headers
 CORS_ORIGIN_ALLOW_ALL = True
-
-# Sentry
-sentry_sdk.init(
-    dsn=secrets['SENTRY_DSN'],
-    integrations=[DjangoIntegration()]
-)
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -70,6 +60,12 @@ if private_ip:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = True
+
+    # Sentry
+    sentry_sdk.init(
+        dsn=secrets['SENTRY_DSN'],
+        integrations=[DjangoIntegration()]
+    )
 else:
     DEBUG = True
     ALLOWED_HOSTS.append('api.localhost')

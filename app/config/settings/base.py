@@ -38,6 +38,20 @@ STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
 MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 STATICFILES_DIRS = [STATIC_DIR]
 
+MEDIA_LOCATION = 'media'
+DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
+
+# easy-thumbnails
+THUMBNAIL_DEFAULT_STORAGE = 'config.storages.MediaStorage'
+THUMBNAIL_WIDGET_OPTIONS = {
+    'size': (300, 300),
+}
+THUMBNAIL_ALIASES = {
+    '': {
+        'admin_list': {'size': (100, 100), 'crop': False},
+    },
+}
+
 # Auth
 AUTH_USER_MODEL = 'members.User'
 AUTHENTICATION_BACKENDS = [
@@ -112,7 +126,9 @@ ADMIN_REORDER = (
         {'model': 'seminars.Session', 'label': '세션'},
     )},
     {'app': 'seminars', 'label': '세미나 추가정보', 'models': (
-        {'model': 'seminars.Speaker', 'label': '스피커'},
+        {'model': 'seminars.Speaker', 'label': '발표자'},
+        {'model': 'seminars.SpeakerLinkType', 'label': '발표자 링크 유형'},
+        {'model': 'seminars.SpeakerLink', 'label': '발표자 링크'},
         {'model': 'seminars.SessionVideo', 'label': '세션 영상'},
         {'model': 'seminars.SessionLink', 'label': '세션 링크'},
         {'model': 'seminars.SessionFile', 'label': '세션 첨부파일'},
@@ -178,10 +194,12 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'adminsortable2',
+    'django_cleanup.apps.CleanupConfig',
     'django_extensions',
     'django_filters',
     'drf_yasg',
     'corsheaders',
+    'easy_thumbnails',
     'markdownx',
     'rest_auth',
     'rest_framework',

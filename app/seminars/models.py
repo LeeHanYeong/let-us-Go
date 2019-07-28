@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
-from markdownx.models import MarkdownxField
+from easy_thumbnails.fields import ThumbnailerImageField, ThumbnailerField
 from phonenumber_field.modelfields import PhoneNumberField
 
 User = get_user_model()
@@ -153,7 +153,7 @@ class Speaker(TimeStampedModel):
     name = models.CharField('이름', max_length=100, blank=True)
     email = models.EmailField('이메일', blank=True)
     phone_number = PhoneNumberField('전화번호', blank=True)
-    img_profile = models.ImageField('프로필 이미지', upload_to='speaker', blank=True)
+    img_profile = ThumbnailerImageField('프로필 이미지', upload_to='speaker', blank=True)
 
     facebook = models.CharField('Facebook 사용자명', max_length=100, blank=True)
     github = models.CharField('GitHub 사용자명', max_length=100, blank=True)
@@ -164,3 +164,34 @@ class Speaker(TimeStampedModel):
     class Meta:
         verbose_name = '스피커'
         verbose_name_plural = f'{verbose_name} 목록'
+
+
+class SpeakerLinkType(models.Model):
+    name = models.CharField('발표자 링크 유형', max_length=20)
+    img_icon = ThumbnailerField('링크 아이콘 이미지', upload_to='speaker/icon', blank=True)
+
+    class Meta:
+        verbose_name = '발표자 링크 유형'
+        verbose_name_plural = f'{verbose_name} 목록'
+
+    def __str__(self):
+        return self.name
+
+
+class SpeakerLink(models.Model):
+    speaker = models.ForeignKey(
+        Speaker, on_delete=models.CASCADE,
+        related_name='link_set', verbose_name='발표자',
+    )
+    type = models.ForeignKey(
+        SpeakerLinkType, on_delete=models.SET_NULL,
+        related_name='link_set', verbose_name='유형', blank=True, null=True,
+    )
+    name = models.CharField('링크명', max_length=200)
+
+    class Meta:
+        verbose_name = '발표자 링크'
+        verbose_name_plural = f'{verbose_name} 목록'
+
+    def __str__(self):
+        return self.name
