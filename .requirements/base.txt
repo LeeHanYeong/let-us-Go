@@ -14,7 +14,7 @@ django-storages
 easy-thumbnails
 
 # DRF
-djangorestframework
+djangorestframework<3.10
 djangorestframework-api-key
 djangorestframework-camel-case
 django-cors-headers
