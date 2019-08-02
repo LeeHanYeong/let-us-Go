@@ -4,8 +4,17 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html
 
 from utils.django.admin import ThumbnailAdminMixin
-from .models import Seminar, Track, Session, Speaker, SessionVideo, SessionLink, SessionFile, SpeakerLinkType, \
-    SpeakerLink
+from .models import (
+    Seminar,
+    Track,
+    Session,
+    Speaker,
+    SessionVideo,
+    SessionLink,
+    SessionFile,
+    SpeakerLinkType,
+    SpeakerLink,
+)
 
 
 class SessionVideoInline(admin.TabularInline):
@@ -49,9 +58,14 @@ class SeminarAdmin(admin.ModelAdmin):
         )
 
     def admin_description(self, obj):
-        return format_html(render_to_string('admin/seminars/seminar_description.jinja2', {
-            'seminar': obj,
-        }))
+        return format_html(
+            render_to_string(
+                template_name='admin/seminars/seminar_description.jinja2',
+                context={
+                    'seminar': obj,
+                }
+            )
+        )
 
     admin_description.short_description = '세미나'
 
