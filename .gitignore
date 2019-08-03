@@ -1,4 +1,5 @@
 db.dump
+dump.json
 
 # Front
 /.front
