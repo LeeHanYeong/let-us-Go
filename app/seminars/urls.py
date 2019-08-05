@@ -12,4 +12,6 @@ urlpatterns = [
 
     path('sessions/', apis.SessionListAPIView.as_view()),
     path('sessions/<int:pk>/', apis.SessionRetrieveAPIView.as_view()),
+
+    path('speakers/', apis.SpeakerListAPIView.as_view()),
 ]
