@@ -71,6 +71,7 @@ urlpatterns_apis_v1 = [
     path('auth/', include(auth_patterns)),
     path('members/', include(members_patterns)),
     path('seminars/', include('seminars.urls')),
+    path('sponsors/', include('sponsors.urls')),
     path('utils/', include(urlpatterns_apis_utils)),
 ]
 urlpatterns = [
