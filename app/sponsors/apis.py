@@ -16,7 +16,9 @@ from .serializers import SponsorTierDetailSerializer
     )
 )
 class SponsorTierListAPIView(generics.ListAPIView):
-    queryset = SponsorTier.objects.all()
+    queryset = SponsorTier.objects.prefetch_related(
+        'sponsor_set',
+    )
     serializer_class = SponsorTierDetailSerializer
     filterset_class = SponsorTierFilterSet
 
