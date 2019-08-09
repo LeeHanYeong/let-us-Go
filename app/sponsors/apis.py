@@ -21,6 +21,6 @@ class SponsorTierListAPIView(generics.ListAPIView):
     filterset_class = SponsorTierFilterSet
 
     def get_queryset(self):
-        if not self.kwargs.get('seminar'):
+        if not self.request.query_params.get('seminar'):
             raise ValidationError('seminar항목은 필수입니다')
-        return super().get_queryset()
+        return self.queryset
