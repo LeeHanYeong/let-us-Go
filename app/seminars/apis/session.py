@@ -14,7 +14,11 @@ from ..serializers import SessionDetailSerializer, SessionSerializer
     )
 )
 class SessionListAPIView(generics.ListAPIView):
-    queryset = Session.objects.all()
+    queryset = Session.objects.select_related(
+        'speaker',
+    ).prefetch_related(
+        'speaker__link_set',
+    )
     serializer_class = SessionSerializer
 
 
