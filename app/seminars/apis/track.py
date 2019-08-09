@@ -26,5 +26,11 @@ class TrackListAPIView(generics.ListAPIView):
     )
 )
 class TrackRetrieveAPIView(generics.RetrieveAPIView):
-    queryset = Track.objects.all()
+    queryset = Track.objects.prefetch_related(
+        'session_set__file_set',
+        'session_set__link_set',
+        'session_set__video_set',
+        'session_set__speaker',
+        'session_set__speaker__link_set',
+    )
     serializer_class = TrackDetailSerializer
