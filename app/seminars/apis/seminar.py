@@ -26,7 +26,14 @@ class SeminarListAPIView(generics.ListAPIView):
     )
 )
 class SeminarRetrieveAPIView(generics.RetrieveAPIView):
-    queryset = Seminar.objects.all()
+    queryset = Seminar.objects.prefetch_related(
+        'track_set__session_set__file_set',
+        'track_set__session_set__video_set',
+        'track_set__session_set__link_set',
+        'track_set__session_set__speaker',
+        'track_set__session_set__speaker__link_set',
+        'sponsor_tier_set__sponsor_set',
+    )
     serializer_class = SeminarDetailSerializer
 
     def get_object(self):

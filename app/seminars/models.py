@@ -149,6 +149,13 @@ class SessionFile(models.Model):
         return self.name
 
 
+class SpeakerManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related(
+            'link_set',
+        )
+
+
 class Speaker(TimeStampedModel):
     name = models.CharField('이름', max_length=100, blank=True)
     email = models.EmailField('이메일', blank=True)
@@ -157,6 +164,8 @@ class Speaker(TimeStampedModel):
 
     facebook = models.CharField('Facebook 사용자명', max_length=100, blank=True)
     github = models.CharField('GitHub 사용자명', max_length=100, blank=True)
+
+    objects = SpeakerManager()
 
     def __str__(self):
         return self.name
