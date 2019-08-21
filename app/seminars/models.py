@@ -51,6 +51,16 @@ class Track(TimeStampedModel):
         ordering = ('order',)
 
 
+class SessionManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().select_related(
+            'speaker',
+        ).prefetch_related(
+            'speaker__link_set',
+            'speaker__link_set__type',
+        )
+
+
 class Session(TimeStampedModel):
     LEVEL_LOW, LEVEL_MID, LEVEL_HIGH = ('low', 'mid', 'high')
     CHOICES_LEVEL = (
@@ -77,6 +87,8 @@ class Session(TimeStampedModel):
     end_time = models.TimeField('종료시간', blank=True, null=True, db_index=True)
 
     weight = models.IntegerField('비중', default=1)
+
+    objects = SessionManager()
 
     def __str__(self):
         return f'{self.track.seminar.name} | {self.track.name} | {self.name}'
