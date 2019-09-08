@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 from django.contrib import messages
-from djs import import_secrets
+from aws_secrets import SECRETS
 
 from ..jinja2 import environment
 
@@ -26,10 +26,38 @@ LOG_DIR = os.path.join(ROOT_DIR, '.log')
 TEMP_DIR = os.path.join(ROOT_DIR, '.temp')
 os.makedirs(LOG_DIR, exist_ok=True)
 os.makedirs(TEMP_DIR, exist_ok=True)
-import_secrets()
 
 ALLOWED_HOSTS = []
 SITE_ID = 1
+
+# django-aws-secrets-manager
+AWS_SECRETS_MANAGER_SECRETS_NAME = 'lhy'
+# AWS_SECRETS_MANAGER_PROFILE = 'lhy-secrets-manager'
+AWS_SECRETS_MANAGER_SECRETS_SECTION = 'letusgo:base'
+AWS_SECRETS_MANAGER_REGION_NAME = 'ap-northeast-2'
+
+SECRET_KEY = SECRETS['SECRET_KEY']
+
+# django-storages
+AWS_S3_ACCESS_KEY_ID = SECRETS['AWS_S3_ACCESS_KEY_ID']
+AWS_S3_SECRET_ACCESS_KEY = SECRETS['AWS_S3_SECRET_ACCESS_KEY']
+AWS_DEFAULT_ACL = SECRETS['AWS_DEFAULT_ACL']
+AWS_BUCKET_ACL = SECRETS['AWS_BUCKET_ACL']
+AWS_AUTO_CREATE_BUCKET = SECRETS['AWS_AUTO_CREATE_BUCKET']
+AWS_S3_FILE_OVERWRITE = SECRETS['AWS_S3_FILE_OVERWRITE']
+
+# Deploy
+AWS_EB_ACCESS_KEY_ID = SECRETS['AWS_EB_ACCESS_KEY_ID']
+AWS_EB_SECRET_ACCESS_KEY = SECRETS['AWS_EB_SECRET_ACCESS_KEY']
+AWS_ACM_ARN = SECRETS['AWS_ACM_ARN']
+
+# Email
+EMAIL_HOST = SECRETS['EMAIL_HOST']
+EMAIL_HOST_USER = SECRETS['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = SECRETS['EMAIL_HOST_PASSWORD']
+EMAIL_PORT = SECRETS['EMAIL_PORT']
+EMAIL_USE_TLS = SECRETS['EMAIL_USE_TLS']
+DEFAULT_FROM_EMAIL = SECRETS['DEFAULT_FROM_EMAIL']
 
 # Static
 STATIC_URL = '/static/'

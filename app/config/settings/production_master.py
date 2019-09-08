@@ -6,13 +6,19 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 from .base import *
 
-secrets = import_secrets()
-
 DEBUG = False or (
         len(sys.argv) > 1
         and sys.argv[1] == 'runserver'
         and platform.system() != 'Linux'
 ) or os.environ.get('DEBUG') == 'True'
+
+# Secrets
+AWS_SECRETS_MANAGER_SECRETS_SECTION = 'letusgo:production_master'
+ALLOWED_HOSTS = SECRETS['ALLOWED_HOSTS']
+DATABASES = SECRETS['DATABASES']
+AWS_STORAGE_BUCKET_NAME = SECRETS['AWS_STORAGE_BUCKET_NAME']
+API_KEY_FRONT_DEPLOY = SECRETS['API_KEY_FRONT_DEPLOY']
+SENTRY_DSN = SECRETS['SENTRY_DSN']
 
 # WSGI
 WSGI_APPLICATION = 'config.wsgi.production_master.application'
@@ -63,7 +69,7 @@ if private_ip:
 
     # Sentry
     sentry_sdk.init(
-        dsn=secrets['SENTRY_DSN'],
+        dsn=SENTRY_DSN,
         integrations=[DjangoIntegration()]
     )
 else:

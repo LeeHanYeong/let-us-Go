@@ -1,6 +1,7 @@
 # Django
 django
 django-admin-sortable2
+django-aws-secrets-manager
 django-cleanup
 django-ckeditor
 django-extensions

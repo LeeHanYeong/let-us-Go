@@ -1,5 +1,6 @@
 db.dump
 dump.json
+aws_secrets
 
 # Front
 /.front

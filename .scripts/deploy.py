@@ -22,11 +22,13 @@ MASTER_TAR_PATH = os.path.join(ROOT_DIR, '.master.tar')
 MASTER_SECRETS_DIR = os.path.join(ROOT_DIR, '.master', '.secrets')
 SECRETS = json.load(open(os.path.join(SECRETS_DIR, 'base.json')))
 
-ACCESS_KEY = SECRETS['AWS_EB_ACCESS_KEY_ID']
-SECRET_KEY = SECRETS['AWS_EB_SECRET_ACCESS_KEY']
-os.environ['AWS_ACCESS_KEY_ID'] = ACCESS_KEY
-os.environ['AWS_SECRET_ACCESS_KEY'] = SECRET_KEY
-ENV = dict(os.environ, AWS_ACCESS_KEY_ID=ACCESS_KEY, AWS_SECRET_ACCESS_KEY=SECRET_KEY)
+EB_ACCESS_KEY = SECRETS['AWS_EB_ACCESS_KEY_ID']
+EB_SECRET_KEY = SECRETS['AWS_EB_SECRET_ACCESS_KEY']
+SECRETS_MANAGER_ACCESS_KEY = SECRETS['AWS_SECRETS_MANAGER_ACCESS_KEY_ID']
+SECRETS_MANAGER_SECRET_KEY = SECRETS['AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY']
+os.environ['AWS_ACCESS_KEY_ID'] = EB_ACCESS_KEY
+os.environ['AWS_SECRET_ACCESS_KEY'] = EB_SECRET_KEY
+ENV = dict(os.environ, AWS_ACCESS_KEY_ID=EB_ACCESS_KEY, AWS_SECRET_ACCESS_KEY=EB_SECRET_KEY)
 ENV['PYTHONPATH'] = ENV.get('PYENV_VIRTUAL_ENV') or ENV.get('VIRTUAL_ENV')
 
 # Docker Images
@@ -139,6 +141,15 @@ if __name__ == '__main__':
 
     # eb create
     run(f'eb create {swap_environment_name} --cname letusgo-swap --elb-type application --sample')
+    run('eb tags {env} -a {env_vars}'.format(
+        env=swap_environment_name,
+        env_vars=','.join(
+            f'{key}={value}' for key, value in {
+                'AWS_SECRETS_MANAGER_ACCESS_KEY_ID': SECRETS_MANAGER_ACCESS_KEY,
+                'AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY': SECRETS_MANAGER_SECRET_KEY,
+            }
+        )
+    ))
 
     # staged영역 포함한 eb deploy실행
     run('git add -A')

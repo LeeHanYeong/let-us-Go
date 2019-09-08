@@ -1,6 +1,13 @@
 from .production_master import *
 
-secrets = import_secrets()
+from aws_secrets import SECRETS
+
+# Secrets
+AWS_SECRETS_MANAGER_SECRETS_SECTION = 'letusgo:production_dev'
+ALLOWED_HOSTS = SECRETS['ALLOWED_HOSTS']
+DATABASES = SECRETS['DATABASES']
+AWS_STORAGE_BUCKET_NAME = SECRETS['AWS_STORAGE_BUCKET_NAME']
+API_KEY_FRONT_DEPLOY = SECRETS['API_KEY_FRONT_DEPLOY']
 
 DEBUG = True
 
