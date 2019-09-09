@@ -5,3 +5,7 @@
 !/.master
 !/master.tar
 !/dev.tar
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore

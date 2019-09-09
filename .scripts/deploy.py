@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 import subprocess
+from copy import deepcopy
 from time import sleep
 
 import boto3
@@ -20,12 +21,12 @@ SECRETS_DIR = os.path.join(ROOT_DIR, '.secrets')
 MASTER_DIR = os.path.join(ROOT_DIR, '.master')
 MASTER_TAR_PATH = os.path.join(ROOT_DIR, '.master.tar')
 MASTER_SECRETS_DIR = os.path.join(ROOT_DIR, '.master', '.secrets')
-SECRETS = json.load(open(os.path.join(SECRETS_DIR, 'base.json')))
+AWS_SECRETS = json.load(open(os.path.join(SECRETS_DIR, 'aws.json')))
 
-EB_ACCESS_KEY = SECRETS['AWS_EB_ACCESS_KEY_ID']
-EB_SECRET_KEY = SECRETS['AWS_EB_SECRET_ACCESS_KEY']
-SECRETS_MANAGER_ACCESS_KEY = SECRETS['AWS_SECRETS_MANAGER_ACCESS_KEY_ID']
-SECRETS_MANAGER_SECRET_KEY = SECRETS['AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY']
+EB_ACCESS_KEY = AWS_SECRETS['AWS_EB_ACCESS_KEY_ID']
+EB_SECRET_KEY = AWS_SECRETS['AWS_EB_SECRET_ACCESS_KEY']
+SECRETS_MANAGER_ACCESS_KEY = AWS_SECRETS['AWS_SECRETS_MANAGER_ACCESS_KEY_ID']
+SECRETS_MANAGER_SECRET_KEY = AWS_SECRETS['AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY']
 os.environ['AWS_ACCESS_KEY_ID'] = EB_ACCESS_KEY
 os.environ['AWS_SECRET_ACCESS_KEY'] = EB_SECRET_KEY
 ENV = dict(os.environ, AWS_ACCESS_KEY_ID=EB_ACCESS_KEY, AWS_SECRET_ACCESS_KEY=EB_SECRET_KEY)
@@ -55,8 +56,19 @@ RUN_CMD = 'docker run --rm -it {options}'.format(
 )
 
 
+class RunError(Exception):
+    def __init__(self, cmd):
+        self.cmd = cmd
+
+    def __str__(self):
+        return f'subprocess.run Error! ({self.cmd})'
+
+
 def run(cmd, **kwargs):
-    subprocess.run(cmd, shell=True, env=ENV, **kwargs)
+    run_env = kwargs.pop('env', ENV)
+    p = subprocess.run(cmd, shell=True, env=run_env, **kwargs)
+    if p.returncode != 0:
+        raise RunError(cmd)
 
 
 def build():
@@ -90,13 +102,16 @@ def build():
     shutil.copytree(SECRETS_DIR, MASTER_SECRETS_DIR)
 
     # migrate
-    run('DJANGO_SETTINGS_MODULE=config.settings.production_dev python app/manage.py migrate --noinput')
-    os.chdir(os.path.join(ROOT_DIR, '.master'))
-    run('DJANGO_SETTINGS_MODULE=config.settings.production_master python app/manage.py migrate --noinput')
-    os.chdir(os.path.join(ROOT_DIR))
+    # run('DJANGO_SETTINGS_MODULE=config.settings.production_dev python app/manage.py migrate --noinput')
+    # os.chdir(os.path.join(ROOT_DIR, '.master'))
+    # run('DJANGO_SETTINGS_MODULE=config.settings.production_master python app/manage.py migrate --noinput')
+    # os.chdir(os.path.join(ROOT_DIR))
 
     # Build local image
-    run(f'docker build -t {IMAGE_PRODUCTION_LOCAL} -f Dockerfile .')
+    ENV_SECRETS = deepcopy(ENV)
+    ENV_SECRETS['AWS_ACCESS_KEY_ID'] = SECRETS_MANAGER_ACCESS_KEY
+    ENV_SECRETS['AWS_SECRET_ACCESS_KEY'] = SECRETS_MANAGER_SECRET_KEY
+    run(f'docker build -t {IMAGE_PRODUCTION_LOCAL} -f Dockerfile .', env=ENV_SECRETS)
 
 
 if __name__ == '__main__':
@@ -117,6 +132,10 @@ if __name__ == '__main__':
         exit(0)
 
     # 위 3경우 외에는 deploy이므로, 이미지 push후 진행
+    run('docker login -u {username} -p {password}'.format(
+        username=AWS_SECRETS['DOCKERHUB_USERNAME'],
+        password=AWS_SECRETS['DOCKERHUB_PASSWORD'],
+    ))
     run(f'docker push {IMAGE_BASE}')
 
     # AWS Clients
@@ -140,16 +159,16 @@ if __name__ == '__main__':
     print(f'새로 생성할 Environment: {swap_environment_name}')
 
     # eb create
-    run(f'eb create {swap_environment_name} --cname letusgo-swap --elb-type application --sample')
-    run('eb tags {env} -a {env_vars}'.format(
-        env=swap_environment_name,
-        env_vars=','.join(
-            f'{key}={value}' for key, value in {
-                'AWS_SECRETS_MANAGER_ACCESS_KEY_ID': SECRETS_MANAGER_ACCESS_KEY,
-                'AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY': SECRETS_MANAGER_SECRET_KEY,
-            }
-        )
-    ))
+    env_vars = ','.join(
+        f'{key}={value}' for key, value in {
+            'AWS_SECRETS_MANAGER_ACCESS_KEY_ID': SECRETS_MANAGER_ACCESS_KEY,
+            'AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY': SECRETS_MANAGER_SECRET_KEY,
+        }.items())
+    run(f'eb create {swap_environment_name} '
+        f'--cname letusgo-swap '
+        f'--elb-type application '
+        f'--envvars {env_vars}'
+        f'--sample')
 
     # staged영역 포함한 eb deploy실행
     run('git add -A')
@@ -180,7 +199,7 @@ if __name__ == '__main__':
         Port=443,
         Certificates=[
             {
-                'CertificateArn': SECRETS['AWS_ACM_ARN'],
+                'CertificateArn': AWS_SECRETS['AWS_ACM_ARN'],
             },
         ],
         DefaultActions=[

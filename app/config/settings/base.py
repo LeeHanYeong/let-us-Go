@@ -32,7 +32,7 @@ SITE_ID = 1
 
 # django-aws-secrets-manager
 AWS_SECRETS_MANAGER_SECRETS_NAME = 'lhy'
-# AWS_SECRETS_MANAGER_PROFILE = 'lhy-secrets-manager'
+AWS_SECRETS_MANAGER_PROFILE = 'lhy-secrets-manager'
 AWS_SECRETS_MANAGER_SECRETS_SECTION = 'letusgo:base'
 AWS_SECRETS_MANAGER_REGION_NAME = 'ap-northeast-2'
 

@@ -16,10 +16,12 @@ RUN         rm -rf  /etc/nginx/sites-available/* &&\
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_dev
 WORKDIR     /srv/dev/app
 RUN         python manage.py collectstatic --noinput
+RUN         python manage.py migrate --noinput
 
 ENV         DJANGO_SETTINGS_MODULE=config.settings.production_master
 WORKDIR     /srv/master/app
 RUN         python manage.py collectstatic --noinput
+RUN         python manage.py migrate --noinput
 
 # CMD
 WORKDIR     /srv/front
