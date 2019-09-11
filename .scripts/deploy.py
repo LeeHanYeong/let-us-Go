@@ -4,7 +4,6 @@ import json
 import os
 import shutil
 import subprocess
-from copy import deepcopy
 from time import sleep
 
 import boto3
@@ -13,6 +12,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--build', action='store_true')
 parser.add_argument('--run', action='store_true')
 parser.add_argument('--bash', action='store_true')
+parser.add_argument('--push', action='store_true')
 args = parser.parse_args()
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,10 +23,16 @@ MASTER_TAR_PATH = os.path.join(ROOT_DIR, '.master.tar')
 MASTER_SECRETS_DIR = os.path.join(ROOT_DIR, '.master', '.secrets')
 AWS_SECRETS = json.load(open(os.path.join(SECRETS_DIR, 'aws.json')))
 
-EB_ACCESS_KEY = AWS_SECRETS['AWS_EB_ACCESS_KEY_ID']
-EB_SECRET_KEY = AWS_SECRETS['AWS_EB_SECRET_ACCESS_KEY']
-SECRETS_MANAGER_ACCESS_KEY = AWS_SECRETS['AWS_SECRETS_MANAGER_ACCESS_KEY_ID']
-SECRETS_MANAGER_SECRET_KEY = AWS_SECRETS['AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY']
+SESSION_SECRETS = boto3.session.Session(profile_name='lhy-secrets-manager')
+SESSION_SECRETS_CREDENTIALS = SESSION_SECRETS.get_credentials()
+SESSION_EB = boto3.session.Session(profile_name='letusgo')
+SESSION_EB_CREDENTIALS = SESSION_EB.get_credentials()
+
+EB_ACCESS_KEY = SESSION_EB_CREDENTIALS.access_key
+EB_SECRET_KEY = SESSION_EB_CREDENTIALS.secret_key
+SECRETS_MANAGER_ACCESS_KEY = SESSION_SECRETS_CREDENTIALS.access_key
+SECRETS_MANAGER_SECRET_KEY = SESSION_SECRETS_CREDENTIALS.secret_key
+
 os.environ['AWS_ACCESS_KEY_ID'] = EB_ACCESS_KEY
 os.environ['AWS_SECRET_ACCESS_KEY'] = EB_SECRET_KEY
 ENV = dict(os.environ, AWS_ACCESS_KEY_ID=EB_ACCESS_KEY, AWS_SECRET_ACCESS_KEY=EB_SECRET_KEY)
@@ -107,16 +113,23 @@ def build():
     # run('DJANGO_SETTINGS_MODULE=config.settings.production_master python app/manage.py migrate --noinput')
     # os.chdir(os.path.join(ROOT_DIR))
 
-    # Build local image
-    ENV_SECRETS = deepcopy(ENV)
-    ENV_SECRETS['AWS_ACCESS_KEY_ID'] = SECRETS_MANAGER_ACCESS_KEY
-    ENV_SECRETS['AWS_SECRET_ACCESS_KEY'] = SECRETS_MANAGER_SECRET_KEY
-    run(f'docker build -t {IMAGE_PRODUCTION_LOCAL} -f Dockerfile .', env=ENV_SECRETS)
+    # Build ProductionImage (Local)
+    run('docker build {build_args} -t {tag} -f {dockerfile} .'.format(
+        build_args=' '.join([
+            f'--build-arg {key}={value}'
+            for key, value in {
+                'AWS_SECRETS_MANAGER_ACCESS_KEY_ID': SECRETS_MANAGER_ACCESS_KEY,
+                'AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY': SECRETS_MANAGER_SECRET_KEY,
+            }.items()
+        ]),
+        tag=IMAGE_PRODUCTION_LOCAL,
+        dockerfile='./.dockerfile/Dockerfile.production',
+    ))
 
 
 if __name__ == '__main__':
     os.chdir(ROOT_DIR)
-    # 로컬 이미지 빌드
+    # Production 이미지 빌드
     build()
 
     # build/run/bash옵션 처리
@@ -131,12 +144,19 @@ if __name__ == '__main__':
         run(f'{RUN_CMD} /bin/bash')
         exit(0)
 
+    # Push ECR
+    run(f'docker tag {IMAGE_PRODUCTION_LOCAL} {IMAGE_PRODUCTION_ECR}')
+    run(f'$(aws ecr get-login --no-include-email --region ap-northeast-2) && docker push {IMAGE_PRODUCTION_ECR}')
+
+    if args.push:
+        exit(0)
+
     # 위 3경우 외에는 deploy이므로, 이미지 push후 진행
-    run('docker login -u {username} -p {password}'.format(
-        username=AWS_SECRETS['DOCKERHUB_USERNAME'],
-        password=AWS_SECRETS['DOCKERHUB_PASSWORD'],
-    ))
-    run(f'docker push {IMAGE_BASE}')
+    # run('docker login -u {username} -p {password}'.format(
+    #     username=AWS_SECRETS['DOCKERHUB_USERNAME'],
+    #     password=AWS_SECRETS['DOCKERHUB_PASSWORD'],
+    # ))
+    # run(f'docker push {IMAGE_BASE}')
 
     # AWS Clients
     client = boto3.client('elasticbeanstalk')
