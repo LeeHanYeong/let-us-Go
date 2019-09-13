@@ -37,6 +37,7 @@ TRACK_FIELDS = (
 )
 SESSION_FIELDS = (
     'pk',
+    'img_cover',
     'level',
     'level_display',
     'name',

@@ -187,7 +187,7 @@ if __name__ == '__main__':
     run(f'eb create {swap_environment_name} '
         f'--cname letusgo-swap '
         f'--elb-type application '
-        f'--envvars {env_vars}'
+        f'--envvars {env_vars} '
         f'--sample')
 
     # staged영역 포함한 eb deploy실행

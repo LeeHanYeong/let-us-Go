@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
+
 from django.utils.functional import lazy
 from django_extensions.db.models import TimeStampedModel
 from easy_thumbnails.fields import ThumbnailerImageField, ThumbnailerField
@@ -97,6 +98,7 @@ class Session(TimeStampedModel):
         Track, on_delete=models.CASCADE,
         verbose_name='트랙', related_name='session_set',
     )
+    img_cover = models.ImageField('커버이미지', upload_to='session', blank=True)
     level = models.CharField('레벨', choices=CHOICES_LEVEL, max_length=5, blank=True, db_index=True)
     name = models.CharField('세션명', max_length=50)
     short_description = models.CharField('세션 설명(간략)', max_length=200, blank=True)
