@@ -2,6 +2,10 @@
 
 ## API Update
 
+- 190913
+  - SeminarList에 `year` filter추가
+  - Seminar에 `year`, `season`필드 추가
+  - Session에 `img_cover`필드 추가
 - 190702
   - 에러메세지 출력방식 변경
   - UserAttribute AvailableCheck동작 오류 수정
