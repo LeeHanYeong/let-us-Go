@@ -6,6 +6,7 @@ app_name = 'seminars'
 urlpatterns = [
     path('', apis.SeminarListAPIView.as_view()),
     path('<int:pk>/', apis.SeminarRetrieveAPIView.as_view()),
+    path('search/', apis.SessionSearchAPIView.as_view()),
 
     path('tracks/', apis.TrackListAPIView.as_view()),
     path('tracks/<int:pk>/', apis.TrackRetrieveAPIView.as_view()),

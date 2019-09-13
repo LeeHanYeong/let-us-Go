@@ -28,7 +28,7 @@ class Seminar(TimeStampedModel):
         (SEASON_FALL, '가을'),
         (SEASON_WINTER, '겨울'),
     )
-    year = models.IntegerField('연도', choices=[(year, year) for year in range(2000, 3000)], blank=True, null=True)
+    year = models.IntegerField('연도', choices=[(year, year) for year in range(2000, 2100)], blank=True, null=True)
     season = models.CharField('시즌', choices=CHOICES_SEASON, max_length=12, blank=True)
     name = models.CharField('세미나명', max_length=100)
     start_at = models.DateTimeField('세미나 시작일시', blank=True, null=True, db_index=True)
