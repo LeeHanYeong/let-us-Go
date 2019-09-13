@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils import timezone
+from django.utils.functional import lazy
 from django_extensions.db.models import TimeStampedModel
 from easy_thumbnails.fields import ThumbnailerImageField, ThumbnailerField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -7,7 +9,26 @@ from phonenumber_field.modelfields import PhoneNumberField
 User = get_user_model()
 
 
+def choices_seminar_year():
+    now = timezone.now()
+    first_seminar = Seminar.objects.order_by('year').first()
+    start_year = first_seminar.year if first_seminar and first_seminar.year and first_seminar.year < now.year else now.year
+
+    last_seminar = Seminar.objects.order_by('year').last()
+    end_year = last_seminar.year + 2 if last_seminar and last_seminar.year else now.year + 2
+    return [(year, year) for year in range(start_year, end_year + 1)]
+
+
 class Seminar(TimeStampedModel):
+    SEASON_SPRING, SEASON_SUMMER, SEASON_FALL, SEASON_WINTER = 'spring', 'summer', 'fall', 'winter'
+    CHOICES_SEASON = (
+        (SEASON_SPRING, '봄'),
+        (SEASON_SUMMER, '여름'),
+        (SEASON_FALL, '가을'),
+        (SEASON_WINTER, '겨울'),
+    )
+    year = models.IntegerField('연도', choices=[(year, year) for year in range(2000, 3000)], blank=True, null=True)
+    season = models.CharField('시즌', choices=CHOICES_SEASON, max_length=12, blank=True)
     name = models.CharField('세미나명', max_length=100)
     start_at = models.DateTimeField('세미나 시작일시', blank=True, null=True, db_index=True)
     end_at = models.DateTimeField('세미나 종료일시', blank=True, null=True)
@@ -26,6 +47,10 @@ class Seminar(TimeStampedModel):
         verbose_name = '세미나'
         verbose_name_plural = f'{verbose_name} 목록'
         ordering = ('-start_at',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._meta.get_field('year').choices = lazy(choices_seminar_year, list)()
 
 
 class Track(TimeStampedModel):

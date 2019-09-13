@@ -50,6 +50,7 @@ class SessionFileAdmin(admin.ModelAdmin):
 @admin.register(Seminar)
 class SeminarAdmin(admin.ModelAdmin):
     list_display = ('admin_description',)
+    list_filter = ('year',)
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related(

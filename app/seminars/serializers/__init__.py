@@ -15,6 +15,8 @@ from ..models import (
 
 SEMINAR_FIELDS = (
     'pk',
+    'year',
+    'season',
     'name',
     'start_at',
     'end_at',

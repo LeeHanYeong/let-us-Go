@@ -2,6 +2,7 @@ from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics
 
+from ..filters import SeminarFilterSet
 from ..models import Seminar
 from ..serializers import SeminarSerializer, SeminarDetailSerializer
 
@@ -16,6 +17,7 @@ from ..serializers import SeminarSerializer, SeminarDetailSerializer
 class SeminarListAPIView(generics.ListAPIView):
     queryset = Seminar.objects.all()
     serializer_class = SeminarSerializer
+    filterset_class = SeminarFilterSet
 
 
 @method_decorator(

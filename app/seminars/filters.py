@@ -4,6 +4,14 @@ from rest_framework.generics import get_object_or_404
 from .models import Seminar, Speaker
 
 
+class SeminarFilterSet(filters.FilterSet):
+    class Meta:
+        model = Seminar
+        fields = (
+            'year',
+        )
+
+
 class SpeakerFilterSet(filters.FilterSet):
     seminar = filters.CharFilter(help_text='Seminar의 pk(id)', method='seminar_filter')
 
