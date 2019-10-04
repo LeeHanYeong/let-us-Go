@@ -24,9 +24,9 @@ from drf_yasg.renderers import ReDocRenderer as BaseReDocRenderer, OpenAPIRender
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
+from members import views as views_members
 from members.urls import members_patterns, auth_patterns
 from . import views, apis
-from members import views as views_members
 
 admin.site.site_title = 'let us:Go!'
 admin.site.site_header = 'let us:Go! 관리자 페이지'
