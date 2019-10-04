@@ -21,11 +21,13 @@ SECRETS_DIR = os.path.join(ROOT_DIR, '.secrets')
 MASTER_DIR = os.path.join(ROOT_DIR, '.master')
 MASTER_TAR_PATH = os.path.join(ROOT_DIR, '.master.tar')
 MASTER_SECRETS_DIR = os.path.join(ROOT_DIR, '.master', '.secrets')
-AWS_SECRETS = json.load(open(os.path.join(SECRETS_DIR, 'aws.json')))
 
-SESSION_SECRETS = boto3.session.Session(profile_name='lhy-secrets-manager')
+AWS_PROFILE_SECRETS = 'lhy-secrets-manager'
+AWS_PROFILE_EB = 'letusgo'
+AWS_REGION = 'ap-northeast-2'
+SESSION_SECRETS = boto3.session.Session(profile_name=AWS_PROFILE_SECRETS, region_name=AWS_REGION)
 SESSION_SECRETS_CREDENTIALS = SESSION_SECRETS.get_credentials()
-SESSION_EB = boto3.session.Session(profile_name='letusgo')
+SESSION_EB = boto3.session.Session(profile_name=AWS_PROFILE_EB, region_name=AWS_REGION)
 SESSION_EB_CREDENTIALS = SESSION_EB.get_credentials()
 
 EB_ACCESS_KEY = SESSION_EB_CREDENTIALS.access_key
@@ -104,8 +106,8 @@ def build():
     run(f'git archive --format=tar.gz master -o {MASTER_TAR_PATH}')
     run(f'tar -xzf {MASTER_TAR_PATH} -C {MASTER_DIR}')
     os.remove(MASTER_TAR_PATH)
-    shutil.rmtree(MASTER_SECRETS_DIR, ignore_errors=True)
-    shutil.copytree(SECRETS_DIR, MASTER_SECRETS_DIR)
+    # shutil.rmtree(MASTER_SECRETS_DIR, ignore_errors=True)
+    # shutil.copytree(SECRETS_DIR, MASTER_SECRETS_DIR)
 
     # migrate
     # run('DJANGO_SETTINGS_MODULE=config.settings.production_dev python app/manage.py migrate --noinput')
@@ -162,6 +164,8 @@ if __name__ == '__main__':
     client = boto3.client('elasticbeanstalk')
     elb_client = boto3.client('elbv2')
     ec2_client = boto3.client('ec2')
+    secrets_manager_client = SESSION_SECRETS.client('secretsmanager')
+    acm_arn = json.loads(secrets_manager_client.get_secret_value(SecretId='lhy')['SecretString'])['letusgo']['base']['AWS_ACM_ARN']
 
     # 실행중인 Environment가져오기
     environments = [
@@ -193,7 +197,7 @@ if __name__ == '__main__':
     # staged영역 포함한 eb deploy실행
     run('git add -A')
     run('git add -f .master')
-    run('git add -f .secrets')
+    # run('git add -f .secrets')
     run(f'eb deploy --staged --timeout 20 {swap_environment_name}')
     run('git reset HEAD', stdout=subprocess.DEVNULL)
 
@@ -219,7 +223,7 @@ if __name__ == '__main__':
         Port=443,
         Certificates=[
             {
-                'CertificateArn': AWS_SECRETS['AWS_ACM_ARN'],
+                'CertificateArn': acm_arn,
             },
         ],
         DefaultActions=[
