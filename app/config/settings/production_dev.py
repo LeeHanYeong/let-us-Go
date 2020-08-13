@@ -1,21 +1,26 @@
 from .production_master import *
 
-from aws_secrets import SECRETS
+DEBUG = True
 
 # Secrets
-AWS_SECRETS_MANAGER_SECRETS_SECTION = 'letusgo:production_dev'
+AWS_SECRETS_MANAGER_SECRET_SECTION = 'letusgo:production_dev'
+AWS_STORAGE_BUCKET_NAME = SECRETS['AWS_STORAGE_BUCKET_NAME']
+
 ALLOWED_HOSTS = SECRETS['ALLOWED_HOSTS']
 DATABASES = SECRETS['DATABASES']
-AWS_STORAGE_BUCKET_NAME = SECRETS['AWS_STORAGE_BUCKET_NAME']
 API_KEY_FRONT_DEPLOY = SECRETS['API_KEY_FRONT_DEPLOY']
-
-DEBUG = True
+SENTRY_DSN = SECRETS['SENTRY_DSN']
 
 # WSGI
 WSGI_APPLICATION = 'config.wsgi.production_dev.application'
 
-if not private_ip:
-    DEBUG = True
+if private_ip:
+    # Sentry
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()]
+    )
+else:
     ALLOWED_HOSTS += [
         'localhost',
         'dev.api.localhost',

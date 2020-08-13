@@ -30,6 +30,7 @@ from . import views, apis
 
 admin.site.site_title = 'let us:Go!'
 admin.site.site_header = 'let us:Go! 관리자 페이지'
+admin.site.enable_nav_sidebar = False
 
 
 class SchemaGenerator(OpenAPISchemaGenerator):
@@ -76,7 +77,6 @@ urlpatterns_apis_v1 = [
 ]
 urlpatterns = [
     re_path(r'^doc/$', RedocSchemaView.as_cached_view(cache_timeout=0), name='schema-redoc'),
-    re_path(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
     path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),

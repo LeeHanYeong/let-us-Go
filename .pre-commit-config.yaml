@@ -1,0 +1,17 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: poetry-export
+        name: Poetry export
+        description: Poetry export requirements.txt
+        entry: python .scripts/pre_commit.py
+        language: system
+        types: [python]
