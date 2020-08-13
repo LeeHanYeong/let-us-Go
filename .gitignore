@@ -1,35 +1,13 @@
 db.dump
 dump.json
-aws_secrets
-
-# Front
-/.front
-
-# branch
-/.master
-/.master.tar
-
-/master.tar
-/master.zip
-/master
-/dev.tar
-/dev.zip
-/dev
-
-/temp
-/app/kakao_zipcode
 .sass-cache/
 *.ipynb
 
 # ignore directories
-/.secrets
 /.static
 /.media
 /.temp
 /.log
-
-# Created by https://www.gitignore.io/api/vue,git,macos,linux,vuejs,django,python,windows,database,pycharm+all,jupyternotebook,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=vue,git,macos,linux,vuejs,django,python,windows,database,pycharm+all,jupyternotebook,visualstudiocode
 
 ### Database ###
 *.accdb
@@ -301,7 +279,6 @@ fabric.properties
 ### PyCharm+all Patch ###
 # Ignores the whole .idea folder and all .iml files
 # See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360
-
 .idea/
 
 # Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
@@ -313,55 +290,6 @@ modules.xml
 
 # Sonarlint plugin
  .idea/sonarlint
-
-### Python ###
-# Byte-compiled / optimized / DLL files
-
-# C extensions
-
-# Distribution / packaging
-
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-
-# Installer logs
-
-# Unit test / coverage reports
-
-# Translations
-
-# Django stuff:
-
-# Flask stuff:
-
-# Scrapy stuff:
-
-# Sphinx documentation
-
-# PyBuilder
-
-# Jupyter Notebook
-
-# IPython
-
-# pyenv
-
-# celery beat schedule file
-
-# SageMath parsed files
-
-# Environments
-
-# Spyder project settings
-
-# Rope project settings
-
-# mkdocs documentation
-
-# mypy
-
-# Pyre type checker
 
 ### Python Patch ###
 .venv/
@@ -376,19 +304,6 @@ modules.xml
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
-
-### Vue ###
-# gitignore template for Vue.js projects
-# Recommended template: Node.gitignore
-
-# TODO: where does this rule come from?
-docs/_book
-
-# TODO: where does this rule come from?
-test/
-
-### Vuejs ###
-node_modules
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -414,10 +329,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-# End of https://www.gitignore.io/api/vue,git,macos,linux,vuejs,django,python,windows,database,pycharm+all,jupyternotebook,visualstudiocode
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
