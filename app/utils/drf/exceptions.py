@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from rest_framework import exceptions, status
 from rest_framework.exceptions import APIException as BaseAPIException, PermissionDenied
 from rest_framework.response import Response
@@ -16,7 +16,7 @@ def _get_message(detail):
         return '\n'.join([_get_message(value) for key, value in detail.items()])
     elif isinstance(detail, Error):
         return detail.message
-    text = force_text(detail)
+    text = force_str(detail)
     return text
 
 
