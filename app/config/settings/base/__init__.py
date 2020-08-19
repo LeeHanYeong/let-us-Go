@@ -15,6 +15,7 @@ ALLOWED_HOSTS = []
 DATE_FORMAT = 'Y년 m월 d일'
 TIME_FORMAT = 'H시 i분'
 DATETIME_FORMAT = f'{DATE_FORMAT} {TIME_FORMAT}'
+APPEND_SLASH = False
 
 # Messages tags
 MESSAGE_TAGS = {
@@ -63,6 +64,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'utils.django.middleware.AppendSlashMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

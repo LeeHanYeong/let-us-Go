@@ -2,10 +2,10 @@ from django.utils.decorators import method_decorator
 from drf_yasg.openapi import Parameter, IN_PATH
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from utils.drf.exceptions import ValidationError
 from ..models import Session
 from ..serializers import SessionDetailSerializer, SessionSerializer
 

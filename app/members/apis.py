@@ -11,8 +11,6 @@ from rest_framework import generics, status, permissions
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
-from utils.drf import errors
-from utils.drf.doc import ResponseErrors
 from .models import User, EmailVerification
 from .permissions import IsUserSelf
 from .serializers import (
@@ -20,7 +18,9 @@ from .serializers import (
     UserCreateSerializer,
     UserUpdateSerializer,
     UserAttributeAvailableSerializer,
-    AuthTokenSerializer, EmailVerificationCreateSerializer)
+    AuthTokenSerializer,
+    EmailVerificationCreateSerializer,
+)
 
 
 @method_decorator(
@@ -33,12 +33,7 @@ from .serializers import (
             status.HTTP_400_BAD_REQUEST: APIResponse(
                 description='실패',
                 examples={
-                    **ResponseErrors(
-                        '이메일 인증 관련',
-                        errors.EMAIL_SEND_FAILED,
-                        errors.EMAIL_VERIFICATION_INCOMPLETED,
-                        errors.EMAIL_VERIFICATION_NOT_EXISTS,
-                    ),
+
                 }
             ),
         }

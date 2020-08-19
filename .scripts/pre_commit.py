@@ -23,4 +23,5 @@ if __name__ == '__main__':
         raise RequiredPackagesNotInstalled('poetry', 'https://lhy.kr/python-poetry')
 
     run('poetry export -f requirements.txt > requirements.txt')
-    run('git add requirements.txt')
+    run('poetry export -f requirements.txt --dev > requirements_dev.txt')
+    run('git add requirements.txt requirements_dev.txt')

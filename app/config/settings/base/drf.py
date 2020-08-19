@@ -19,5 +19,5 @@ REST_FRAMEWORK = {
     'JSON_UNDERSCOREIZE': {
         'no_underscore_before_number': True,
     },
-    'EXCEPTION_HANDLER': 'utils.drf.exceptions.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'utils.drf.exceptions.rest_exception_handler',
 }

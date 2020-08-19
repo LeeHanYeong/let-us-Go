@@ -1,8 +1,8 @@
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics
+from rest_framework.exceptions import ValidationError
 
-from utils.drf.exceptions import ValidationError
 from .filters import SponsorTierFilterSet
 from .models import SponsorTier
 from .serializers import SponsorTierDetailSerializer
