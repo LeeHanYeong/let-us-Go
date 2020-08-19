@@ -3,12 +3,21 @@ ENV         LANG C.UTF-8
 RUN         apt -y update &&\
             apt -y dist-upgrade
 
-COPY        requirements.txt /tmp/requirements.txt
-RUN         pip install -r /tmp/requirements.txt
+ARG         requirements
+ARG         gunicorn
+ARG         wsgi
+ARG         settings
+
+COPY        $requirements /tmp/$requirements
+RUN         pip install -r /tmp/$requirements --no-cache-dir
 RUN         mkdir /var/log/gunicorn
 
 COPY        .   /srv/
 WORKDIR     /srv/app
 
+ENV         gunicorn ${gunicorn}
+ENV         wsgi ${wsgi}
+ENV         DJANGO_SETTINGS_MODULE ${settings}
+
 CMD         python manage.py collectstatic --noinput && \
-            gunicorn -c /srv/.config/gunicorn_dev.py config.wsgi.production_dev
+            gunicorn -c ${gunicorn} ${wsgi}
