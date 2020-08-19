@@ -11,16 +11,38 @@ services:
       - '80:80'
       - '443:443'
 
-  certbot:
-    image: certbot/certbot
+  django_dev:
+    build:
+      context: https://github.com/LeeHanYeong/let-us-Go.git#develop
+      dockerfile: Dockerfile
+      args:
+        requirements: requirements_dev.txt
+        gunicorn: /srv/.config/gunicorn_dev.py
+        wsgi: config.wsgi.production_dev
+        settings: config.settings.production_dev
     volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - static-dev:/srv/.static
+    expose:
+      - '8001'
+    env_file:
+      - .env
 
-#  django_dev:
-#    build:
-#      context: https://github.com/LeeHanYeong/let-us-Go.git#develop
-#      dockerfile: Dockerfile
-#    expose:
-#      - '8001'
-#    command: gunicorn -c /srv/.config/gunicorn_dev.py config.wsgi.production_dev
+  django_master:
+    build:
+      context: https://github.com/LeeHanYeong/let-us-Go.git#master
+      dockerfile: Dockerfile
+      args:
+        requirements: requirements.txt
+        gunicorn: /srv/.config/gunicorn_master.py
+        wsgi: config.wsgi.production_master
+        settings: config.settings.production_master
+    volumes:
+      - static-master:/srv/.static
+    expose:
+      - '8000'
+    env_file:
+      - .env
+
+volumes:
+  static-dev:
+  static-master:
