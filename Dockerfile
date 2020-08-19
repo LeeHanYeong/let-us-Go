@@ -19,5 +19,6 @@ ENV         gunicorn ${gunicorn}
 ENV         wsgi ${wsgi}
 ENV         DJANGO_SETTINGS_MODULE ${settings}
 
-CMD         python manage.py collectstatic --noinput && \
+CMD         python manage.py collectstatic --noinput &&\
+            python manage.py migrate --noinput &&\
             gunicorn -c ${gunicorn} ${wsgi}
