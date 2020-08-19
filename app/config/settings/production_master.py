@@ -75,4 +75,6 @@ if private_ip:
     )
 else:
     DEBUG = True
-    ALLOWED_HOSTS.append('api.localhost')
+    ALLOWED_HOSTS += [
+        'api.localhost',
+    ]

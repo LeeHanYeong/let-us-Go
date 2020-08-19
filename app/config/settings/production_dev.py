@@ -22,6 +22,5 @@ if private_ip:
     )
 else:
     ALLOWED_HOSTS += [
-        'localhost',
         'api.dev.localhost',
     ]
