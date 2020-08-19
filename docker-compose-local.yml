@@ -12,8 +12,10 @@ services:
 
   django_dev:
     build:
-      context: https://github.com/LeeHanYeong/let-us-Go.git#develop
+      context: .
       dockerfile: Dockerfile
     expose:
       - '8001'
+    env_file:
+      - .env
     command: gunicorn -c /srv/.config/gunicorn_dev.py config.wsgi.production_dev

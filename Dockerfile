@@ -9,4 +9,6 @@ RUN         mkdir /var/log/gunicorn
 
 COPY        .   /srv/
 WORKDIR     /srv/app
+RUN         python manage.py collectstatic --noinput
+
 CMD         gunicorn -c /srv/.config/gunicorn_dev.py config.wsgi.production_dev
