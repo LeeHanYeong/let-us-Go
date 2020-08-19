@@ -5,8 +5,8 @@ services:
     image: nginx:latest
     volumes:
       - .config/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
     ports:
       - '80:80'
       - '443:443'
