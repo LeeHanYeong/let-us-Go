@@ -2,10 +2,16 @@
 
 ## Requirements
 
+**Production**
+
+- Docker
+- docker-compose
+
+**Development**
+
 - Python >= 3.8
 - Poetry
 - pre-commit
-- Docker
 
 > **Poetry, pre-commit은 brew를 사용해 설치**
 > brew install poetry pre-commit
@@ -14,11 +20,31 @@
 
 ## Installation
 
+### Let's Encrypt
+
+#### 인증서 생성
+
+```shell
+sh .scripts/ssl_cert.sh
+```
+
+#### 인증서 갱신
+
+```shell
+sh .scripts/ssl_renew.sh
+```
 
 
 
+## Run
 
+```shell
+sh run.sh
+```
 
+- 소스 업데이트 (git pull)
+- ssl_renew.sh를 Cronjob에 등록 (Monthly)
+- docker-compose build, restart
 
 
 

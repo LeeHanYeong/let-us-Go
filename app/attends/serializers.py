@@ -6,7 +6,7 @@ from seminars.serializers import TrackDetailSerializer
 from .models import Attend
 
 ATTEND_FIELDS = (
-    'pk',
+    'id',
     'is_canceled',
     'track',
     'status',

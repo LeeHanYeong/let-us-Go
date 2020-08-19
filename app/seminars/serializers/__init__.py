@@ -10,11 +10,11 @@ from ..models import (
     SessionFile,
     SessionVideo,
     SpeakerLink,
-    SpeakerLinkType,
+    SpeakerLinkType, SessionLinkCategory,
 )
 
 SEMINAR_FIELDS = (
-    'pk',
+    'id',
     'year',
     'season',
     'name',
@@ -27,7 +27,7 @@ SEMINAR_FIELDS = (
     'img_sponsors_mobile',
 )
 TRACK_FIELDS = (
-    'pk',
+    'id',
     'name',
     'location',
     'total_attend_count',
@@ -36,7 +36,7 @@ TRACK_FIELDS = (
     'entry_fee_student',
 )
 SESSION_FIELDS = (
-    'pk',
+    'id',
     'img_cover',
     'level',
     'level_display',
@@ -50,7 +50,7 @@ SESSION_FIELDS = (
     'speaker',
 )
 SPEAKER_FIELDS = (
-    'pk',
+    'id',
     'name',
     'email',
     'phone_number',
@@ -74,10 +74,24 @@ class SessionVideoSerializer(serializers.ModelSerializer):
         )
 
 
+class SessionLinkCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SessionLinkCategory
+        fields = (
+            'id',
+            'name',
+            'icon',
+        )
+
+
 class SessionLinkSerializer(serializers.ModelSerializer):
+    category = SessionLinkCategory()
+
     class Meta:
         model = SessionLink
         fields = (
+            'id',
+            'category',
             'name',
             'url',
         )
@@ -87,6 +101,7 @@ class SessionFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = SessionFile
         fields = (
+            'id',
             'name',
             'attachment',
         )
@@ -96,7 +111,7 @@ class SpeakerLinkTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpeakerLinkType
         fields = (
-            'pk',
+            'id',
             'name',
             'img_icon',
         )
@@ -108,7 +123,7 @@ class SpeakerLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpeakerLink
         fields = (
-            'pk',
+            'id',
             'type',
             'name',
             'url',
@@ -159,7 +174,6 @@ class SessionDetailSerializer(SessionSerializer):
 
 
 class TrackDetailSerializer(serializers.ModelSerializer):
-    seminar = SeminarSerializer()
     session_set = SessionDetailSerializer(many=True)
 
     class Meta:

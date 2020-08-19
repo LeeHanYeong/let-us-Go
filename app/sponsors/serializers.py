@@ -3,11 +3,11 @@ from rest_framework import serializers
 from .models import Sponsor, SponsorTier
 
 SPONSOR_TIER_FIELDS = (
-    'pk',
+    'id',
     'name',
 )
 SPONSOR_FIELDS = (
-    'pk',
+    'id',
     'name',
     'logo',
 )

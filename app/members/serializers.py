@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'pk',
+            'id',
             'username',
             'type',
             'nickname',
@@ -106,7 +106,7 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmailVerification
         fields = (
-            'pk',
+            'id',
             'user',
             'email',
             'code',
