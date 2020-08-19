@@ -10,6 +10,7 @@ from .models import (
     Session,
     Speaker,
     SessionVideo,
+    SessionLinkType,
     SessionLink,
     SessionFile,
     SpeakerLinkType,
@@ -34,6 +35,11 @@ class SessionFileInline(admin.TabularInline):
 
 @admin.register(SessionVideo)
 class SessionVideoAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(SessionLinkType)
+class SessionLinkTypeAdmin(admin.ModelAdmin):
     pass
 
 

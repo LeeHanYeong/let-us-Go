@@ -7,10 +7,11 @@ from ..models import (
     Speaker,
     Track,
     SessionLink,
+    SessionLinkType,
     SessionFile,
     SessionVideo,
     SpeakerLink,
-    SpeakerLinkType, SessionLinkCategory,
+    SpeakerLinkType,
 )
 
 SEMINAR_FIELDS = (
@@ -76,7 +77,7 @@ class SessionVideoSerializer(serializers.ModelSerializer):
 
 class SessionLinkCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = SessionLinkCategory
+        model = SessionLinkType
         fields = (
             'id',
             'name',
@@ -85,13 +86,13 @@ class SessionLinkCategorySerializer(serializers.ModelSerializer):
 
 
 class SessionLinkSerializer(serializers.ModelSerializer):
-    category = SessionLinkCategory()
+    type = SessionLinkType()
 
     class Meta:
         model = SessionLink
         fields = (
             'id',
-            'category',
+            'type',
             'name',
             'url',
         )

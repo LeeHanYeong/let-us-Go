@@ -156,12 +156,12 @@ class SessionVideo(models.Model):
         super().save(*args, **kwargs)
 
 
-class SessionLinkCategory(models.Model):
-    name = models.CharField('세션 링크 타입', max_length=100)
-    icon = models.ImageField('아이콘 이미지', upload_to='session/icon', blank=True)
+class SessionLinkType(models.Model):
+    name = models.CharField('발표자 링크 유형', max_length=20)
+    img_icon = ThumbnailerField('링크 아이콘 이미지', upload_to='session/icon', blank=True)
 
     class Meta:
-        verbose_name = '세션 링크 타입'
+        verbose_name = '세션 링크 유형'
         verbose_name_plural = f'{verbose_name} 목록'
 
     def __str__(self):
@@ -169,13 +169,13 @@ class SessionLinkCategory(models.Model):
 
 
 class SessionLink(models.Model):
-    category = models.ForeignKey(
-        SessionLinkCategory, verbose_name='세션 링크 타입', on_delete=models.SET_NULL,
+    type = models.ForeignKey(
+        SessionLinkType, verbose_name='세션 링크 유형', on_delete=models.SET_NULL,
         related_name='link_set', related_query_name='link', blank=True, null=True,
     )
     session = models.ForeignKey(
-        Session, verbose_name='세션',
-        related_name='link_set', on_delete=models.CASCADE,
+        Session, verbose_name='세션', on_delete=models.CASCADE,
+        related_name='link_set', related_query_name='link',
     )
     name = models.CharField('링크명', max_length=100)
     url = models.URLField('URL', blank=True)
