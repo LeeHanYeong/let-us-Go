@@ -75,18 +75,18 @@ class SessionVideoSerializer(serializers.ModelSerializer):
         )
 
 
-class SessionLinkCategorySerializer(serializers.ModelSerializer):
+class SessionLinkTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = SessionLinkType
         fields = (
             'id',
             'name',
-            'icon',
+            'img_icon',
         )
 
 
 class SessionLinkSerializer(serializers.ModelSerializer):
-    type = SessionLinkType()
+    type = SessionLinkTypeSerializer()
 
     class Meta:
         model = SessionLink
