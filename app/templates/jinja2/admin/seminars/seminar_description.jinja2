@@ -5,7 +5,10 @@
     <table class="admin-list-table">
         <tr>
             <td>일시</td>
-            <td>{{ seminar.start_at|localtime|date }} ~ {{ seminar.end_at|localtime|time }}</td>
+            <td>
+                {% if seminar.start_at %}{{ seminar.start_at|localtime|date }}{% endif %} ~
+                {% if seminar.end_at %}{{ seminar.end_at|localtime|time }}{% endif %}
+            </td>
         </tr>
         <tr>
             <td>주소</td>
