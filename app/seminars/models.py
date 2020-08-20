@@ -28,13 +28,13 @@ class Seminar(TimeStampedModel):
         (SEASON_FALL, '가을'),
         (SEASON_WINTER, '겨울'),
     )
-    year = models.IntegerField('연도', choices=[(year, year) for year in range(2000, 2100)], blank=True, null=True)
+    year = models.IntegerField('연도', choices=[(year, year) for year in range(2015, 2030)], blank=True, null=True)
     season = models.CharField('시즌', choices=CHOICES_SEASON, max_length=12, blank=True)
     name = models.CharField('세미나명', max_length=100)
     start_at = models.DateTimeField('세미나 시작일시', blank=True, null=True, db_index=True)
     end_at = models.DateTimeField('세미나 종료일시', blank=True, null=True)
-    address1 = models.CharField('주소', max_length=200, help_text='도로명/지번 주소')
-    address2 = models.CharField('상세주소', max_length=100, help_text='건물명/층/호수/상세장소 등')
+    address1 = models.CharField('주소', max_length=200, help_text='도로명/지번 주소', blank=True)
+    address2 = models.CharField('상세주소', max_length=100, help_text='건물명/층/호수/상세장소 등', blank=True)
 
     after_party_fee = models.PositiveIntegerField('회식비', blank=True, null=True)
 
@@ -157,7 +157,7 @@ class SessionVideo(models.Model):
 
 
 class SessionLinkType(models.Model):
-    name = models.CharField('발표자 링크 유형', max_length=20)
+    name = models.CharField('이름', max_length=20)
     img_icon = ThumbnailerField('링크 아이콘 이미지', upload_to='session/icon', blank=True)
 
     class Meta:
