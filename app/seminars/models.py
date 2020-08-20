@@ -38,13 +38,13 @@ class Seminar(TimeStampedModel):
     img_sponsors_web = models.ImageField('스폰서 이미지(웹)', upload_to='seminar', blank=True)
     img_sponsors_mobile = models.ImageField('스폰서 이미지(모바일)', upload_to='seminar', blank=True)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = '세미나'
         verbose_name_plural = f'{verbose_name} 목록'
         ordering = ('-start_at',)
+
+    def __str__(self):
+        return self.name
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

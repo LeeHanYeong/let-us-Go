@@ -6,8 +6,7 @@
         <tr>
             <td>일시</td>
             <td>
-                {% if seminar.start_at %}{{ seminar.start_at|localtime|date }}{% endif %} ~
-                {% if seminar.end_at %}{{ seminar.end_at|localtime|time }}{% endif %}
+                {{ localdatetime(seminar.start_at) }} ~ {{ localdatetime(seminar.end_at) }}
             </td>
         </tr>
         <tr>
@@ -16,7 +15,7 @@
         </tr>
         <tr>
             <td>회식비</td>
-            <td>{{ seminar.after_party_fee|intcomma }}원</td>
+            <td>{{ seminar.after_party_fee|price }}</td>
         </tr>
         <tr>
             <td>트랙</td>
@@ -39,11 +38,11 @@
                                 </tr>
                                 <tr>
                                     <td>참가비</td>
-                                    <td>{{ track.entry_fee|intcomma }}원</td>
+                                    <td>{{ track.entry_fee|price }}</td>
                                 </tr>
                                 <tr>
                                     <td>학생참가비</td>
-                                    <td>{{ track.entry_fee_student|intcomma }}원</td>
+                                    <td>{{ track.entry_fee_student|price }}</td>
                                 </tr>
                                 <tr>
                                     <td>세션 목록</td>
@@ -52,8 +51,8 @@
                                             {% for session in track.session_set.all() %}
                                             <tr>
                                                 <td class="fw-normal p-0 pb-1">
-                                                    <span>{{ (session.start_time|localtime).strftime('%H:%M') }} - </span>
-                                                    <span>{{ (session.end_time|localtime).strftime('%H:%M') }}</span>
+                                                    <span>{{ localtime(session.start_time, 'H:i') }} - </span>
+                                                    <span>{{ localtime(session.end_time, 'H:i') }}</span>
                                                     <span style="margin-left: 5px;">
                                                         <b>
                                                             <a href="{{ url('admin:seminars_session_change', args=[session.pk]) }}">{{ session.name }}</a>
