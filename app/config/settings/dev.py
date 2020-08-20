@@ -1,6 +1,8 @@
 from .base import *
 
 DEBUG = True
+os.environ['DJANGO_ALLOW_ASYNC_UNSAFE'] = 'true'
+DJANGO_ALLOW_ASYNC_UNSAFE = True
 ALLOWED_HOSTS += [
     'localhost',
     '.localhost',
@@ -19,9 +21,7 @@ INSTALLED_APPS += [
     'debug_toolbar',
     'sslserver',
 ]
-MIDDLEWARE += [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
+MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 # django-debug-toolbar
 INTERNAL_IPS = ['127.0.0.1']

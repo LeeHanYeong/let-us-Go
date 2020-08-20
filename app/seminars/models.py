@@ -121,6 +121,9 @@ class Session(TimeStampedModel):
         verbose_name = '세션'
         verbose_name_plural = f'{verbose_name} 목록'
         ordering = ('start_time',)
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
 
 class SessionVideo(models.Model):
