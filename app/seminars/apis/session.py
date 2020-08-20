@@ -62,6 +62,6 @@ class SessionSearchAPIView(APIView):
         for session in sessions:
             search_result_dict.setdefault(session.track.seminar.name, [])
             search_result_dict[session.track.seminar.name].append(
-                SessionSerializer(session).data,
+                SessionDetailSerializer(session).data,
             )
         return Response(search_result_dict)
