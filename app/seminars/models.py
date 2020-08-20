@@ -12,11 +12,8 @@ User = get_user_model()
 
 def choices_seminar_year():
     now = timezone.now()
-    first_seminar = Seminar.objects.order_by('year').first()
-    start_year = first_seminar.year if first_seminar and first_seminar.year and first_seminar.year < now.year else now.year
-
-    last_seminar = Seminar.objects.order_by('year').last()
-    end_year = last_seminar.year + 2 if last_seminar and last_seminar.year else now.year + 2
+    start_year = 2016
+    end_year = now.year + 2
     return [(year, year) for year in range(start_year, end_year + 1)]
 
 
@@ -28,7 +25,7 @@ class Seminar(TimeStampedModel):
         (SEASON_FALL, '가을'),
         (SEASON_WINTER, '겨울'),
     )
-    year = models.IntegerField('연도', choices=[(year, year) for year in range(2015, 2030)], blank=True, null=True)
+    year = models.IntegerField('연도', choices=[(year, year) for year in range(2010, 2100)], blank=True, null=True)
     season = models.CharField('시즌', choices=CHOICES_SEASON, max_length=12, blank=True)
     name = models.CharField('세미나명', max_length=100)
     start_at = models.DateTimeField('세미나 시작일시', blank=True, null=True, db_index=True)
