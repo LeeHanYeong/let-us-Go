@@ -1,13 +1,27 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
-
 from django.utils.functional import lazy
 from django_extensions.db.models import TimeStampedModel
 from easy_thumbnails.fields import ThumbnailerImageField, ThumbnailerField
 from phonenumber_field.modelfields import PhoneNumberField
 
+from utils.django import Manager
+
 User = get_user_model()
+
+__all__ = (
+    "Seminar",
+    "Track",
+    "Session",
+    "SessionVideo",
+    "SessionLinkType",
+    "SessionLink",
+    "SessionFile",
+    "Speaker",
+    "SpeakerLinkType",
+    "SpeakerLink",
+)
 
 
 def choices_seminar_year():
@@ -15,6 +29,10 @@ def choices_seminar_year():
     start_year = 2016
     end_year = now.year + 2
     return [(year, year) for year in range(start_year, end_year + 1)]
+
+
+class SeminarManager(Manager):
+    pass
 
 
 class Seminar(TimeStampedModel):
@@ -51,6 +69,8 @@ class Seminar(TimeStampedModel):
     img_sponsors_mobile = models.ImageField(
         "스폰서 이미지(모바일)", upload_to="seminar", blank=True
     )
+
+    objects = SeminarManager()
 
     class Meta:
         verbose_name = "세미나"
@@ -171,11 +191,14 @@ class SessionVideo(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
+    def clean(self):
         if self.key and self.url:
             raise ValueError("영상의 ID또는 URL중 하나만 입력되어야 합니다")
         if self.type != self.TYPE_LINK and self.url:
             raise ValueError("링크가 아닌 유형의 경우에는 key만 허용됩니다")
+
+    def save(self, *args, **kwargs):
+        self.clean()
         super().save(*args, **kwargs)
 
 
