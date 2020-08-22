@@ -2,11 +2,10 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.functional import lazy
+from django_aid.django.model import Manager
 from django_extensions.db.models import TimeStampedModel
 from easy_thumbnails.fields import ThumbnailerImageField, ThumbnailerField
 from phonenumber_field.modelfields import PhoneNumberField
-
-from utils.django import Manager
 
 User = get_user_model()
 
@@ -85,6 +84,10 @@ class Seminar(TimeStampedModel):
         self._meta.get_field("year").choices = lazy(choices_seminar_year, list)()
 
 
+class TrackManager(Manager):
+    pass
+
+
 class Track(TimeStampedModel):
     seminar = models.ForeignKey(
         "seminars.Seminar",
@@ -101,6 +104,8 @@ class Track(TimeStampedModel):
     entry_fee_student = models.PositiveIntegerField("학생 참가비", blank=True, null=True)
     order = models.PositiveIntegerField("순서", default=0, blank=False, null=False)
 
+    objects = TrackManager()
+
     def __str__(self):
         return f"{self.seminar.name} | {self.name}"
 
@@ -110,7 +115,7 @@ class Track(TimeStampedModel):
         ordering = ("order",)
 
 
-class SessionManager(models.Manager):
+class SessionManager(Manager):
     def get_queryset(self):
         return (
             super()
@@ -257,7 +262,7 @@ class SessionFile(models.Model):
         return self.name
 
 
-class SpeakerManager(models.Manager):
+class SpeakerManager(Manager):
     def get_queryset(self):
         return super().get_queryset().prefetch_related("link_set",)
 

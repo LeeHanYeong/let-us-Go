@@ -1,50 +1,28 @@
 from django.db.models import F
-from django.utils.decorators import method_decorator
-from drf_yasg.openapi import Parameter, IN_PATH
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
+from django_aid.drf.viewsets import ReadOnlyModelViewSet
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from ..models import Session, Seminar
 from ..serializers import SessionDetailSerializer, SessionSerializer, SeminarSerializer
 
+__all__ = ("SessionViewSet",)
 
-@method_decorator(
-    name="get",
-    decorator=swagger_auto_schema(
-        operation_summary="Session List", operation_description="세션(List)"
-    ),
-)
-class SessionListAPIView(generics.ListAPIView):
-    queryset = Session.objects.select_related("speaker",).prefetch_related(
-        "speaker__link_set",
+
+class SessionViewSet(ReadOnlyModelViewSet):
+    queryset = (
+        Session.objects.annotate_choices()
+        .select_related("speaker",)
+        .prefetch_related("speaker__link_set",)
     )
-    serializer_class = SessionSerializer
+    serializer_classes = {
+        "list": SessionSerializer,
+        "retrieve": SessionDetailSerializer,
+    }
 
-
-@method_decorator(
-    name="get",
-    decorator=swagger_auto_schema(
-        operation_summary="Session Detail", operation_description="세션(Retrieve)"
-    ),
-)
-class SessionRetrieveAPIView(generics.RetrieveAPIView):
-    queryset = Session.objects.all()
-    serializer_class = SessionDetailSerializer
-
-
-@method_decorator(
-    name="get",
-    decorator=swagger_auto_schema(
-        operation_summary="Session Search",
-        operation_description="세션 검색(Search)",
-        manual_parameters=[Parameter("keyword", IN_PATH, type="string"),],
-    ),
-)
-class SessionSearchAPIView(APIView):
-    def get(self, request):
+    @action(detail=False, methods=["get"])
+    def search(self, request, *args, **kwargs):
         keyword = request.query_params.get("keyword", "")
         if len(keyword) < 2:
             raise ValidationError("검색어는 최소 2글자 이상이어야 합니다")
