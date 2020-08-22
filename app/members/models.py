@@ -1,20 +1,22 @@
 import string
 
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager as BaseUserManager
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
 from django.db import models
-from django.template.loader import render_to_string
 from django.utils.crypto import get_random_string
+from django_aid.django.model import Manager
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 
-from utils.models import DeleteModel, DeleteModelManager
+from utils.models import DeleteModel
+
+__all__ = (
+    "User",
+    "EmailVerification",
+)
 
 
-class UserManager(DeleteModelManager, BaseUserManager):
+class UserManager(Manager, BaseUserManager):
     def create_user(self, email, username=None, password=None, **extra_fields):
         if extra_fields.get("type") == User.TYPE_EMAIL:
             username = email
@@ -23,7 +25,7 @@ class UserManager(DeleteModelManager, BaseUserManager):
         return super().create_user(username, email, password, **extra_fields)
 
 
-class User(AbstractUser, TimeStampedModel, DeleteModel):
+class User(AbstractUser, TimeStampedModel):
     TYPE_KAKAO, TYPE_FACEBOOK, TYPE_EMAIL = "kakao", "facebook", "email"
     TYPE_CHOICES = (
         (TYPE_KAKAO, "카카오"),
@@ -46,23 +48,17 @@ class User(AbstractUser, TimeStampedModel, DeleteModel):
 
     objects = UserManager()
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = "사용자"
         verbose_name_plural = f"{verbose_name} 목록"
+
+    def __str__(self):
+        return self.name
 
     def save(self, *args, **kwargs):
         if self.type == self.TYPE_EMAIL:
             self.username = self.email
         super().save(*args, **kwargs)
-
-    def perform_delete(self):
-        deleted_count = User.objects.filter(is_deleted=True).count()
-        deleted_name = f"deleted_{deleted_count:05d}"
-        self.username = deleted_name
-        self.nickname = deleted_name
 
 
 class EmailValidationManager(models.Manager):

@@ -51,7 +51,7 @@ if SETTINGS_MODULE in ("config.settings", "config.settings.dev"):
             *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
         ]
         urlpatterns_apis_v1 += [
-            re_path(r"rest-auth/", include("rest_auth.urls")),
+            # re_path(r"rest-auth/", include("rest_auth.urls")),
         ]
     except ModuleNotFoundError:
         pass
