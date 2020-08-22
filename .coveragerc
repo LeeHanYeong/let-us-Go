@@ -1,2 +1,7 @@
 [run]
 omit = */migrations/*
+
+[report]
+exclude_lines =
+    def __str__
+    def __repr__

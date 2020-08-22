@@ -49,6 +49,17 @@ sh run.sh
 
 
 
+## Test
+
+```shell
+cd app
+pytest --cov-config=../.coveragerc --cov . -c ../pytest.ini
+```
+
+
+
+
+
 ## API 설명
 
 ### Authentication
