@@ -8,28 +8,35 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('members', '0010_auto_20190701_1445'),
+        ("members", "0010_auto_20190701_1445"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='emailverification',
-            old_name='is_send_success',
-            new_name='is_send_succeed',
+            model_name="emailverification",
+            old_name="is_send_success",
+            new_name="is_send_succeed",
         ),
         migrations.AddField(
-            model_name='emailverification',
-            name='is_verification_completed',
+            model_name="emailverification",
+            name="is_verification_completed",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='emailverification',
-            name='email',
-            field=models.EmailField(max_length=254, unique=True, verbose_name='이메일'),
+            model_name="emailverification",
+            name="email",
+            field=models.EmailField(max_length=254, unique=True, verbose_name="이메일"),
         ),
         migrations.AlterField(
-            model_name='emailverification',
-            name='user',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='email_verification', to=settings.AUTH_USER_MODEL, verbose_name='사용자'),
+            model_name="emailverification",
+            name="user",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="email_verification",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="사용자",
+            ),
         ),
     ]

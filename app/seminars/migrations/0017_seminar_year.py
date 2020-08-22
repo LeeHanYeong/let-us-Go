@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0016_speakerlink_url'),
+        ("seminars", "0016_speakerlink_url"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='seminar',
-            name='year',
-            field=models.IntegerField(blank=True, null=True, verbose_name='연도'),
+            model_name="seminar",
+            name="year",
+            field=models.IntegerField(blank=True, null=True, verbose_name="연도"),
         ),
     ]

@@ -6,23 +6,37 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('attends', '0004_auto_20190627_1416'),
+        ("attends", "0004_auto_20190627_1416"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='attend',
-            name='applicant_type',
-            field=models.CharField(choices=[('normal', '일반'), ('staff', '스태프')], db_index=True, default='normal', max_length=10, verbose_name='지원자 구분'),
+            model_name="attend",
+            name="applicant_type",
+            field=models.CharField(
+                choices=[("normal", "일반"), ("staff", "스태프")],
+                db_index=True,
+                default="normal",
+                max_length=10,
+                verbose_name="지원자 구분",
+            ),
         ),
         migrations.AlterField(
-            model_name='attend',
-            name='discount_type',
-            field=models.CharField(choices=[('normal', '일반'), ('student', '학생')], db_index=True, default='normal', max_length=10, verbose_name='할인 구분'),
+            model_name="attend",
+            name="discount_type",
+            field=models.CharField(
+                choices=[("normal", "일반"), ("student", "학생")],
+                db_index=True,
+                default="normal",
+                max_length=10,
+                verbose_name="할인 구분",
+            ),
         ),
         migrations.AlterField(
-            model_name='attend',
-            name='status',
-            field=models.CharField(db_index=True, default='in_progress', max_length=12, verbose_name='상태'),
+            model_name="attend",
+            name="status",
+            field=models.CharField(
+                db_index=True, default="in_progress", max_length=12, verbose_name="상태"
+            ),
         ),
     ]

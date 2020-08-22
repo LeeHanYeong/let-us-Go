@@ -10,19 +10,27 @@ from django.core.management import BaseCommand
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        parser.add_argument('--force', action='store_true', help='Force update by local secrets')
+        parser.add_argument(
+            "--force", action="store_true", help="Force update by local secrets"
+        )
 
     def handle(self, *args, **options):
         project = settings.PROJECT
 
         home = str(Path.home())
-        dropbox_dir = os.path.join(home, 'Dropbox', 'settings', 'django', project)
-        if options['force']:
+        dropbox_dir = os.path.join(home, "Dropbox", "settings", "django", project)
+        if options["force"]:
             shutil.rmtree(dropbox_dir)
         os.makedirs(dropbox_dir, exist_ok=True)
 
-        dropbox_filename_set = {filename for filename in os.listdir(dropbox_dir) if '.json' in filename}
-        secrets_filename_set = {filename for filename in os.listdir(settings.SECRETS_DIR) if '.json' in filename}
+        dropbox_filename_set = {
+            filename for filename in os.listdir(dropbox_dir) if ".json" in filename
+        }
+        secrets_filename_set = {
+            filename
+            for filename in os.listdir(settings.SECRETS_DIR)
+            if ".json" in filename
+        }
         filename_list = list(dropbox_filename_set | secrets_filename_set)
 
         secrets = {}
@@ -44,7 +52,7 @@ class Command(BaseCommand):
                     dropbox_dict[secret_key] = secret_value
 
             # 작성한 secrets를 local과 Dropbox에 동시저장
-            json.dump(dropbox_dict, open(dropbox_file_path, 'wt'), indent=2)
-            json.dump(dropbox_dict, open(secrets_file_path, 'wt'), indent=2)
+            json.dump(dropbox_dict, open(dropbox_file_path, "wt"), indent=2)
+            json.dump(dropbox_dict, open(secrets_file_path, "wt"), indent=2)
             secrets[filename] = dropbox_dict
         pprint(secrets)

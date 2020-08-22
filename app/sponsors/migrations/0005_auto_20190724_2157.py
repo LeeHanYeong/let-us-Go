@@ -6,12 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sponsors', '0004_auto_20190724_2136'),
+        ("sponsors", "0004_auto_20190724_2136"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='sponsortier',
-            options={'ordering': ('order',), 'verbose_name': '스폰서 등급', 'verbose_name_plural': '스폰서 등급 목록'},
+            name="sponsortier",
+            options={
+                "ordering": ("order",),
+                "verbose_name": "스폰서 등급",
+                "verbose_name_plural": "스폰서 등급 목록",
+            },
         ),
     ]

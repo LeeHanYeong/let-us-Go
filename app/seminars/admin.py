@@ -55,40 +55,39 @@ class SessionFileAdmin(admin.ModelAdmin):
 
 @admin.register(Seminar)
 class SeminarAdmin(admin.ModelAdmin):
-    list_display = ('admin_description',)
-    list_filter = ('year',)
+    list_display = ("admin_description",)
+    list_filter = ("year",)
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related(
-            'track_set',
-            'track_set__session_set',
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related("track_set", "track_set__session_set",)
         )
 
     def admin_description(self, obj):
         return format_html(
             render_to_string(
-                template_name='admin/seminars/seminar_description.jinja2',
-                context={
-                    'seminar': obj,
-                }
+                template_name="admin/seminars/seminar_description.jinja2",
+                context={"seminar": obj,},
             )
         )
 
-    admin_description.short_description = '세미나'
+    admin_description.short_description = "세미나"
 
 
 @admin.register(Track)
 class TrackAdmin(SortableAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'seminar')
-    list_filter = ('seminar',)
-    readonly_fields = ('attend_count',)
+    list_display = ("name", "seminar")
+    list_filter = ("seminar",)
+    readonly_fields = ("attend_count",)
 
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'track', 'start_time', 'end_time', 'weight')
-    list_editable = ('weight',)
-    list_filter = ('track',)
+    list_display = ("name", "track", "start_time", "end_time", "weight")
+    list_editable = ("weight",)
+    list_filter = ("track",)
     inlines = [
         SessionVideoInline,
         SessionLinkInline,
@@ -104,42 +103,45 @@ class SpeakerLinkInline(admin.TabularInline):
 @admin.register(Speaker)
 class SpeakerAdmin(ThumbnailAdminMixin):
     list_display = (
-        'name',
-        'img_profile_thumbnail',
-        'admin_session_set',
-        'admin_link_set',
+        "name",
+        "img_profile_thumbnail",
+        "admin_session_set",
+        "admin_link_set",
     )
     inlines = [
         SpeakerLinkInline,
     ]
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related(
-            'session_set',
-            'session_set__track',
-            'session_set__track__seminar',
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related(
+                "session_set", "session_set__track", "session_set__track__seminar",
+            )
         )
 
     def img_profile_thumbnail(self, obj):
-        return render_to_string('admin/thumbnail.html', {
-            'image': obj.img_profile,
-        })
+        return render_to_string("admin/thumbnail.html", {"image": obj.img_profile,})
 
     def admin_session_set(self, obj):
-        sessions = '\n'.join([
-            f'<div>{str(session)}</div>' for session in obj.session_set.all()
-        ])
-        return format_html(f'<div>{sessions}</div>')
+        sessions = "\n".join(
+            [f"<div>{str(session)}</div>" for session in obj.session_set.all()]
+        )
+        return format_html(f"<div>{sessions}</div>")
 
     def admin_link_set(self, obj):
-        links = '\n'.join([
-            f'<li><a href="{link.url}">{link.name}</a></li>' for link in obj.link_set.all()
-        ])
-        return format_html(f'<ul>{links}</ul>')
+        links = "\n".join(
+            [
+                f'<li><a href="{link.url}">{link.name}</a></li>'
+                for link in obj.link_set.all()
+            ]
+        )
+        return format_html(f"<ul>{links}</ul>")
 
-    img_profile_thumbnail.short_description = '프로필 이미지'
-    admin_session_set.short_description = '발표한 세션 목록'
-    admin_link_set.short_description = '링크 목록'
+    img_profile_thumbnail.short_description = "프로필 이미지"
+    admin_session_set.short_description = "발표한 세션 목록"
+    admin_link_set.short_description = "링크 목록"
 
 
 @admin.register(SpeakerLinkType)

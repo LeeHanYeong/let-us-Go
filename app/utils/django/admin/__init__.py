@@ -4,8 +4,4 @@ from easy_thumbnails.widgets import ImageClearableFileInput
 
 
 class ThumbnailAdminMixin(admin.ModelAdmin):
-    formfield_overrides = {
-        ThumbnailerField: {
-            'widget': ImageClearableFileInput,
-        }
-    }
+    formfield_overrides = {ThumbnailerField: {"widget": ImageClearableFileInput,}}

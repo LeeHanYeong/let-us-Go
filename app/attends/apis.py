@@ -15,59 +15,55 @@ User = get_user_model()
 
 
 @method_decorator(
-    name='get',
+    name="get",
     decorator=swagger_auto_schema(
-        operation_summary='Attend List',
-        operation_description='지원서 목록'
-    )
+        operation_summary="Attend List", operation_description="지원서 목록"
+    ),
 )
 @method_decorator(
-    name='post',
+    name="post",
     decorator=swagger_auto_schema(
-        operation_summary='Attend Create',
-        operation_description='지원서 작성'
-    )
+        operation_summary="Attend Create", operation_description="지원서 작성"
+    ),
 )
 class AttendListCreateAPIView(generics.ListCreateAPIView):
     def get_permissions(self):
-        if self.request.method == 'GET':
+        if self.request.method == "GET":
             return [permissions.IsAuthenticated]
         return super().get_permissions()
 
     def get_queryset(self):
-        queryset = Attend.objects.select_related('track', 'user')
+        queryset = Attend.objects.select_related("track", "user")
         if self.request.user.is_authenticated:
             return queryset.filter(user=self.request.user)
         return queryset.none()
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             return AttendCreateSerializer
         return AttendSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user, context={'request': self.request})
+        serializer.save(user=self.request.user, context={"request": self.request})
 
 
 @method_decorator(
-    name='get',
+    name="get",
     decorator=swagger_auto_schema(
-        operation_summary='Attend Retrieve',
-        operation_description='지원서 정보'
-    )
+        operation_summary="Attend Retrieve", operation_description="지원서 정보"
+    ),
 )
 @method_decorator(
-    name='patch',
+    name="patch",
     decorator=swagger_auto_schema(
-        operation_summary='Attend Update',
-        operation_description='지원서 정보 수정'
-    )
+        operation_summary="Attend Update", operation_description="지원서 정보 수정"
+    ),
 )
 class AttendRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
-    queryset = Attend.objects.select_related('seminar', 'user')
+    queryset = Attend.objects.select_related("seminar", "user")
 
     def get_serializer_class(self):
-        if self.request.method in ('PATCH', 'PUT'):
+        if self.request.method in ("PATCH", "PUT"):
             return AttendUpdateSerializer
         return AttendDetailSerializer
 

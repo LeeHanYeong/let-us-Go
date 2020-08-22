@@ -7,31 +7,46 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0004_auto_20190627_1417'),
+        ("seminars", "0004_auto_20190627_1417"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='track',
-            options={'ordering': ('order',), 'verbose_name': '트랙', 'verbose_name_plural': '트랙 목록'},
+            name="track",
+            options={
+                "ordering": ("order",),
+                "verbose_name": "트랙",
+                "verbose_name_plural": "트랙 목록",
+            },
         ),
-        migrations.RemoveField(
-            model_name='seminar',
-            name='entry_fee',
-        ),
+        migrations.RemoveField(model_name="seminar", name="entry_fee",),
         migrations.AddField(
-            model_name='track',
-            name='entry_fee',
-            field=models.PositiveIntegerField(blank=True, null=True, verbose_name='참가비'),
+            model_name="track",
+            name="entry_fee",
+            field=models.PositiveIntegerField(
+                blank=True, null=True, verbose_name="참가비"
+            ),
         ),
         migrations.AlterField(
-            model_name='session',
-            name='speaker',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='session_set', to='seminars.Speaker', verbose_name='발표자'),
+            model_name="session",
+            name="speaker",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="session_set",
+                to="seminars.Speaker",
+                verbose_name="발표자",
+            ),
         ),
         migrations.AlterField(
-            model_name='session',
-            name='speaker_alt_text',
-            field=models.CharField(blank=True, help_text='발표자가 없는 세션의 경우 대체될 텍스트입니다', max_length=50, verbose_name='발표자 대체 텍스트'),
+            model_name="session",
+            name="speaker_alt_text",
+            field=models.CharField(
+                blank=True,
+                help_text="발표자가 없는 세션의 경우 대체될 텍스트입니다",
+                max_length=50,
+                verbose_name="발표자 대체 텍스트",
+            ),
         ),
     ]

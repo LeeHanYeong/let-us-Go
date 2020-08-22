@@ -8,11 +8,10 @@ from ..serializers import SeminarSerializer, SeminarDetailSerializer
 
 
 @method_decorator(
-    name='get',
+    name="get",
     decorator=swagger_auto_schema(
-        operation_summary='Seminar List',
-        operation_description='세미나(List)'
-    )
+        operation_summary="Seminar List", operation_description="세미나(List)"
+    ),
 )
 class SeminarListAPIView(generics.ListAPIView):
     queryset = Seminar.objects.all()
@@ -21,20 +20,20 @@ class SeminarListAPIView(generics.ListAPIView):
 
 
 @method_decorator(
-    name='get',
+    name="get",
     decorator=swagger_auto_schema(
-        operation_summary='Seminar Detail',
-        operation_description='세미나(Retrieve)<br>id에 0보내면 가장 최근 세미나를 리턴',
-    )
+        operation_summary="Seminar Detail",
+        operation_description="세미나(Retrieve)<br>id에 0보내면 가장 최근 세미나를 리턴",
+    ),
 )
 class SeminarRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Seminar.objects.prefetch_related(
-        'track_set__session_set__file_set',
-        'track_set__session_set__video_set',
-        'track_set__session_set__link_set',
-        'track_set__session_set__speaker',
-        'track_set__session_set__speaker__link_set',
-        'sponsor_tier_set__sponsor_set',
+        "track_set__session_set__file_set",
+        "track_set__session_set__video_set",
+        "track_set__session_set__link_set",
+        "track_set__session_set__speaker",
+        "track_set__session_set__speaker__link_set",
+        "sponsor_tier_set__sponsor_set",
     )
     serializer_class = SeminarDetailSerializer
 

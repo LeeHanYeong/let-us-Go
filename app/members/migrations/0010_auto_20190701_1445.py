@@ -6,12 +6,11 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('members', '0009_emailvalidation_is_send_success'),
+        ("members", "0009_emailvalidation_is_send_success"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='EmailValidation',
-            new_name='EmailVerification',
+            old_name="EmailValidation", new_name="EmailVerification",
         ),
     ]

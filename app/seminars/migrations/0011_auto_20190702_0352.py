@@ -6,12 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0010_auto_20190701_1700'),
+        ("seminars", "0010_auto_20190701_1700"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='session',
-            options={'ordering': ('start_time',), 'verbose_name': '세션', 'verbose_name_plural': '세션 목록'},
+            name="session",
+            options={
+                "ordering": ("start_time",),
+                "verbose_name": "세션",
+                "verbose_name_plural": "세션 목록",
+            },
         ),
     ]

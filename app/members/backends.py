@@ -4,9 +4,7 @@ from django.contrib.auth.hashers import check_password
 
 User = get_user_model()
 
-__all__ = (
-    'SettingsBackend',
-)
+__all__ = ("SettingsBackend",)
 
 
 class SettingsBackend:
@@ -14,17 +12,13 @@ class SettingsBackend:
         email_valid = username in settings.DEFAULT_USERS.keys()
         user_dict = settings.DEFAULT_USERS.get(username, {})
 
-        password_valid = check_password(password, user_dict.get('password', ''))
+        password_valid = check_password(password, user_dict.get("password", ""))
         if email_valid and password_valid:
             try:
                 user = User.objects.get(email=username)
             except User.DoesNotExist:
                 user = User.objects.update_or_create(
-                    email=username,
-                    defaults={
-                        'username': username,
-                        **user_dict,
-                    }
+                    email=username, defaults={"username": username, **user_dict,}
                 )[0]
             return user
         return None

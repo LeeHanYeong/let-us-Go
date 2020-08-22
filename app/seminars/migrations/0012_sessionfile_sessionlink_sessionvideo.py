@@ -7,37 +7,98 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0011_auto_20190702_0352'),
+        ("seminars", "0011_auto_20190702_0352"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SessionVideo',
+            name="SessionVideo",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(default='link', max_length=12, verbose_name='유형')),
-                ('name', models.CharField(max_length=100, verbose_name='영상명')),
-                ('key', models.CharField(blank=True, max_length=100, verbose_name='영상 UniqueID')),
-                ('url', models.URLField(blank=True, verbose_name='영상 URL')),
-                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='video_set', to='seminars.Session', verbose_name='세션')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(default="link", max_length=12, verbose_name="유형"),
+                ),
+                ("name", models.CharField(max_length=100, verbose_name="영상명")),
+                (
+                    "key",
+                    models.CharField(
+                        blank=True, max_length=100, verbose_name="영상 UniqueID"
+                    ),
+                ),
+                ("url", models.URLField(blank=True, verbose_name="영상 URL")),
+                (
+                    "session",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="video_set",
+                        to="seminars.Session",
+                        verbose_name="세션",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SessionLink',
+            name="SessionLink",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, verbose_name='링크명')),
-                ('url', models.URLField(blank=True, verbose_name='URL')),
-                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='link_set', to='seminars.Session', verbose_name='세션')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, verbose_name="링크명")),
+                ("url", models.URLField(blank=True, verbose_name="URL")),
+                (
+                    "session",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="link_set",
+                        to="seminars.Session",
+                        verbose_name="세션",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SessionFile',
+            name="SessionFile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, verbose_name='파일명')),
-                ('attachment', models.FileField(blank=True, upload_to='session', verbose_name='첨부파일')),
-                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='file_set', to='seminars.Session', verbose_name='세션')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, verbose_name="파일명")),
+                (
+                    "attachment",
+                    models.FileField(
+                        blank=True, upload_to="session", verbose_name="첨부파일"
+                    ),
+                ),
+                (
+                    "session",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="file_set",
+                        to="seminars.Session",
+                        verbose_name="세션",
+                    ),
+                ),
             ],
         ),
     ]

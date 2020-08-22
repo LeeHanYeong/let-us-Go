@@ -6,30 +6,35 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0012_sessionfile_sessionlink_sessionvideo'),
+        ("seminars", "0012_sessionfile_sessionlink_sessionvideo"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='sessionfile',
-            options={'verbose_name': '세션 첨부파일', 'verbose_name_plural': '세션 첨부파일 목록'},
+            name="sessionfile",
+            options={"verbose_name": "세션 첨부파일", "verbose_name_plural": "세션 첨부파일 목록"},
         ),
         migrations.AlterModelOptions(
-            name='sessionlink',
-            options={'verbose_name': '세션 링크', 'verbose_name_plural': '세션 링크 목록'},
+            name="sessionlink",
+            options={"verbose_name": "세션 링크", "verbose_name_plural": "세션 링크 목록"},
         ),
         migrations.AlterModelOptions(
-            name='sessionvideo',
-            options={'verbose_name': '세션 영상', 'verbose_name_plural': '세션 영상 목록'},
+            name="sessionvideo",
+            options={"verbose_name": "세션 영상", "verbose_name_plural": "세션 영상 목록"},
         ),
         migrations.AlterField(
-            model_name='session',
-            name='description',
-            field=models.TextField(blank=True, verbose_name='세션 설명'),
+            model_name="session",
+            name="description",
+            field=models.TextField(blank=True, verbose_name="세션 설명"),
         ),
         migrations.AlterField(
-            model_name='sessionvideo',
-            name='type',
-            field=models.CharField(choices=[('link', '링크'), ('youtube', 'YouTube')], default='link', max_length=12, verbose_name='유형'),
+            model_name="sessionvideo",
+            name="type",
+            field=models.CharField(
+                choices=[("link", "링크"), ("youtube", "YouTube")],
+                default="link",
+                max_length=12,
+                verbose_name="유형",
+            ),
         ),
     ]

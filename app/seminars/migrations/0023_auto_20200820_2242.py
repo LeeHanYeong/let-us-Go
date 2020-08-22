@@ -6,28 +6,56 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0022_auto_20200819_2200'),
+        ("seminars", "0022_auto_20200819_2200"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='seminar',
-            name='address1',
-            field=models.CharField(blank=True, help_text='도로명/지번 주소', max_length=200, verbose_name='주소'),
+            model_name="seminar",
+            name="address1",
+            field=models.CharField(
+                blank=True, help_text="도로명/지번 주소", max_length=200, verbose_name="주소"
+            ),
         ),
         migrations.AlterField(
-            model_name='seminar',
-            name='address2',
-            field=models.CharField(blank=True, help_text='건물명/층/호수/상세장소 등', max_length=100, verbose_name='상세주소'),
+            model_name="seminar",
+            name="address2",
+            field=models.CharField(
+                blank=True,
+                help_text="건물명/층/호수/상세장소 등",
+                max_length=100,
+                verbose_name="상세주소",
+            ),
         ),
         migrations.AlterField(
-            model_name='seminar',
-            name='year',
-            field=models.IntegerField(blank=True, choices=[(2015, 2015), (2016, 2016), (2017, 2017), (2018, 2018), (2019, 2019), (2020, 2020), (2021, 2021), (2022, 2022), (2023, 2023), (2024, 2024), (2025, 2025), (2026, 2026), (2027, 2027), (2028, 2028), (2029, 2029)], null=True, verbose_name='연도'),
+            model_name="seminar",
+            name="year",
+            field=models.IntegerField(
+                blank=True,
+                choices=[
+                    (2015, 2015),
+                    (2016, 2016),
+                    (2017, 2017),
+                    (2018, 2018),
+                    (2019, 2019),
+                    (2020, 2020),
+                    (2021, 2021),
+                    (2022, 2022),
+                    (2023, 2023),
+                    (2024, 2024),
+                    (2025, 2025),
+                    (2026, 2026),
+                    (2027, 2027),
+                    (2028, 2028),
+                    (2029, 2029),
+                ],
+                null=True,
+                verbose_name="연도",
+            ),
         ),
         migrations.AlterField(
-            model_name='sessionlinktype',
-            name='name',
-            field=models.CharField(max_length=20, verbose_name='이름'),
+            model_name="sessionlinktype",
+            name="name",
+            field=models.CharField(max_length=20, verbose_name="이름"),
         ),
     ]

@@ -8,24 +8,26 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0005_auto_20190627_1442'),
+        ("seminars", "0005_auto_20190627_1442"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('attends', '0005_auto_20190627_1417'),
+        ("attends", "0005_auto_20190627_1417"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='attend',
-            name='track',
-            field=models.ForeignKey(default='', on_delete=django.db.models.deletion.CASCADE, related_name='attend_set', to='seminars.Track', verbose_name='트랙'),
+            model_name="attend",
+            name="track",
+            field=models.ForeignKey(
+                default="",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="attend_set",
+                to="seminars.Track",
+                verbose_name="트랙",
+            ),
             preserve_default=False,
         ),
         migrations.AlterUniqueTogether(
-            name='attend',
-            unique_together={('track', 'user')},
+            name="attend", unique_together={("track", "user")},
         ),
-        migrations.RemoveField(
-            model_name='attend',
-            name='seminar',
-        ),
+        migrations.RemoveField(model_name="attend", name="seminar",),
     ]

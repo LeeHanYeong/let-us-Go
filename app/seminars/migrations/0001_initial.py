@@ -17,45 +17,160 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Seminar',
+            name="Seminar",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', django_extensions.db.fields.CreationDateTimeField(auto_now_add=True, verbose_name='created')),
-                ('modified', django_extensions.db.fields.ModificationDateTimeField(auto_now=True, verbose_name='modified')),
-                ('name', models.CharField(max_length=100, verbose_name='세미나명')),
-                ('start_at', models.DateTimeField(blank=True, null=True, verbose_name='세미나 시작일시')),
-                ('end_at', models.DateTimeField(blank=True, null=True, verbose_name='세미나 종료일시')),
-                ('address1', models.CharField(help_text='도로명/지번 주소', max_length=200, verbose_name='주소')),
-                ('address2', models.CharField(help_text='건물명/층/호수/상세장소 등', max_length=100, verbose_name='상세주소')),
-                ('entry_fee', models.PositiveIntegerField(blank=True, null=True, verbose_name='참가비')),
-                ('after_party_fee', models.PositiveIntegerField(blank=True, null=True, verbose_name='회식비')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created",
+                    django_extensions.db.fields.CreationDateTimeField(
+                        auto_now_add=True, verbose_name="created"
+                    ),
+                ),
+                (
+                    "modified",
+                    django_extensions.db.fields.ModificationDateTimeField(
+                        auto_now=True, verbose_name="modified"
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, verbose_name="세미나명")),
+                (
+                    "start_at",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="세미나 시작일시"
+                    ),
+                ),
+                (
+                    "end_at",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="세미나 종료일시"
+                    ),
+                ),
+                (
+                    "address1",
+                    models.CharField(
+                        help_text="도로명/지번 주소", max_length=200, verbose_name="주소"
+                    ),
+                ),
+                (
+                    "address2",
+                    models.CharField(
+                        help_text="건물명/층/호수/상세장소 등", max_length=100, verbose_name="상세주소"
+                    ),
+                ),
+                (
+                    "entry_fee",
+                    models.PositiveIntegerField(
+                        blank=True, null=True, verbose_name="참가비"
+                    ),
+                ),
+                (
+                    "after_party_fee",
+                    models.PositiveIntegerField(
+                        blank=True, null=True, verbose_name="회식비"
+                    ),
+                ),
             ],
             options={
-                'ordering': ('-modified', '-created'),
-                'get_latest_by': 'modified',
-                'abstract': False,
+                "ordering": ("-modified", "-created"),
+                "get_latest_by": "modified",
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Session',
+            name="Session",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', django_extensions.db.fields.CreationDateTimeField(auto_now_add=True, verbose_name='created')),
-                ('modified', django_extensions.db.fields.ModificationDateTimeField(auto_now=True, verbose_name='modified')),
-                ('level', models.CharField(blank=True, choices=[('l', '초급'), ('m', '중급'), ('h', '고급')], max_length=1, verbose_name='레벨')),
-                ('name', models.CharField(max_length=50, verbose_name='세션명')),
-                ('short_description', models.CharField(blank=True, max_length=200, verbose_name='세션 설명(간략)')),
-                ('description', markdownx.models.MarkdownxField(blank=True, help_text='Markdown', verbose_name='세션 설명')),
-                ('speaker_alt_text', models.CharField(help_text='발표자가 없는 세션의 경우 대체될 텍스트입니다', max_length=50, verbose_name='발표자 대체 텍스트')),
-                ('start_time', models.TimeField(blank=True, null=True, verbose_name='시작시간')),
-                ('end_time', models.TimeField(blank=True, null=True, verbose_name='종료시간')),
-                ('seminar', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='session_set', to='seminars.Seminar', verbose_name='세미나')),
-                ('speaker', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='session_set', to=settings.AUTH_USER_MODEL, verbose_name='발표자')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created",
+                    django_extensions.db.fields.CreationDateTimeField(
+                        auto_now_add=True, verbose_name="created"
+                    ),
+                ),
+                (
+                    "modified",
+                    django_extensions.db.fields.ModificationDateTimeField(
+                        auto_now=True, verbose_name="modified"
+                    ),
+                ),
+                (
+                    "level",
+                    models.CharField(
+                        blank=True,
+                        choices=[("l", "초급"), ("m", "중급"), ("h", "고급")],
+                        max_length=1,
+                        verbose_name="레벨",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, verbose_name="세션명")),
+                (
+                    "short_description",
+                    models.CharField(
+                        blank=True, max_length=200, verbose_name="세션 설명(간략)"
+                    ),
+                ),
+                (
+                    "description",
+                    markdownx.models.MarkdownxField(
+                        blank=True, help_text="Markdown", verbose_name="세션 설명"
+                    ),
+                ),
+                (
+                    "speaker_alt_text",
+                    models.CharField(
+                        help_text="발표자가 없는 세션의 경우 대체될 텍스트입니다",
+                        max_length=50,
+                        verbose_name="발표자 대체 텍스트",
+                    ),
+                ),
+                (
+                    "start_time",
+                    models.TimeField(blank=True, null=True, verbose_name="시작시간"),
+                ),
+                (
+                    "end_time",
+                    models.TimeField(blank=True, null=True, verbose_name="종료시간"),
+                ),
+                (
+                    "seminar",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="session_set",
+                        to="seminars.Seminar",
+                        verbose_name="세미나",
+                    ),
+                ),
+                (
+                    "speaker",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="session_set",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="발표자",
+                    ),
+                ),
             ],
             options={
-                'ordering': ('-modified', '-created'),
-                'get_latest_by': 'modified',
-                'abstract': False,
+                "ordering": ("-modified", "-created"),
+                "get_latest_by": "modified",
+                "abstract": False,
             },
         ),
     ]

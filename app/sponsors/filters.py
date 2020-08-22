@@ -6,6 +6,4 @@ from .models import SponsorTier
 class SponsorTierFilterSet(filters.FilterSet):
     class Meta:
         model = SponsorTier
-        fields = (
-            'seminar',
-        )
+        fields = ("seminar",)

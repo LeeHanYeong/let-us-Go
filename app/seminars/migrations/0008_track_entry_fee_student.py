@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0007_auto_20190627_1504'),
+        ("seminars", "0007_auto_20190627_1504"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='track',
-            name='entry_fee_student',
-            field=models.PositiveIntegerField(blank=True, null=True, verbose_name='학생 참가비'),
+            model_name="track",
+            name="entry_fee_student",
+            field=models.PositiveIntegerField(
+                blank=True, null=True, verbose_name="학생 참가비"
+            ),
         ),
     ]

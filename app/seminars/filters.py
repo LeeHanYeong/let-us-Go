@@ -7,19 +7,15 @@ from .models import Seminar, Speaker
 class SeminarFilterSet(filters.FilterSet):
     class Meta:
         model = Seminar
-        fields = (
-            'year',
-        )
+        fields = ("year",)
 
 
 class SpeakerFilterSet(filters.FilterSet):
-    seminar = filters.CharFilter(help_text='Seminar의 pk(id)', method='seminar_filter')
+    seminar = filters.CharFilter(help_text="Seminar의 pk(id)", method="seminar_filter")
 
     class Meta:
         model = Speaker
-        fields = (
-            'seminar',
-        )
+        fields = ("seminar",)
 
     def seminar_filter(self, queryset, name, value):
         seminar = get_object_or_404(Seminar, pk=value)

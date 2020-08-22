@@ -7,14 +7,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0002_auto_20190621_1329'),
+        ("seminars", "0002_auto_20190621_1329"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('attends', '0002_auto_20190625_1836'),
+        ("attends", "0002_auto_20190625_1836"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='attend',
-            unique_together={('seminar', 'user')},
+            name="attend", unique_together={("seminar", "user")},
         ),
     ]

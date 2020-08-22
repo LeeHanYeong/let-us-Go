@@ -1,8 +1,6 @@
 from django.middleware.common import CommonMiddleware
 
-__all__ = (
-    'AppendSlashMiddleware',
-)
+__all__ = ("AppendSlashMiddleware",)
 
 
 class AppendSlashMiddleware(CommonMiddleware):
@@ -11,7 +9,7 @@ class AppendSlashMiddleware(CommonMiddleware):
     """
 
     def process_request(self, request):
-        if not request.path.endswith('/'):
-            request.path += '/'
-        if not request.path_info.endswith('/'):
-            request.path_info += '/'
+        if not request.path.endswith("/"):
+            request.path += "/"
+        if not request.path_info.endswith("/"):
+            request.path_info += "/"

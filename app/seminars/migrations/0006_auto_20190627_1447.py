@@ -6,17 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('seminars', '0005_auto_20190627_1442'),
+        ("seminars", "0005_auto_20190627_1442"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='speaker',
-            options={'verbose_name': '스피커', 'verbose_name_plural': '스피커 목록'},
+            name="speaker",
+            options={"verbose_name": "스피커", "verbose_name_plural": "스피커 목록"},
         ),
         migrations.AddField(
-            model_name='speaker',
-            name='img_profile',
-            field=models.ImageField(blank=True, upload_to='speaker', verbose_name='프로필 이미지'),
+            model_name="speaker",
+            name="img_profile",
+            field=models.ImageField(
+                blank=True, upload_to="speaker", verbose_name="프로필 이미지"
+            ),
         ),
     ]

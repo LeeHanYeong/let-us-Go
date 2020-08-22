@@ -11,29 +11,78 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('seminars', '0002_auto_20190621_1329'),
+        ("seminars", "0002_auto_20190621_1329"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Attend',
+            name="Attend",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', django_extensions.db.fields.CreationDateTimeField(auto_now_add=True, verbose_name='created')),
-                ('modified', django_extensions.db.fields.ModificationDateTimeField(auto_now=True, verbose_name='modified')),
-                ('is_canceled', models.BooleanField(default=False)),
-                ('name', models.CharField(max_length=20, verbose_name='이름(실명)')),
-                ('type', models.CharField(choices=[('s', '학생'), ('n', '일반')], max_length=1, verbose_name='구분(학생/일반)')),
-                ('goods_size', models.CharField(blank=True, choices=[('s', 'S'), ('m', 'M'), ('l', 'L')], max_length=3, verbose_name='굿즈 사이즈')),
-                ('attend_after_party', models.BooleanField(verbose_name='뒷풀이 참석 여부')),
-                ('seminar', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attend_set', to='seminars.Seminar', verbose_name='세미나')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attend_set', to=settings.AUTH_USER_MODEL, verbose_name='사용자')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created",
+                    django_extensions.db.fields.CreationDateTimeField(
+                        auto_now_add=True, verbose_name="created"
+                    ),
+                ),
+                (
+                    "modified",
+                    django_extensions.db.fields.ModificationDateTimeField(
+                        auto_now=True, verbose_name="modified"
+                    ),
+                ),
+                ("is_canceled", models.BooleanField(default=False)),
+                ("name", models.CharField(max_length=20, verbose_name="이름(실명)")),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[("s", "학생"), ("n", "일반")],
+                        max_length=1,
+                        verbose_name="구분(학생/일반)",
+                    ),
+                ),
+                (
+                    "goods_size",
+                    models.CharField(
+                        blank=True,
+                        choices=[("s", "S"), ("m", "M"), ("l", "L")],
+                        max_length=3,
+                        verbose_name="굿즈 사이즈",
+                    ),
+                ),
+                ("attend_after_party", models.BooleanField(verbose_name="뒷풀이 참석 여부")),
+                (
+                    "seminar",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="attend_set",
+                        to="seminars.Seminar",
+                        verbose_name="세미나",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="attend_set",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="사용자",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': '참가신청내역',
-                'verbose_name_plural': '참가신청내역 목록',
-                'ordering': ('-created',),
+                "verbose_name": "참가신청내역",
+                "verbose_name_plural": "참가신청내역 목록",
+                "ordering": ("-created",),
             },
         ),
     ]

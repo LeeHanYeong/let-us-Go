@@ -25,8 +25,8 @@ def query(request=None, only=False, **kwargs):
         query_params = {k: v for k, v in query_params.items() if v}
 
     if query_params:
-        return '?' + '&'.join([f'{k}={v}' for k, v in query_params.items()])
-    return ''
+        return "?" + "&".join([f"{k}={v}" for k, v in query_params.items()])
+    return ""
 
 
 def date(value):
@@ -48,8 +48,8 @@ def time(value):
 
 def price(value):
     if isinstance(value, Integral) and value != 0:
-        return f'{value:,}원'
-    return '없음'
+        return f"{value:,}원"
+    return "없음"
 
 
 def localtime(value, time_format=settings.TIME_FORMAT):
@@ -77,23 +77,22 @@ def localdatetime(value, datetime_format=settings.DATETIME_FORMAT):
 
 
 def environment(**options):
-    extensions = options.get('extensions', [])
-    options['extensions'] = extensions
+    extensions = options.get("extensions", [])
+    options["extensions"] = extensions
 
     env = Environment(**options)
-    env.globals.update({
-        'static': static,
-        'url': reverse,
-        'query': query,
-        'get_messages': messages.get_messages,
-        'localtime': localtime,
-        'localdate': localdate,
-        'localdatetime': localdatetime,
-    })
-    env.filters.update({
-        'date': date,
-        'time': time,
-        'intcomma': intcomma,
-        'price': price,
-    })
+    env.globals.update(
+        {
+            "static": static,
+            "url": reverse,
+            "query": query,
+            "get_messages": messages.get_messages,
+            "localtime": localtime,
+            "localdate": localdate,
+            "localdatetime": localdatetime,
+        }
+    )
+    env.filters.update(
+        {"date": date, "time": time, "intcomma": intcomma, "price": price,}
+    )
     return env

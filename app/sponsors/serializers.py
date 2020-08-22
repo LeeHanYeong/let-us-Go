@@ -3,13 +3,13 @@ from rest_framework import serializers
 from .models import Sponsor, SponsorTier
 
 SPONSOR_TIER_FIELDS = (
-    'id',
-    'name',
+    "id",
+    "name",
 )
 SPONSOR_FIELDS = (
-    'id',
-    'name',
-    'logo',
+    "id",
+    "name",
+    "logo",
 )
 
 
@@ -30,6 +30,4 @@ class SponsorTierDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SponsorTier
-        fields = SPONSOR_TIER_FIELDS + (
-            'sponsor_set',
-        )
+        fields = SPONSOR_TIER_FIELDS + ("sponsor_set",)
