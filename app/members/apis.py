@@ -67,6 +67,7 @@ class UserViewSet(ModelViewSet):
             return [IsUserSelf]
         elif self.action == "profile":
             return [permissions.IsAuthenticated]
+        return []
 
 
 class AuthTokenAPIView(LoginView):
