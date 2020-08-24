@@ -23,6 +23,28 @@
 
 ## Installation
 
+### .env파일 추가 (docker-compose의 env_file에서 사용)
+
+```shell
+AWS_SECRETS_MANAGER_ACCESS_KEY_ID=*****
+AWS_SECRETS_MANAGER_SECRET_ACCESS_KEY=*****
+AWS_ROUTE53_ACCESS_KEY_ID=*****
+AWS_ROUTE53_SECRET_ACCESS_KEY=*****
+CODECOV_TOKEN=*****
+```
+
+
+
+## Run
+
+```shell
+docker-compose up -d
+```
+
+
+
+## Scripts
+
 ### Let's Encrypt
 
 #### 인증서 생성
@@ -39,7 +61,7 @@ sh .scripts/ssl_renew.sh
 
 
 
-## Run & Update
+### Source update & restart
 
 ```shell
 sh run.sh
@@ -54,8 +76,67 @@ sh run.sh
 ## Test
 
 ```shell
+# coverage기반 pytest실행
 pytest --cov app
+# codecov리포트 전송, CODECOV_TOKEN환경변수 필요
+codecov
 ```
+
+
+
+## Deployment
+
+### EC2 초기설정
+
+```shell
+# docker
+sudo apt -y update
+sudo apt -y dist-upgrade
+sudo apt-get -y install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+sudo apt -y update
+sudo apt -y install docker-ce docker-ce-cli containerd.io
+
+# docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+# 점검 도구
+sudo apt -y install net-tools
+
+# zsh
+sudo apt -y install zsh
+echo n | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sudo chsh -s $(which zsh) $(whoami)
+```
+
+
+
+### EC2에 CI완료 후 run.sh실행을 위한 설정
+
+>  GitHub Action ([AWS SSM Send-Command](https://github.com/marketplace/actions/aws-ssm-send-command)) 사용
+
+#### GitHub Action에 비밀값 설정
+
+- SSM FullAccess권한을 가진 Credential추가
+  - AWS_SSM_ACCESS_KEY_ID
+  - AWS_SSM_SECRET_ACCESS_KEY
+
+#### EC2 IAM Role설정
+
+-  AmazonSSMFullAccess
+
+
 
 
 

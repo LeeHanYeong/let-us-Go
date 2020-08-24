@@ -5,14 +5,13 @@ from collections import OrderedDict
 
 from drf_yasg import openapi
 from drf_yasg.generators import OpenAPISchemaGenerator
-from drf_yasg.inspectors import SwaggerAutoSchema as DefaultSwaggerAutoSchema
 from drf_yasg.renderers import ReDocRenderer as BaseReDocRenderer, OpenAPIRenderer
 from drf_yasg.views import get_schema_view
 from inflection import camelize
 from rest_framework import permissions
 from rest_framework.exceptions import APIException
 
-__all__ = ("RedocSchemaView", "SwaggerAutoSchema")
+__all__ = ("RedocSchemaView",)
 
 exceptions = []
 drf_exceptions_module = importlib.import_module("utils.drf.exceptions")
@@ -54,30 +53,6 @@ DRF_EXCEPTION_DESCRIPTION = """
 )
 
 
-class SwaggerAutoSchema(DefaultSwaggerAutoSchema):
-    def get_operation_id(self, operation_keys=None):
-        operation_keys = operation_keys or self.operation_keys
-        operation_id = self.overrides.get("operation_id", "")
-
-        if not operation_id:
-            if len(operation_keys) > 2:
-                operation_keys = operation_keys[1:]
-
-            # 복수형 처리 (notices, posts등을 notice, post로 변경)
-            operation_keys = [
-                key[:-1] if key[-1] == "s" else key for key in operation_keys
-            ]
-            # '-'처리 (auth-token을 AuthToken으로 처리)
-            operation_keys = [key.replace("-", "_") for key in operation_keys]
-            # PartialUpdate처리 (PartialUpdate -> Update로 출력)
-            operation_keys = [
-                key.replace("partial_update", "update") for key in operation_keys
-            ]
-
-            operation_id = " _".join(operation_keys)
-        return camelize(operation_id)
-
-
 class SchemaGenerator(OpenAPISchemaGenerator):
     PATTERN_ERASE_WORDS = re.compile(
         "|".join(["list", "create", "read", "update", "partial_update", "destroy"])
@@ -90,7 +65,25 @@ class SchemaGenerator(OpenAPISchemaGenerator):
             operation_id = self.PATTERN_ERASE_WORDS.sub("", operation_id)
             return operation_id
 
+        def _get_summary_from_operation_id(_operation_id):
+            operation_keys = _operation_id.replace("partial_update", "update").split(
+                "_"
+            )
+
+            # 복수형 처리 (notices, posts등을 notice, post로 변경)
+            operation_keys = [
+                key[:-1] if key[-1] == "s" else key for key in operation_keys
+            ]
+            # '-'처리 (auth-token을 AuthToken으로 처리)
+            operation_keys = [key.replace("-", "_") for key in operation_keys]
+            return camelize(" _".join(operation_keys))
+
         paths = OrderedDict(sorted(paths.items(), key=path_sort_function))
+        for key, path in paths.items():
+            for operation in path.operations:
+                operation[1]["summary"] = _get_summary_from_operation_id(
+                    operation[1]["operationId"]
+                )
         # 마지막에 /(slash)가 붙은 경우, 제거함
         paths = OrderedDict(
             {k[:-1] if k[-1] == "/" else k: v for k, v in paths.items()}

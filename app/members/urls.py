@@ -67,7 +67,8 @@ auth_patterns = (
                     (
                         "post",
                         {
-                            "operation_id": "Get AuthToken",
+                            "operation_id": "get-auth-token",
+                            "operation_summary": "Get AuthToken",
                             "operation_description": "인증정보를 사용해 사용자의 Token(key)과 User정보를 획득",
                             "responses": {status.HTTP_200_OK: AuthTokenSerializer(),},
                         },
