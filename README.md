@@ -1,5 +1,7 @@
 # let us:Go!
 
+[![codecov](https://codecov.io/gh/LeeHanYeong/let-us-go/branch/develop/graph/badge.svg)](https://codecov.io/gh/LeeHanYeong/let-us-go)
+
 ## Requirements
 
 **Production**

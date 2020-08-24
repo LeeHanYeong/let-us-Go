@@ -1,13 +1,15 @@
 [run]
 omit =
     */migrations/*
-    manage.py
-    config/wsgi/*
-    config/settings/dev.py
-    config/settings/production_dev.py
-    config/urls/dev.py
+    app/manage.py
+    app/config/wsgi/*
+    app/config/settings/dev.py
+    app/config/settings/production_dev.py
+    app/config/urls/dev.py
 
 [report]
+omit =
+    app/config/wsgi/*
 exclude_lines =
     def __str__
     def __repr__
