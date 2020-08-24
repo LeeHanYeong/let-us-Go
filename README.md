@@ -39,7 +39,7 @@ sh .scripts/ssl_renew.sh
 
 
 
-## Run
+## Run & Update
 
 ```shell
 sh run.sh
@@ -54,11 +54,8 @@ sh run.sh
 ## Test
 
 ```shell
-cd app
-pytest --cov-config=../.coveragerc --cov . -c ../pytest.ini
+pytest --cov app
 ```
-
-
 
 
 
@@ -127,6 +124,44 @@ Authorization: Token a129b636dc3f352f864398b471f17b43bb4ce352
 수신한 Token을 Header에 등록 후, [API - Attend List](https://letusgo.lhy.kr/doc/#operation/attends_list) 에 GET요청, 신청서 목록 확인
 
 
+
+
+
+## Other settings
+
+### AWS EC2(Ubuntu 20.04)
+
+```shell
+# docker
+sudo apt -y update
+sudo apt -y dist-upgrade
+sudo apt-get -y install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+sudo apt -y update
+sudo apt -y install docker-ce docker-ce-cli containerd.io
+
+# docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+# 점검 도구
+sudo apt -y install net-tools
+
+# zsh
+sudo apt -y install zsh
+echo n | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sudo chsh -s $(which zsh) $(whoami)
+```
 
 
 

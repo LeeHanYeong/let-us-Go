@@ -191,7 +191,7 @@ description = "Helper module used in general django applications"
 name = "django-aid"
 optional = false
 python-versions = ">=3.7"
-version = "0.1.4"
+version = "0.1.5"
 
 [package.dependencies]
 django = "*"
@@ -846,7 +846,7 @@ secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "pyOpenSSL (>=0
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [metadata]
-content-hash = "6487b8b55d1dbb25a7b097ac131be4a008814223a1cf0173f2893ccecb21c161"
+content-hash = "cd718a6ff930b35e5d9f36ebb7fc6bbb4a2e1acd450b3b5ae8a85a358f3dbd9c"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -973,8 +973,8 @@ django-admin-sortable2 = [
     {file = "django-admin-sortable2-0.7.7.tar.gz", hash = "sha256:65c8a02300e178b4a02c904b6f4dce6e528c58f5ecab3907dfba3540da51b862"},
 ]
 django-aid = [
-    {file = "django-aid-0.1.4.tar.gz", hash = "sha256:fbc89db70799151485c0b7d41d3064f399457908acc7f80d5ed79dd8bc3130fc"},
-    {file = "django_aid-0.1.4-py3-none-any.whl", hash = "sha256:cf3282cb31787d295b10d4bdefb59d232943f75c63cf615dfd49fd9c8c79f572"},
+    {file = "django-aid-0.1.5.tar.gz", hash = "sha256:1dcf0bae9d8c1566e1d6c86ccb6dce62d95ea0618c4d1c739cd4a8b3fa3dc555"},
+    {file = "django_aid-0.1.5-py3-none-any.whl", hash = "sha256:7352dfa290002868dc2e9560403bde7b9b3e6ef4da46f7252abea43cae091ec3"},
 ]
 django-cleanup = [
     {file = "django-cleanup-4.0.1.tar.gz", hash = "sha256:4d0fd9ad3117a219e4cb3e35dd32f39c764a860ce56b820abb88ad3ec063ffd7"},

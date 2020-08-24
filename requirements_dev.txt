@@ -1,4 +1,3 @@
-Warning: The lock file is not up to date with the latest changes in pyproject.toml. You may be getting outdated dependencies. Run update to update them.
 asgiref==3.2.10 \
     --hash=sha256:9fc6fb5d39b8af147ba40765234fa822b39818b12cc80b35ad9b0cef3a476aed \
     --hash=sha256:7e51911ee147dd685c3c8b805c0ad0cb58d360987b56953878f8c06d2d1c6f1a
@@ -105,9 +104,9 @@ django==3.1 \
     --hash=sha256:2d390268a13c655c97e0e2ede9d117007996db692c1bb93eabebd4fb7ea7012b
 django-admin-sortable2==0.7.7 \
     --hash=sha256:65c8a02300e178b4a02c904b6f4dce6e528c58f5ecab3907dfba3540da51b862
-django-aid==0.1.4 \
-    --hash=sha256:fbc89db70799151485c0b7d41d3064f399457908acc7f80d5ed79dd8bc3130fc \
-    --hash=sha256:cf3282cb31787d295b10d4bdefb59d232943f75c63cf615dfd49fd9c8c79f572
+django-aid==0.1.5 \
+    --hash=sha256:1dcf0bae9d8c1566e1d6c86ccb6dce62d95ea0618c4d1c739cd4a8b3fa3dc555 \
+    --hash=sha256:7352dfa290002868dc2e9560403bde7b9b3e6ef4da46f7252abea43cae091ec3
 django-cleanup==4.0.1 \
     --hash=sha256:4d0fd9ad3117a219e4cb3e35dd32f39c764a860ce56b820abb88ad3ec063ffd7 \
     --hash=sha256:ebbad94d1ed655a8d899b00a847ceab16355a659b807d4151ffed6e5a9c10db2
