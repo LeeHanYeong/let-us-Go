@@ -1,7 +1,26 @@
-from rest_framework.views import exception_handler
+from rest_framework import status
+from rest_framework.exceptions import APIException
 
 
-def rest_exception_handler(exc, context):
-    # 클라이언트에서 status및 code활용
-    response = exception_handler(exc, context)
-    return response
+class EmailSendFailed(APIException):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    default_detail = "이메일 전송에 실패했습니다"
+    default_code = "email_send_failed"
+
+
+class EmailVerificationNotCompleted(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "이메일 인증이 완료되지 않았습니다"
+    default_code = "email_verification_not_completed"
+
+
+class EmailVerificationDoesNotExist(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "이메일 인증정보가 존재하지 않습니다"
+    default_code = "email_verification_does_not_exist"
+
+
+class EmailVerificationCodeInvalid(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "이메일 인증코드가 유효하지 않습니다"
+    default_code = "email_verification_code_invalid"

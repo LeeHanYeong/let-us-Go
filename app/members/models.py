@@ -8,8 +8,6 @@ from django_aid.django.model import Manager
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 
-from utils.models import DeleteModel
-
 __all__ = (
     "User",
     "EmailVerification",
@@ -61,14 +59,10 @@ class User(AbstractUser, TimeStampedModel):
         super().save(*args, **kwargs)
 
 
-class EmailValidationManager(models.Manager):
+class EmailVerificationManager(models.Manager):
     def create(self, **kwargs):
         instance, created = super().update_or_create(
-            **kwargs,
-            defaults={
-                "status_verification": EmailVerification.WAIT,
-                "status_send": EmailVerification.WAIT,
-            },
+            **kwargs, defaults={"status_send": EmailVerification.WAIT},
         )
         if not created:
             instance.reset_code()
@@ -92,15 +86,11 @@ class EmailVerification(TimeStampedModel):
     )
     email = models.EmailField("이메일", unique=True)
     code = models.CharField("인증코드", max_length=50)
-
-    status_verification = models.CharField(
-        "인증상태", choices=CHOICES_STATUS, default=WAIT, max_length=10
-    )
     status_send = models.CharField(
         "발송상태", choices=CHOICES_STATUS, default=WAIT, max_length=10
     )
 
-    objects = EmailValidationManager()
+    objects = EmailVerificationManager()
 
     class Meta:
         verbose_name = "이메일 인증"
@@ -108,11 +98,10 @@ class EmailVerification(TimeStampedModel):
         ordering = ("-pk",)
 
     def __str__(self):
-        return "{user}{email} (발송: {send}, 인증: {verification})".format(
+        return "{user}{email} (발송: {send})".format(
             user=f"{self.user.name} | " if self.user else "",
             email=self.email,
             send=self.get_status_send_display(),
-            verification=self.get_status_verification_display(),
         )
 
     def save(self, **kwargs):
@@ -123,10 +112,6 @@ class EmailVerification(TimeStampedModel):
     def reset_code(self):
         self.code = get_random_string(6, allowed_chars=string.digits)
         self.save()
-
-    @property
-    def is_verification_completed(self):
-        return self.status_verification == self.SUCCEED
 
     @property
     def is_send_succeed(self):

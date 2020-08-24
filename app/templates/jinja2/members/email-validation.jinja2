@@ -14,7 +14,7 @@
     <title>{{ subject }}</title>
 </head>
 <body>
-    <h1>{{ subject }}</h1><br/>
-    <a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'email-validation' code %}">인증을 완료하려면 아래 이 링크를 클릭해주세요</a>
+    <h1>{{ subject }}</h1>
+    <p><strong>{{ code }}</strong></p>
 </body>
 </html>

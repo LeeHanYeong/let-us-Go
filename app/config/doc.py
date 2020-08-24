@@ -102,7 +102,7 @@ BaseSchemaView = get_schema_view(
     openapi.Info(
         title="let us: Go! API",
         default_version="v1",
-        description="let us: Go! API Documentation",
+        description="let us: Go! API Documentation\n" + DRF_EXCEPTION_DESCRIPTION,
         contact=openapi.Contact(email="dev@lhy.kr"),
     ),
     public=True,

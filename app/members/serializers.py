@@ -1,8 +1,14 @@
 from django.conf import settings
-from rest_auth.serializers import TokenSerializer
+from rest_auth.serializers import TokenSerializer, LoginSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from utils.drf.exceptions import (
+    EmailSendFailed,
+    EmailVerificationNotCompleted,
+    EmailVerificationDoesNotExist,
+    EmailVerificationCodeInvalid,
+)
 from .models import User, EmailVerification
 
 
@@ -13,6 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "type",
+            "name",
             "nickname",
             "email",
             "phone_number",
@@ -28,6 +35,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+    email_verification_code = serializers.CharField(help_text="이메일 인증코드")
     password1 = serializers.CharField(help_text="비밀번호")
     password2 = serializers.CharField(help_text="비밀번호 확인")
 
@@ -35,12 +43,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "username",
-            "password1",
-            "password2",
             "type",
+            "name",
             "nickname",
             "email",
             "phone_number",
+            "email_verification_code",
+            "password1",
+            "password2",
         )
 
     def __init__(self, *args, **kwargs):
@@ -56,14 +66,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
             email_verification = EmailVerification.objects.get(
                 email=data.get("email", "")
             )
-            if not email_verification.is_verification_completed:
-                if not email_verification.is_send_succeed:
-                    raise ValidationError("이메일 전송 실패")
-                else:
-                    raise ValidationError("이메일 인증 미완료")
-
+            if email_verification.code != data["email_verification_code"]:
+                raise EmailVerificationCodeInvalid()
         except EmailVerification.DoesNotExist:
-            raise ValidationError("이메일 인증정보가 존재하지 않음")
+            raise EmailVerificationDoesNotExist()
 
         data["password"] = data["password2"]
         del data["password1"]
@@ -71,7 +77,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        return self.Meta.model._default_manager.create_user(**validated_data)
+        code = validated_data.pop("email_verification_code")
+        user = self.Meta.model._default_manager.create_user(**validated_data)
+        e = EmailVerification.objects.get(code=code)
+        e.user = user
+        e.save()
+        return user
 
     def to_representation(self, instance):
         return UserSerializer(instance).data
@@ -81,6 +92,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            "name",
             "nickname",
             "email",
             "phone_number",

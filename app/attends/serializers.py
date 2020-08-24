@@ -47,19 +47,6 @@ class AttendCreateSerializer(serializers.ModelSerializer):
             "is_attend_after_party",
         )
 
-    def validate_track(self, value):
-        return value
-
-    def validate_user(self, value):
-        return value
-
-    def validate(self, attrs):
-        user = attrs["user"]
-        track = attrs["track"]
-        if Attend.objects.filter(user=user, track=track).exists():
-            raise ValidationError("이미 신청내역이 있습니다")
-        return attrs
-
     def to_representation(self, instance):
         return AttendDetailSerializer(instance).data
 

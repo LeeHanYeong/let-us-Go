@@ -1,7 +1,21 @@
 [run]
-omit = */migrations/*
+omit =
+    */migrations/*
+    manage.py
+    config/wsgi/*
+    config/settings/dev.py
+    config/settings/production_dev.py
+    config/urls/dev.py
 
 [report]
 exclude_lines =
     def __str__
     def __repr__
+    if settings.DEBUG:
+    if DEBUG:
+    if SETTINGS_MODULE
+    if not SETTINGS_MODULE
+    def is_ec2_linux
+    def get_linux_ec2_private_ip
+    if private_ip:
+    class SettingsBackend:
