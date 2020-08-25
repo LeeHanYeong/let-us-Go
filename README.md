@@ -5,7 +5,7 @@
 [![github-last-commit]][github]
 [![made-with]][django]
 
-iOS 세미나 **let us: Go!**의 API서버 애플리케이션
+iOS 세미나 **`let us: Go!`** 의 API서버 애플리케이션
 
 >  API문서: https://api.dev.letusgo.app/doc
 
