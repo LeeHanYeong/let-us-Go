@@ -9,7 +9,7 @@ __all__ = ("SeminarViewSet",)
 
 class SeminarViewSet(ReadOnlyModelViewSet):
     queryset = Seminar.objects.annotate_choices()
-    serializer_class = {
+    serializer_classes = {
         "list": SeminarSerializer,
         "retrieve": SeminarDetailSerializer,
     }

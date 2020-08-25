@@ -1,11 +1,9 @@
 from django.conf import settings
-from rest_auth.serializers import TokenSerializer, LoginSerializer
+from rest_auth.serializers import TokenSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from utils.drf.exceptions import (
-    EmailSendFailed,
-    EmailVerificationNotCompleted,
     EmailVerificationDoesNotExist,
     EmailVerificationCodeInvalid,
 )

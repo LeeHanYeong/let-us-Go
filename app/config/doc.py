@@ -7,11 +7,12 @@ from drf_yasg import openapi
 from drf_yasg.generators import OpenAPISchemaGenerator
 from drf_yasg.renderers import ReDocRenderer as BaseReDocRenderer, OpenAPIRenderer
 from drf_yasg.views import get_schema_view
-from inflection import camelize
 from rest_framework import permissions
 from rest_framework.exceptions import APIException
 
 __all__ = ("RedocSchemaView",)
+
+from rest_framework.viewsets import ViewSetMixin
 
 exceptions = []
 drf_exceptions_module = importlib.import_module("utils.drf.exceptions")
@@ -54,9 +55,44 @@ DRF_EXCEPTION_DESCRIPTION = """
 
 
 class SchemaGenerator(OpenAPISchemaGenerator):
-    PATTERN_ERASE_WORDS = re.compile(
-        "|".join(["list", "create", "read", "update", "partial_update", "destroy"])
-    )
+    DEFAULT_OPERATIONS = [
+        "list",
+        "create",
+        "read",
+        "update",
+        "partial_update",
+        "destroy",
+    ]
+    PATTERN_ERASE_WORDS = re.compile("|".join(DEFAULT_OPERATIONS))
+
+    def get_operation_keys(self, subpath, method, view):
+        keys = super().get_operation_keys(subpath, method, view)
+        keys = [
+            key.replace("partial_update", "update").replace("-", "_") for key in keys
+        ]
+        return keys
+
+    def get_operation(self, view, path, prefix, method, components, request):
+        operation = super().get_operation(
+            view, path, prefix, method, components, request
+        )
+        if operation is not None and "summary" not in operation:
+            if issubclass(view.__class__, ViewSetMixin):
+                action = view.action.replace("partial_update", "update")
+                keys = [item for item in [view.basename, action]]
+            else:
+                if view.queryset is not None:
+                    app_label = view.queryset.model._meta.app_label
+                    model_name = view.queryset.model.__name__
+                    keys = [
+                        model_name if model_name in item else item
+                        for item in operation["operationId"].split("_")
+                        if item != app_label
+                    ]
+                else:
+                    keys = [item for item in operation["operationId"].split("_")]
+            operation["summary"] = " ".join([key.capitalize() for key in keys])
+        return operation
 
     def get_paths_object(self, paths: OrderedDict):
         # operation_id에서, PATTERN_ERASE_WORDS에 해당하는 단어를 지운 후 오름차순으로 정렬
@@ -65,25 +101,7 @@ class SchemaGenerator(OpenAPISchemaGenerator):
             operation_id = self.PATTERN_ERASE_WORDS.sub("", operation_id)
             return operation_id
 
-        def _get_summary_from_operation_id(_operation_id):
-            operation_keys = _operation_id.replace("partial_update", "update").split(
-                "_"
-            )
-
-            # 복수형 처리 (notices, posts등을 notice, post로 변경)
-            operation_keys = [
-                key[:-1] if key[-1] == "s" else key for key in operation_keys
-            ]
-            # '-'처리 (auth-token을 AuthToken으로 처리)
-            operation_keys = [key.replace("-", "_") for key in operation_keys]
-            return camelize(" _".join(operation_keys))
-
         paths = OrderedDict(sorted(paths.items(), key=path_sort_function))
-        for key, path in paths.items():
-            for operation in path.operations:
-                operation[1]["summary"] = _get_summary_from_operation_id(
-                    operation[1]["operationId"]
-                )
         # 마지막에 /(slash)가 붙은 경우, 제거함
         paths = OrderedDict(
             {k[:-1] if k[-1] == "/" else k: v for k, v in paths.items()}
