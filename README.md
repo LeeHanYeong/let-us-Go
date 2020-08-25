@@ -1,7 +1,13 @@
-# let us:Go!
+# let us: Go!
 
 [![github-action]][github-workflow]
 [![coverage]][codecov]
+[![github-last-commit]][github]
+[![made-with]][django]
+
+iOS 세미나 **let us: Go!**의 API서버 애플리케이션
+
+>  API문서: https://api.dev.letusgo.app/doc
 
 ## Requirements
 
@@ -139,116 +145,6 @@ sudo chsh -s $(which zsh) $(whoami)
 
 
 
-
-
-## API 설명
-
-### Authentication
-
-사용자 인증이 필요한 경우, Token인증을 사용합니다. Token인증에는 아래 라이브러리를 사용하고 있습니다.
-[DRF Authentication - Token](https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication)
-
-
-
-#### Token획득법
-
-[API Docs - AuthToken](https://letusgo.lhy.kr/doc/#operation/rest-auth_login_create)
-`/rest-auth/login/` URL에 아래와 같은 데이터를 `POST` 방식으로 전송
-
-```json
-{
-  "username": "string",
-  "email": "user@example.com",
-  "password": "string"
-}
-```
-
-성공시 Token문자열을 객체로 리턴
-
-```json
-{
-  "key": "a129b636dc3f352f864398b471f17b43bb4ce352"
-}
-```
-
-
-
-#### Token 사용법
-
-```
-Authorization: Token a129b636dc3f352f864398b471f17b43bb4ce352
-```
-
-위 key/value를 HTTP Request header로 지정해서 전송 (value의 token값 앞에 "Token "문자열이 존재해야 함)
-
-
-
-### API 사용과정 설명
-
-#### 1. 세미나 상세 받아오기 (Seminar Detail)
-
-[API - Seminar Detail](https://letusgo.lhy.kr/doc/#operation/seminars_read) 에 GET요청(id에 0) 가장 최신의 세미나 정보 수신
-
-#### 2. 회원가입 (User Create)
-
-[API - User Create](https://letusgo.lhy.kr/doc/#operation/members_create) 에 POST요청, 유저 생성
-
-#### 3. Token 받아오기 (rest-auth_login_create)
-
-[API - Auth_AuthToken](https://letusgo.lhy.kr/doc/#operation/auth_token_create) 에 POST요청, Token과 User정보수신
-
-#### 4. 인증(Authenticate)된 상태로 신청서 작성 (Attend Create)
-
-수신한 Token을 Header에 등록 후, [API - Attend Create](https://letusgo.lhy.kr/doc/#operation/attends_create) 에 POST요청, Status code확인 (201)
-
-#### 5. 인증(Authenticate)된 상태로 신청서 목록 확인 (Attend List)
-
-수신한 Token을 Header에 등록 후, [API - Attend List](https://letusgo.lhy.kr/doc/#operation/attends_list) 에 GET요청, 신청서 목록 확인
-
-
-
-
-
-## Other settings
-
-### AWS EC2(Ubuntu 20.04)
-
-```shell
-# docker
-sudo apt -y update
-sudo apt -y dist-upgrade
-sudo apt-get -y install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-sudo apt -y update
-sudo apt -y install docker-ce docker-ce-cli containerd.io
-
-# docker-compose
-sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
-
-# 점검 도구
-sudo apt -y install net-tools
-
-# zsh
-sudo apt -y install zsh
-echo n | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-sudo chsh -s $(which zsh) $(whoami)
-```
-
-
-
-
-
 ## Trouble shooting
 
 ### RDS Database생성시
@@ -261,5 +157,9 @@ CREATE DATABASE letusgo OWNER=lhy TEMPLATE template0 LC_COLLATE 'C';
 
 [coverage]: https://img.shields.io/codecov/c/github/LeeHanYeong/let-us-go/master.svg
 [codecov]: https://codecov.io/github/LeeHanYeong/let-us-go
-[github-action]: https://img.shields.io/github/workflow/status/LeeHanYeong/let-us-go/CI
+[github-action]: https://img.shields.io/github/workflow/status/LeeHanYeong/let-us-go/CI/master.svg
 [github-workflow]: https://github.com/leehanyeong/let-us-go/actions?query=workflow%3ACI
+[github-last-commit]: https://img.shields.io/github/last-commit/LeeHanYeong/let-us-go/develop.svg
+[github]: https://github.com/leehanyeong/let-us-go
+[made-with]: https://img.shields.io/badge/Made%20with-Django-blue
+[django]: https://www.djangoproject.com/
