@@ -1,16 +1,13 @@
 from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.utils.decorators import method_decorator
-from django_aid.drf.viewsets import ModelViewSet
+from django_aid.drf.viewsets import ModelViewSet, ViewSetMixin
 from djangorestframework_camel_case.util import camel_to_underscore
-from drf_yasg.utils import swagger_auto_schema
 from rest_auth.views import LoginView
-from rest_framework import generics, status, permissions
+from rest_framework import permissions, mixins, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 from sentry_sdk import capture_exception
 
 from utils.drf.exceptions import EmailSendFailed
@@ -23,6 +20,7 @@ from .serializers import (
     UserAttributeAvailableSerializer,
     AuthTokenSerializer,
     EmailVerificationCreateSerializer,
+    EmailVerificationCheckSerializer,
 )
 
 
@@ -77,9 +75,12 @@ class AuthTokenAPIView(LoginView):
         return AuthTokenSerializer
 
 
-class EmailVerificationCreateAPIView(generics.CreateAPIView):
+class EmailVerificationViewSet(ViewSetMixin, mixins.CreateModelMixin, GenericViewSet):
     queryset = EmailVerification.objects.all()
-    serializer_class = EmailVerificationCreateSerializer
+    serializer_classes = {
+        "create": EmailVerificationCreateSerializer,
+        "check": EmailVerificationCheckSerializer,
+    }
 
     def perform_create(self, serializer):
         instance = serializer.save()
@@ -109,3 +110,9 @@ class EmailVerificationCreateAPIView(generics.CreateAPIView):
             e = EmailSendFailed(f"인증 이메일 발송에 실패했습니다({instance.email})")
             capture_exception(e)
             raise e
+
+    @action(detail=False, methods=["post"])
+    def check(self, request, *args, **kwargs):
+        serializer = self.get_serializer_class()(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(status=status.HTTP_204_NO_CONTENT)

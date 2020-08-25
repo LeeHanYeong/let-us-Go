@@ -2,6 +2,7 @@ from django.conf import settings
 from rest_auth.serializers import TokenSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 
 from utils.drf.exceptions import (
     EmailVerificationDoesNotExist,
@@ -112,15 +113,15 @@ class AuthTokenSerializer(TokenSerializer):
         fields = TokenSerializer.Meta.fields + ("user",)
 
 
-class EmailVerificationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EmailVerification
-        fields = (
-            "id",
-            "user",
-            "email",
-            "code",
-        )
+class EmailVerificationCheckSerializer(serializers.Serializer):
+    email = serializers.CharField(required=True)
+    code = serializers.CharField(required=True)
+
+    def validate(self, data):
+        email = data["email"]
+        code = data["code"]
+        get_object_or_404(EmailVerification, email=email, code=code)
+        return data
 
 
 class EmailVerificationCreateSerializer(serializers.ModelSerializer):
@@ -137,5 +138,5 @@ class EmailVerificationCreateSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         if settings.DEBUG:
-            return EmailVerificationSerializer(instance).data
+            return EmailVerificationCheckSerializer(instance).data
         return super().to_representation(instance)
