@@ -29,6 +29,6 @@ class SeminarViewSet(ReadOnlyModelViewSet):
 
     def get_object(self):
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-        if self.kwargs.get(lookup_url_kwarg) == 0:
+        if self.kwargs.get(lookup_url_kwarg) == "0":
             return self.queryset.first()
         return super().get_object()

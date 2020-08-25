@@ -1,3 +1,5 @@
+from itertools import cycle
+
 from model_bakery import baker
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -19,6 +21,13 @@ class SeminarAPITest(APITestCase):
         seminar = baker.make(Seminar)
         response = self.client.get(self.URL_DETAIL.format(id=seminar.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_retrieve_recent_when_id_0(self):
+        baker.make(Seminar, _quantity=10)
+        first_seminar = Seminar.objects.first()
+        response = self.client.get(self.URL_DETAIL.format(id=0))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["id"], first_seminar.id)
 
 
 class TrackAPITest(APITestCase):
@@ -52,6 +61,20 @@ class SessionAPITest(APITestCase):
         response = self.client.get(self.URL_DETAIL.format(id=session.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_search(self):
+        baker.make(Session, name="letusgo")
+        response = self.client.get(
+            self.URL_LIST + "search/", data={"keyword": "let"}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_search_keyword_min_length(self):
+        response = self.client.get(
+            self.URL_LIST + "search/", data={"keyword": "le"}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("최소", response.data[0])
+
 
 class SpeakerAPITest(APITestCase):
     URL_LIST = "/v1/seminars/speakers/"
@@ -61,3 +84,27 @@ class SpeakerAPITest(APITestCase):
         response = self.client.get(self.URL_LIST)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 10)
+
+    def test_filter(self):
+        seminars = baker.make(Seminar, _quantity=10)
+        # 1세미나당 2개 트랙
+        tracks = baker.make(Track, seminar=cycle(seminars), _quantity=20)
+
+        # 1트랙당 5개 세션 (1세미나당 10개 세션)
+        # 1세션당 1개 발표자 (1세미나당 10발표자)
+        speakers = baker.make(Speaker, _quantity=100)
+        baker.make(Session, track=cycle(tracks), speaker=cycle(speakers), _quantity=100)
+
+        seminar = seminars[0]
+        response = self.client.get(self.URL_LIST, data={"seminar": seminar.id})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 10)
+        for data_speaker in response.data["results"]:
+            self.assertIn(
+                data_speaker["id"],
+                list(
+                    Speaker.objects.filter(
+                        session_set__track__seminar_id=seminar.id
+                    ).values_list("id", flat=True)
+                ),
+            )

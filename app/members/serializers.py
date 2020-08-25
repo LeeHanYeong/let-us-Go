@@ -40,7 +40,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            "username",
             "type",
             "name",
             "nickname",
@@ -53,11 +52,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].required = False
 
     def validate(self, data):
-        if not data.get("nickname"):
-            raise ValidationError({"nickname": "닉네임은 필수항목입니다"})
         if data["password1"] != data["password2"]:
             raise ValidationError({"password2": "비밀번호와 비밀번호 확인란의 값이 다릅니다"})
         try:
@@ -65,9 +61,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 email=data.get("email", "")
             )
             if email_verification.code != data["email_verification_code"]:
-                raise EmailVerificationCodeInvalid()
+                raise EmailVerificationCodeInvalid(
+                    {"email_verification_code": "이메일 인증코드가 유효하지 않습니다"}
+                )
         except EmailVerification.DoesNotExist:
-            raise EmailVerificationDoesNotExist()
+            raise EmailVerificationDoesNotExist(
+                {"email_verification_code": "이메일 인증정보가 존재하지 않습니다"}
+            )
 
         data["password"] = data["password2"]
         del data["password1"]

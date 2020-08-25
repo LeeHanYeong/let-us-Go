@@ -65,9 +65,9 @@ class UserViewSet(ModelViewSet):
         return super().get_object()
 
     def get_permissions(self):
-        if self.action in ("retrieve", "update", "delete"):
+        if self.action in ("retrieve", "partial_update", "update"):
             return [IsUserSelf()]
-        elif self.action == "profile":
+        elif self.action in ("list", "profile"):
             return [permissions.IsAuthenticated()]
         return []
 

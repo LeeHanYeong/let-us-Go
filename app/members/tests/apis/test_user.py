@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from members.models import User, EmailVerification
+from members.serializers import UserSerializer
 
 
 class UserAPIViewTest(APITestCase):
@@ -76,3 +77,35 @@ class UserAPIViewTest(APITestCase):
         )
         self.assertEqual(response_available_false.status_code, status.HTTP_200_OK)
         self.assertEqual(response_available_false.data["exists"], False)
+
+    def test_permissions(self):
+        # List요청, 인증필요
+        response = self.client.get(self.URL_LIST)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # Retrieve요청, 인증필요
+        user = baker.make(User)
+        response = self.client.get(self.URL_DETAIL.format(id=user.id))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # Profile요청, 인증 필요
+        response = self.client.get(self.URL_LIST + "profile/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # Retrieve요청, 다른사용자일 경우 거부
+        user2 = baker.make(User)
+        self.client.force_authenticate(user2)
+        response = self.client.get(self.URL_DETAIL.format(id=user.id))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # Update요청, 다른사용자일 경우 거부
+        data = UserSerializer(user).data
+        data["name"] = "AnotherName"
+        response = self.client.patch(
+            self.URL_DETAIL.format(id=user.id), data=data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # Destroy요청, 허용되지 않는 요청
+        response = self.client.delete(self.URL_DETAIL.format(id=user.id))
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)

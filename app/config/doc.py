@@ -81,7 +81,7 @@ class SchemaGenerator(OpenAPISchemaGenerator):
                 action = view.action.replace("partial_update", "update")
                 keys = [item for item in [view.basename, action]]
             else:
-                if view.queryset is not None:
+                if hasattr(view, "queryset") and view.queryset is not None:
                     app_label = view.queryset.model._meta.app_label
                     model_name = view.queryset.model.__name__
                     keys = [

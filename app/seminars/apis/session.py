@@ -24,7 +24,7 @@ class SessionViewSet(ReadOnlyModelViewSet):
     @action(detail=False, methods=["get"])
     def search(self, request, *args, **kwargs):
         keyword = request.query_params.get("keyword", "")
-        if len(keyword) < 2:
+        if len(keyword) < 3:
             raise ValidationError("검색어는 최소 2글자 이상이어야 합니다")
 
         sessions = (

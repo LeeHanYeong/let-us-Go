@@ -112,7 +112,3 @@ class EmailVerification(TimeStampedModel):
     def reset_code(self):
         self.code = get_random_string(6, allowed_chars=string.digits)
         self.save()
-
-    @property
-    def is_send_succeed(self):
-        return self.status_send == self.SUCCEED

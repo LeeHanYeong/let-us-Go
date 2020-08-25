@@ -6,6 +6,7 @@ from .drf import *
 from .drf_yasg import *
 from .easy_thumbnails import *
 from .paths import *
+from .phonenumber import *
 from .secrets import *
 from .static import *
 
