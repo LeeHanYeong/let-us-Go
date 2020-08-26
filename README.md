@@ -155,9 +155,9 @@ template0으로부터, LC_COLLATE를 따로 설정 (한글 ordering관련)
 CREATE DATABASE letusgo OWNER=lhy TEMPLATE template0 LC_COLLATE 'C';
 ```
 
-[coverage]: https://img.shields.io/codecov/c/github/LeeHanYeong/let-us-go/master.svg
+[coverage]: https://img.shields.io/codecov/c/github/LeeHanYeong/let-us-go/develop.svg
 [codecov]: https://codecov.io/github/LeeHanYeong/let-us-go
-[github-action]: https://img.shields.io/github/workflow/status/LeeHanYeong/let-us-go/CI/master.svg
+[github-action]: https://img.shields.io/github/workflow/status/LeeHanYeong/let-us-go/CI/develop.svg
 [github-workflow]: https://github.com/leehanyeong/let-us-go/actions?query=workflow%3ACI
 [github-last-commit]: https://img.shields.io/github/last-commit/LeeHanYeong/let-us-go/develop.svg
 [github]: https://github.com/leehanyeong/let-us-go

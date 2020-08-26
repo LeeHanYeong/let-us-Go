@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches:
-      - master
       - develop
 
 env:
@@ -45,7 +44,7 @@ jobs:
       run: black app --check
 
     - name: Test with pytest-cov
-      run: pytest --cov app --create-db
+      run: pytest --cov app
 
     - name: Codecov
       run: codecov
