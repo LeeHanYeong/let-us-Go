@@ -32,8 +32,9 @@ class SessionViewSet(ReadOnlyModelViewSet):
             .filter(name__icontains=keyword,)
             .annotate(seminar=F("track__seminar"),)
         )
-
-        seminars = Seminar.objects.filter(track_set__session_set__in=sessions,)
+        seminars = Seminar.objects.filter(
+            track_set__session_set__in=sessions
+        ).distinct()
 
         search_results = []
         for seminar in seminars:

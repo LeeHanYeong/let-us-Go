@@ -75,6 +75,16 @@ class SessionAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("최소", response.data[0])
 
+    def test_search_duplicate(self):
+        seminar = baker.make(Seminar)
+        track = baker.make(Track, seminar=seminar)
+        baker.make(Session, name="SameName", track=track, _quantity=30)
+        response = self.client.get(
+            self.URL_LIST + "search/", data={"keyword": "same"}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
 
 class SpeakerAPITest(APITestCase):
     URL_LIST = "/v1/seminars/speakers/"
