@@ -45,7 +45,7 @@ jobs:
       run: black app --check
 
     - name: Test with pytest-cov
-      run: pytest --cov app
+      run: pytest --cov app --create-db
 
     - name: Codecov
       run: codecov
