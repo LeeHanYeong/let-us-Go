@@ -206,6 +206,14 @@ version = "4.0.1"
 
 [[package]]
 category = "main"
+description = "simple color field for your models with a nice color-picker in the admin-interface."
+name = "django-colorfield"
+optional = false
+python-versions = "*"
+version = "0.3.2"
+
+[[package]]
+category = "main"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
 name = "django-cors-headers"
 optional = false
@@ -846,7 +854,7 @@ secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "pyOpenSSL (>=0
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [metadata]
-content-hash = "cd718a6ff930b35e5d9f36ebb7fc6bbb4a2e1acd450b3b5ae8a85a358f3dbd9c"
+content-hash = "88a8a538e184a368a65f990ea82270cc8cbdbe8e31ede733d508ba50f7b8b4b4"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -979,6 +987,10 @@ django-aid = [
 django-cleanup = [
     {file = "django-cleanup-4.0.1.tar.gz", hash = "sha256:4d0fd9ad3117a219e4cb3e35dd32f39c764a860ce56b820abb88ad3ec063ffd7"},
     {file = "django_cleanup-4.0.1-py2.py3-none-any.whl", hash = "sha256:ebbad94d1ed655a8d899b00a847ceab16355a659b807d4151ffed6e5a9c10db2"},
+]
+django-colorfield = [
+    {file = "django-colorfield-0.3.2.tar.gz", hash = "sha256:f5dde281f4db8871eb5845aee614b4f1a47e7fd5b20476238793f519cd7bdf41"},
+    {file = "django_colorfield-0.3.2-py2-none-any.whl", hash = "sha256:e435ec31712f5e8b955cc7633aef1e49cc3b409c21dfcefeb2f6ef0e1cb69533"},
 ]
 django-cors-headers = [
     {file = "django-cors-headers-3.4.0.tar.gz", hash = "sha256:f5218f2f0bb1210563ff87687afbf10786e080d8494a248e705507ebd92d7153"},

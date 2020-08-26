@@ -10,6 +10,8 @@ SPONSOR_FIELDS = (
     "id",
     "name",
     "logo",
+    "logo_white",
+    "logo_white_bgcolor",
 )
 
 

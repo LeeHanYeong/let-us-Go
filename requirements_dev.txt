@@ -110,6 +110,9 @@ django-aid==0.1.5 \
 django-cleanup==4.0.1 \
     --hash=sha256:4d0fd9ad3117a219e4cb3e35dd32f39c764a860ce56b820abb88ad3ec063ffd7 \
     --hash=sha256:ebbad94d1ed655a8d899b00a847ceab16355a659b807d4151ffed6e5a9c10db2
+django-colorfield==0.3.2 \
+    --hash=sha256:f5dde281f4db8871eb5845aee614b4f1a47e7fd5b20476238793f519cd7bdf41 \
+    --hash=sha256:e435ec31712f5e8b955cc7633aef1e49cc3b409c21dfcefeb2f6ef0e1cb69533
 django-cors-headers==3.4.0 \
     --hash=sha256:f5218f2f0bb1210563ff87687afbf10786e080d8494a248e705507ebd92d7153 \
     --hash=sha256:5240062ef0b16668ce8a5f43324c388d65f5439e1a30e22c38684d5ddaff0d15

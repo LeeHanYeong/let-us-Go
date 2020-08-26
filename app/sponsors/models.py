@@ -1,3 +1,4 @@
+from colorfield.fields import ColorField
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
@@ -35,6 +36,8 @@ class Sponsor(TimeStampedModel):
     )
     name = models.CharField("스폰서명", max_length=30)
     logo = models.FileField("CI로고", upload_to="sponsors", blank=True)
+    logo_white = models.FileField("CI로고 (흰색)", upload_to="sponsors", blank=True)
+    logo_white_bgcolor = ColorField(default="#72a0e0")
 
     def __str__(self):
         return self.name
