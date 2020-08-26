@@ -23,6 +23,12 @@ from .serializers import (
     EmailVerificationCheckSerializer,
 )
 
+__all__ = (
+    "UserViewSet",
+    "AuthTokenAPIView",
+    "EmailVerificationViewSet",
+)
+
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.annotate_choices()

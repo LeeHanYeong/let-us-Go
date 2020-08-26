@@ -36,14 +36,11 @@ class User(AbstractUser, TimeStampedModel):
     type = models.CharField(
         "유형", max_length=10, choices=TYPE_CHOICES, default=TYPE_EMAIL
     )
-    nickname = models.CharField(
-        "닉네임", max_length=20, unique=True, blank=True, null=True
-    )
+    nickname = models.CharField("닉네임", max_length=20, blank=True)
     email = models.EmailField("이메일", unique=True)
     phone_number = PhoneNumberField("전화번호", blank=True)
 
     REQUIRED_FIELDS = ("email",)
-
     objects = UserManager()
 
     class Meta:
