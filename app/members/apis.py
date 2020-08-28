@@ -3,10 +3,11 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django_aid.drf.viewsets import ModelViewSet, ViewSetMixin
 from djangorestframework_camel_case.util import camel_to_underscore
-from rest_auth.views import LoginView
 from rest_framework import permissions, mixins, status
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from sentry_sdk import capture_exception
 
@@ -18,9 +19,10 @@ from .serializers import (
     UserCreateSerializer,
     UserUpdateSerializer,
     UserAttributeAvailableSerializer,
-    AuthTokenSerializer,
     EmailVerificationCreateSerializer,
     EmailVerificationCheckSerializer,
+    GetEmailAuthTokenSerializer,
+    AuthTokenSerializer,
 )
 
 __all__ = (
@@ -76,9 +78,16 @@ class UserViewSet(ModelViewSet):
         return []
 
 
-class AuthTokenAPIView(LoginView):
-    def get_response_serializer(self):
-        return AuthTokenSerializer
+class AuthTokenAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = GetEmailAuthTokenSerializer(
+            data=request.data, context={"reuqest": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        token, _ = Token.objects.get_or_create(user=user)
+        token_serializer = AuthTokenSerializer(token)
+        return Response(token_serializer.data)
 
 
 class EmailVerificationViewSet(ViewSetMixin, mixins.CreateModelMixin, GenericViewSet):

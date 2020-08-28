@@ -17,6 +17,7 @@ exclude_lines =
     if DEBUG:
     if SETTINGS_MODULE
     if not SETTINGS_MODULE
+    def rest_exception_handler
     def is_ec2_linux
     def get_linux_ec2_private_ip
     if private_ip:

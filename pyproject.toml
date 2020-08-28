@@ -29,7 +29,6 @@ djangorestframework = "^3.10"
 djangorestframework-api-key = "^1.4"
 djangorestframework-camel-case = "^1.1"
 djangorestframework-filters = ">=1.0.0.dev2"
-django-rest-auth = "^0.9.5"
 drf-writable-nested = "^0.5.1"
 drf-yasg = "^1.17"
 

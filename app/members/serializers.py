@@ -1,12 +1,14 @@
 from django.conf import settings
-from rest_auth.serializers import TokenSerializer
+from django.contrib.auth import authenticate
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 
 from utils.drf.exceptions import (
     EmailVerificationDoesNotExist,
     EmailVerificationCodeInvalid,
+    InvalidCredentials,
 )
 from .models import User, EmailVerification
 
@@ -106,11 +108,35 @@ class UserAttributeAvailableSerializer(serializers.Serializer):
     value = serializers.CharField()
 
 
-class AuthTokenSerializer(TokenSerializer):
-    user = UserSerializer()
+class AuthTokenSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
 
-    class Meta(TokenSerializer.Meta):
-        fields = TokenSerializer.Meta.fields + ("user",)
+    class Meta:
+        model = Token
+        fields = (
+            "key",
+            "user",
+        )
+
+
+class GetEmailAuthTokenSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True, allow_blank=False)
+    password = serializers.CharField(required=True, allow_blank=False)
+
+    def validate(self, attrs):
+        email = attrs["email"]
+        password = attrs["password"]
+
+        user = authenticate(
+            request=self.context.get("request"),
+            username=email,
+            password=password,
+        )
+        if not user:
+            msg = "이메일 또는 비밀번호를 확인해주세요"
+            raise InvalidCredentials(msg)
+        attrs["user"] = user
+        return attrs
 
 
 class EmailVerificationCheckSerializer(serializers.Serializer):

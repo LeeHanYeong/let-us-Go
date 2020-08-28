@@ -29,6 +29,24 @@ class AuthTokenAPITest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_auth_token_type_email_failed(self):
+        email = "sample@sample.com"
+        password = "sample_password"
+        User.objects.create_user(
+            type="email",
+            email=email,
+            password=password,
+        )
+        response = self.client.post(
+            self.URL,
+            data={
+                "email": "a" + email,
+                "password": password,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class EmailVerificationAPITest(APITestCase):
     URL = "/v1/auth/email-verification/"

@@ -356,22 +356,6 @@ phonenumberslite = ["phonenumberslite (>=7.0.2)"]
 
 [[package]]
 category = "main"
-description = "Create a set of REST API endpoints for Authentication and Registration"
-name = "django-rest-auth"
-optional = false
-python-versions = "*"
-version = "0.9.5"
-
-[package.dependencies]
-Django = ">=1.8.0"
-djangorestframework = ">=3.1.3"
-six = ">=1.9.0"
-
-[package.extras]
-with_social = ["django-allauth (>=0.25.0)"]
-
-[[package]]
-category = "main"
 description = "Django SecretsManager is custom secret managers for Django"
 name = "django-secrets-manager"
 optional = false
@@ -1105,7 +1089,7 @@ secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "pyOpenSSL (>=0
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [metadata]
-content-hash = "38df7e7127bc135ecb5f53c3ed3d847ff71493f84fddb1f07e6ee95b9b0a9a26"
+content-hash = "c2cffdbc6476a5d38a30748758092c3fd408479602b5ac45587bbeb8d325daec"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -1289,9 +1273,6 @@ django-modeladmin-reorder = [
 django-phonenumber-field = [
     {file = "django-phonenumber-field-3.0.1.tar.gz", hash = "sha256:794ebbc3068a7af75aa72a80cb0cec67e714ff8409a965968040f1fd210b2d97"},
     {file = "django_phonenumber_field-3.0.1-py3-none-any.whl", hash = "sha256:1ab19f723928582fed412bd9844221fa4ff466276d8526b8b4a9913ee1487c5e"},
-]
-django-rest-auth = [
-    {file = "django-rest-auth-0.9.5.tar.gz", hash = "sha256:f11e12175dafeed772f50d740d22caeab27e99a3caca24ec65e66a8d6de16571"},
 ]
 django-secrets-manager = [
     {file = "django-secrets-manager-0.1.13.tar.gz", hash = "sha256:46d6360b0ddf8f4c860b62b3cfe9c4ab342c115478a10af5577736f9abe6a8e5"},

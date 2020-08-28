@@ -73,7 +73,7 @@ class SessionAPITest(APITestCase):
             self.URL_LIST + "search/", data={"keyword": "le"}, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("최소", response.data[0])
+        self.assertIn("최소", response.data[0]["message"])
 
     def test_search_duplicate(self):
         seminar = baker.make(Seminar)

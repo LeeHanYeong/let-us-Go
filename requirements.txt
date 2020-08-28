@@ -136,8 +136,6 @@ django-modeladmin-reorder==0.3.1 \
 django-phonenumber-field==3.0.1 \
     --hash=sha256:794ebbc3068a7af75aa72a80cb0cec67e714ff8409a965968040f1fd210b2d97 \
     --hash=sha256:1ab19f723928582fed412bd9844221fa4ff466276d8526b8b4a9913ee1487c5e
-django-rest-auth==0.9.5 \
-    --hash=sha256:f11e12175dafeed772f50d740d22caeab27e99a3caca24ec65e66a8d6de16571
 django-secrets-manager==0.1.13 \
     --hash=sha256:46d6360b0ddf8f4c860b62b3cfe9c4ab342c115478a10af5577736f9abe6a8e5 \
     --hash=sha256:b7d8e619703e95ce7110c7194c93973a0cc3d4b3895c78244f7007e653e169a8

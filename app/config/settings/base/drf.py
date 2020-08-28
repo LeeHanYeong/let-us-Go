@@ -16,5 +16,5 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "utils.drf.pagination.PageNumberPagination",
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "JSON_UNDERSCOREIZE": {"no_underscore_before_number": True},
-    "EXCEPTION_HANDLER": "django_aid.drf.exceptions.rest_exception_handler",
+    "EXCEPTION_HANDLER": "utils.drf.exceptions.rest_exception_handler",
 }
