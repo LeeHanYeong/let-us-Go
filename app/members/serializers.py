@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import authenticate
+from django.db import transaction
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
@@ -55,6 +56,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["type"].required = True
 
     def validate(self, data):
         if data["password1"] != data["password2"]:
@@ -78,12 +80,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        code = validated_data.pop("email_verification_code")
-        user = self.Meta.model._default_manager.create_user(**validated_data)
-        e = EmailVerification.objects.get(code=code)
-        e.user = user
-        e.save()
-        return user
+        with transaction.atomic():
+            code = validated_data.pop("email_verification_code")
+            user = User.objects.create_user(**validated_data)
+            e = EmailVerification.objects.get(code=code)
+            e.user = user
+            e.save()
+            return user
 
     def to_representation(self, instance):
         return UserSerializer(instance).data

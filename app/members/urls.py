@@ -1,11 +1,15 @@
 from django.urls import path, include
 from django_aid.drf.drf_yasg import schema
-from drf_yasg.openapi import Response as APIResponse
+from drf_yasg.openapi import Response as APIResponse, Parameter
 from rest_framework import status
 from rest_framework.routers import SimpleRouter
 
 from . import apis
-from .serializers import UserSerializer, AuthTokenSerializer
+from .serializers import (
+    UserSerializer,
+    AuthTokenSerializer,
+    GetEmailAuthTokenSerializer,
+)
 
 members_router = SimpleRouter()
 members_router.register(
@@ -100,6 +104,7 @@ auth_patterns = (
                             "operation_id": "auth_get_auth_token",
                             "operation_summary": "Get AuthToken",
                             "operation_description": "인증정보를 사용해 사용자의 Token(key)과 User정보를 획득",
+                            "request_body": GetEmailAuthTokenSerializer,
                             "responses": {
                                 status.HTTP_200_OK: AuthTokenSerializer(),
                             },
