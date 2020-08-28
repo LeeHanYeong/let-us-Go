@@ -77,13 +77,19 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.jinja2.Jinja2",
-        "DIRS": [os.path.join(TEMPLATES_DIR, "jinja2"),],
+        "DIRS": [
+            os.path.join(TEMPLATES_DIR, "jinja2"),
+        ],
         "APP_DIRS": False,
-        "OPTIONS": {"environment": "config.jinja2.environment",},
+        "OPTIONS": {
+            "environment": "config.jinja2.environment",
+        },
     },
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [TEMPLATES_DIR,],
+        "DIRS": [
+            TEMPLATES_DIR,
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -100,9 +106,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
 LANGUAGE_CODE = "ko-kr"
@@ -133,11 +145,18 @@ LOGGING = {
             "maxBytes": 1048576,
             "backupCount": 10,
         },
-        "console": {"class": "logging.StreamHandler", "level": "INFO",},
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "INFO",
+        },
     },
     "loggers": {
         "django": {
-            "handlers": ["file_error", "file_info", "console",],
+            "handlers": [
+                "file_error",
+                "file_info",
+                "console",
+            ],
             "level": "INFO",
             "propagate": True,
         },

@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameModel(
-            old_name="EmailValidation", new_name="EmailVerification",
+            old_name="EmailValidation",
+            new_name="EmailVerification",
         ),
     ]

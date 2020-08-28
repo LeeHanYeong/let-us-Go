@@ -15,10 +15,17 @@ class AuthTokenAPITest(APITestCase):
         email = "sample@sample.com"
         password = "sample_password"
         User.objects.create_user(
-            type="email", email=email, password=password,
+            type="email",
+            email=email,
+            password=password,
         )
         response = self.client.post(
-            self.URL, data={"email": email, "password": password,}, format="json"
+            self.URL,
+            data={
+                "email": email,
+                "password": password,
+            },
+            format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -53,16 +60,28 @@ class EmailVerificationAPITest(APITestCase):
         email = "sample@sample.com"
         ev = baker.make(EmailVerification, email=email)
         response = self.client.post(
-            self.URL_CHECK, data={"email": email, "code": ev.code,}
+            self.URL_CHECK,
+            data={
+                "email": email,
+                "code": ev.code,
+            },
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         response = self.client.post(
-            self.URL_CHECK, data={"email": "another@sample.com", "code": ev.code,}
+            self.URL_CHECK,
+            data={
+                "email": "another@sample.com",
+                "code": ev.code,
+            },
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         response = self.client.post(
-            self.URL_CHECK, data={"email": email, "code": ev.code + "a",}
+            self.URL_CHECK,
+            data={
+                "email": email,
+                "code": ev.code + "a",
+            },
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

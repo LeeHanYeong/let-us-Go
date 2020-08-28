@@ -59,7 +59,8 @@ class User(AbstractUser, TimeStampedModel):
 class EmailVerificationManager(models.Manager):
     def create(self, **kwargs):
         instance, created = super().update_or_create(
-            **kwargs, defaults={"status_send": EmailVerification.WAIT},
+            **kwargs,
+            defaults={"status_send": EmailVerification.WAIT},
         )
         if not created:
             instance.reset_code()

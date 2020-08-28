@@ -18,9 +18,13 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "이메일 인증 목록",
             },
         ),
-        migrations.RemoveField(model_name="emailverification", name="is_send_succeed",),
         migrations.RemoveField(
-            model_name="emailverification", name="is_verification_completed",
+            model_name="emailverification",
+            name="is_send_succeed",
+        ),
+        migrations.RemoveField(
+            model_name="emailverification",
+            name="is_verification_completed",
         ),
         migrations.AddField(
             model_name="emailverification",

@@ -100,7 +100,9 @@ auth_patterns = (
                             "operation_id": "auth_get_auth_token",
                             "operation_summary": "Get AuthToken",
                             "operation_description": "인증정보를 사용해 사용자의 Token(key)과 User정보를 획득",
-                            "responses": {status.HTTP_200_OK: AuthTokenSerializer(),},
+                            "responses": {
+                                status.HTTP_200_OK: AuthTokenSerializer(),
+                            },
                         },
                     ),
                 ],

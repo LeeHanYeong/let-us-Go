@@ -165,7 +165,11 @@ class SessionDetailSerializer(SessionSerializer):
 
     class Meta:
         model = Session
-        fields = SESSION_FIELDS + ("video_set", "link_set", "file_set",)
+        fields = SESSION_FIELDS + (
+            "video_set",
+            "link_set",
+            "file_set",
+        )
 
 
 class TrackDetailSerializer(serializers.ModelSerializer):
@@ -173,7 +177,10 @@ class TrackDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Track
-        fields = TRACK_FIELDS + ("seminar", "session_set",)
+        fields = TRACK_FIELDS + (
+            "seminar",
+            "session_set",
+        )
 
 
 class SeminarDetailSerializer(serializers.ModelSerializer):
@@ -182,4 +189,7 @@ class SeminarDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Seminar
-        fields = SEMINAR_FIELDS + ("track_set", "sponsor_tier_set",)
+        fields = SEMINAR_FIELDS + (
+            "track_set",
+            "sponsor_tier_set",
+        )

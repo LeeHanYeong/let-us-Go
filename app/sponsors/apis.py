@@ -8,6 +8,8 @@ __all__ = ("SponsorTierListAPIView",)
 
 
 class SponsorTierListAPIView(generics.ListAPIView):
-    queryset = SponsorTier.objects.prefetch_related("sponsor_set",)
+    queryset = SponsorTier.objects.prefetch_related(
+        "sponsor_set",
+    )
     serializer_class = SponsorTierDetailSerializer
     filterset_class = SponsorTierFilterSet

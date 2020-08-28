@@ -62,14 +62,19 @@ class SeminarAdmin(admin.ModelAdmin):
         return (
             super()
             .get_queryset(request)
-            .prefetch_related("track_set", "track_set__session_set",)
+            .prefetch_related(
+                "track_set",
+                "track_set__session_set",
+            )
         )
 
     def admin_description(self, obj):
         return format_html(
             render_to_string(
                 template_name="admin/seminars/seminar_description.jinja2",
-                context={"seminar": obj,},
+                context={
+                    "seminar": obj,
+                },
             )
         )
 
@@ -117,12 +122,19 @@ class SpeakerAdmin(ThumbnailAdminMixin):
             super()
             .get_queryset(request)
             .prefetch_related(
-                "session_set", "session_set__track", "session_set__track__seminar",
+                "session_set",
+                "session_set__track",
+                "session_set__track__seminar",
             )
         )
 
     def img_profile_thumbnail(self, obj):
-        return render_to_string("admin/thumbnail.html", {"image": obj.img_profile,})
+        return render_to_string(
+            "admin/thumbnail.html",
+            {
+                "image": obj.img_profile,
+            },
+        )
 
     def admin_session_set(self, obj):
         sessions = "\n".join(

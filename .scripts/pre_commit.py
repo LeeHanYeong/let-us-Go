@@ -9,7 +9,8 @@ class RequiredPackagesNotInstalled(Exception):
 
     def __str__(self):
         return 'Required package "{name}" is not installed.{help}'.format(
-            name=self.name, help=f" (try: {self.help_text})" if self.help_text else "",
+            name=self.name,
+            help=f" (try: {self.help_text})" if self.help_text else "",
         )
 
 

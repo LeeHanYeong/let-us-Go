@@ -96,7 +96,10 @@ class EmailVerificationViewSet(ViewSetMixin, mixins.CreateModelMixin, GenericVie
             message=instance.code,
             html_message=render_to_string(
                 template_name="members/email-validation.jinja2",
-                context={"subject": subject, "code": instance.code,},
+                context={
+                    "subject": subject,
+                    "code": instance.code,
+                },
                 request=self.request,
             ),
             from_email=settings.DEFAULT_FROM_EMAIL,

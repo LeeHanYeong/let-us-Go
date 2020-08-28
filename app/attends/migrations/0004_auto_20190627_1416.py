@@ -10,7 +10,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="attend", name="type",),
+        migrations.RemoveField(
+            model_name="attend",
+            name="type",
+        ),
         migrations.AddField(
             model_name="attend",
             name="applicant_type",

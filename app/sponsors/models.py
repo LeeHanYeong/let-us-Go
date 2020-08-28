@@ -22,7 +22,9 @@ class SponsorTier(models.Model):
 
     def __str__(self):
         return "{seminar} | {tier_name} ({order})".format(
-            seminar=self.seminar.name, tier_name=self.name, order=self.order,
+            seminar=self.seminar.name,
+            tier_name=self.name,
+            order=self.order,
         )
 
 

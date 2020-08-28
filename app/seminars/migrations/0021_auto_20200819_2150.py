@@ -31,7 +31,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "세션 링크 타입", "verbose_name_plural": "세션 링크 타입 목록",},
+            options={
+                "verbose_name": "세션 링크 타입",
+                "verbose_name_plural": "세션 링크 타입 목록",
+            },
         ),
         migrations.AddField(
             model_name="sessionlink",

@@ -43,6 +43,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "스폰서", "verbose_name_plural": "스폰서 목록",},
+            options={
+                "verbose_name": "스폰서",
+                "verbose_name_plural": "스폰서 목록",
+            },
         ),
     ]

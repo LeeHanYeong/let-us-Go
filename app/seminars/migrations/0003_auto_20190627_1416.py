@@ -70,7 +70,10 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
         ),
-        migrations.RemoveField(model_name="session", name="seminar",),
+        migrations.RemoveField(
+            model_name="session",
+            name="seminar",
+        ),
         migrations.CreateModel(
             name="Track",
             fields=[
@@ -107,7 +110,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "트랙", "verbose_name_plural": "트랙 목록",},
+            options={
+                "verbose_name": "트랙",
+                "verbose_name_plural": "트랙 목록",
+            },
         ),
         migrations.AddField(
             model_name="session",

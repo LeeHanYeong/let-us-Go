@@ -18,7 +18,11 @@ class SettingsBackend:
                 user = User.objects.get(email=username)
             except User.DoesNotExist:
                 user = User.objects.update_or_create(
-                    email=username, defaults={"username": username, **user_dict,}
+                    email=username,
+                    defaults={
+                        "username": username,
+                        **user_dict,
+                    },
                 )[0]
             return user
         return None

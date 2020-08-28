@@ -44,7 +44,10 @@ class Attend(TimeStampedModel):
         related_name="attend_set",
     )
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="사용자", related_name="attend_set",
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="사용자",
+        related_name="attend_set",
     )
     name = models.CharField("이름(실명)", max_length=20, db_index=True)
     applicant_type = models.CharField(

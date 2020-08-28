@@ -120,8 +120,13 @@ class SessionManager(Manager):
         return (
             super()
             .get_queryset()
-            .select_related("speaker",)
-            .prefetch_related("speaker__link_set", "speaker__link_set__type",)
+            .select_related(
+                "speaker",
+            )
+            .prefetch_related(
+                "speaker__link_set",
+                "speaker__link_set__type",
+            )
         )
 
 
@@ -133,7 +138,10 @@ class Session(TimeStampedModel):
         (LEVEL_HIGH, "고급"),
     )
     track = models.ForeignKey(
-        Track, on_delete=models.CASCADE, verbose_name="트랙", related_name="session_set",
+        Track,
+        on_delete=models.CASCADE,
+        verbose_name="트랙",
+        related_name="session_set",
     )
     img_cover = models.ImageField("커버이미지", upload_to="session", blank=True)
     level = models.CharField(
@@ -152,7 +160,10 @@ class Session(TimeStampedModel):
         db_index=True,
     )
     speaker_alt_text = models.CharField(
-        "발표자 대체 텍스트", max_length=50, help_text="발표자가 없는 세션의 경우 대체될 텍스트입니다", blank=True,
+        "발표자 대체 텍스트",
+        max_length=50,
+        help_text="발표자가 없는 세션의 경우 대체될 텍스트입니다",
+        blank=True,
     )
     start_time = models.TimeField("시작시간", blank=True, null=True, db_index=True)
     end_time = models.TimeField("종료시간", blank=True, null=True, db_index=True)
@@ -180,7 +191,10 @@ class SessionVideo(models.Model):
         (TYPE_YOUTUBE, "YouTube"),
     )
     session = models.ForeignKey(
-        Session, verbose_name="세션", related_name="video_set", on_delete=models.CASCADE,
+        Session,
+        verbose_name="세션",
+        related_name="video_set",
+        on_delete=models.CASCADE,
     )
     type = models.CharField(
         "유형", default=TYPE_LINK, choices=CHOICES_TYPE, max_length=12
@@ -249,7 +263,10 @@ class SessionLink(models.Model):
 
 class SessionFile(models.Model):
     session = models.ForeignKey(
-        Session, verbose_name="세션", related_name="file_set", on_delete=models.CASCADE,
+        Session,
+        verbose_name="세션",
+        related_name="file_set",
+        on_delete=models.CASCADE,
     )
     name = models.CharField("파일명", max_length=100)
     attachment = models.FileField("첨부파일", upload_to="session", blank=True)
@@ -264,7 +281,13 @@ class SessionFile(models.Model):
 
 class SpeakerManager(Manager):
     def get_queryset(self):
-        return super().get_queryset().prefetch_related("link_set",)
+        return (
+            super()
+            .get_queryset()
+            .prefetch_related(
+                "link_set",
+            )
+        )
 
 
 class Speaker(TimeStampedModel):
@@ -300,7 +323,10 @@ class SpeakerLinkType(models.Model):
 
 class SpeakerLink(models.Model):
     speaker = models.ForeignKey(
-        Speaker, on_delete=models.CASCADE, related_name="link_set", verbose_name="발표자",
+        Speaker,
+        on_delete=models.CASCADE,
+        related_name="link_set",
+        verbose_name="발표자",
     )
     type = models.ForeignKey(
         SpeakerLinkType,

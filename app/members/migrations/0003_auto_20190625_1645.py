@@ -12,9 +12,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelManagers(
-            name="user", managers=[("objects", members.models.UserManager()),],
+            name="user",
+            managers=[
+                ("objects", members.models.UserManager()),
+            ],
         ),
-        migrations.RemoveField(model_name="user", name="birth_date",),
+        migrations.RemoveField(
+            model_name="user",
+            name="birth_date",
+        ),
         migrations.AddField(
             model_name="user",
             name="is_deleted",

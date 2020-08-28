@@ -19,7 +19,10 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "트랙 목록",
             },
         ),
-        migrations.RemoveField(model_name="seminar", name="entry_fee",),
+        migrations.RemoveField(
+            model_name="seminar",
+            name="entry_fee",
+        ),
         migrations.AddField(
             model_name="track",
             name="entry_fee",

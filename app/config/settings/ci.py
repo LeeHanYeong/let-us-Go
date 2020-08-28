@@ -12,5 +12,7 @@ EMAIL_FILE_PATH = os.path.join(ROOT_DIR, ".email")
 
 # Sentry
 sentry_sdk.init(
-    dsn=SENTRY_DSN, integrations=[DjangoIntegration()], send_default_pii=True,
+    dsn=SENTRY_DSN,
+    integrations=[DjangoIntegration()],
+    send_default_pii=True,
 )

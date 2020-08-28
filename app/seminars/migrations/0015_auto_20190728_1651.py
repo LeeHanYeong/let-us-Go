@@ -78,6 +78,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "발표자 링크", "verbose_name_plural": "발표자 링크 목록",},
+            options={
+                "verbose_name": "발표자 링크",
+                "verbose_name_plural": "발표자 링크 목록",
+            },
         ),
     ]

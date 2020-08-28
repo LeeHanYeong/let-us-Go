@@ -34,7 +34,10 @@ class UserAPIViewTest(APITestCase):
         self.assertEqual(response_list.status_code, status.HTTP_200_OK)
 
         email = "sample@sample.com"
-        e = baker.make(EmailVerification, email=email,)
+        e = baker.make(
+            EmailVerification,
+            email=email,
+        )
         response_create = self.client.post(
             self.URL_LIST,
             data={
@@ -64,7 +67,10 @@ class UserAPIViewTest(APITestCase):
 
         response_available_true = self.client.post(
             f"{self.URL_LIST}available/",
-            data={"attribute_name": "email", "value": email,},
+            data={
+                "attribute_name": "email",
+                "value": email,
+            },
             format="json",
         )
         self.assertEqual(response_available_true.status_code, status.HTTP_200_OK)
@@ -72,7 +78,10 @@ class UserAPIViewTest(APITestCase):
 
         response_available_false = self.client.post(
             f"{self.URL_LIST}available/",
-            data={"attribute_name": "name", "value": "a" + email,},
+            data={
+                "attribute_name": "name",
+                "value": "a" + email,
+            },
             format="json",
         )
         self.assertEqual(response_available_false.status_code, status.HTTP_200_OK)

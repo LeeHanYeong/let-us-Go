@@ -32,9 +32,15 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "세션 링크 유형", "verbose_name_plural": "세션 링크 유형 목록",},
+            options={
+                "verbose_name": "세션 링크 유형",
+                "verbose_name_plural": "세션 링크 유형 목록",
+            },
         ),
-        migrations.RemoveField(model_name="sessionlink", name="category",),
+        migrations.RemoveField(
+            model_name="sessionlink",
+            name="category",
+        ),
         migrations.AlterField(
             model_name="sessionlink",
             name="session",
@@ -46,7 +52,9 @@ class Migration(migrations.Migration):
                 verbose_name="세션",
             ),
         ),
-        migrations.DeleteModel(name="SessionLinkCategory",),
+        migrations.DeleteModel(
+            name="SessionLinkCategory",
+        ),
         migrations.AddField(
             model_name="sessionlink",
             name="type",

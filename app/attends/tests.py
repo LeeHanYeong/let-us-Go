@@ -43,7 +43,11 @@ class AttendAPITest(APITestCase):
 
         data_attend = deepcopy(response_retrieve.data)
         data_attend["name"] = "TestName"
-        response_update = self.client.patch(url_detail, data_attend, format="json",)
+        response_update = self.client.patch(
+            url_detail,
+            data_attend,
+            format="json",
+        )
         self.assertEqual(response_update.status_code, status.HTTP_200_OK)
         self.assertEqual(response_update.data["name"], "TestName")
 

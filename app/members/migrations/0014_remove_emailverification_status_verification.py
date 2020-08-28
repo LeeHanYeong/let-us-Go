@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name="emailverification", name="status_verification",
+            model_name="emailverification",
+            name="status_verification",
         ),
     ]

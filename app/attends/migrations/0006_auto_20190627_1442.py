@@ -27,7 +27,11 @@ class Migration(migrations.Migration):
             preserve_default=False,
         ),
         migrations.AlterUniqueTogether(
-            name="attend", unique_together={("track", "user")},
+            name="attend",
+            unique_together={("track", "user")},
         ),
-        migrations.RemoveField(model_name="attend", name="seminar",),
+        migrations.RemoveField(
+            model_name="attend",
+            name="seminar",
+        ),
     ]
