@@ -101,7 +101,7 @@ class EmailVerificationViewSet(ViewSetMixin, mixins.CreateModelMixin, GenericVie
             ),
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[instance.email],
-            fail_silently=True,
+            fail_silently=False,
         )
         # 해당 이메일로 마지막으로 인증요청한 항목 외에 삭제
         EmailVerification.objects.filter(email=instance.email).exclude(
