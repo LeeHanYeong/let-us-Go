@@ -90,7 +90,7 @@ class EmailVerificationViewSet(ViewSetMixin, mixins.CreateModelMixin, GenericVie
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        subject = "let us: Go! 이메일 인증 코드"
+        subject = "let us: Go! 이메일 인증 코드 안내"
         result = send_mail(
             subject=subject,
             message=instance.code,

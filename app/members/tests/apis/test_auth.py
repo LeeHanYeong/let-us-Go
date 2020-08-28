@@ -31,7 +31,7 @@ class EmailVerificationAPITest(APITestCase):
         email = "sample@sample.com"
         response = self.client.post(self.URL, data={"email": email}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(mail.outbox[0].subject, "let us: Go! 이메일 인증 코드")
+        self.assertEqual(mail.outbox[0].subject, "let us: Go! 이메일 인증 코드 안내")
 
     def test_create_failed(self):
         with patch("members.apis.send_mail", return_value=0):
