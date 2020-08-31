@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django_aid.drf.drf_yasg import schema
-from drf_yasg.openapi import Response as APIResponse, Parameter
+from drf_yasg.openapi import Response as APIResponse
 from rest_framework import status
 from rest_framework.routers import SimpleRouter
 
@@ -56,6 +56,30 @@ members_router.register(
                             description="",
                             examples={"application/json": {"exists": True}},
                         ),
+                    },
+                },
+            ),
+            (
+                "password_reset_request",
+                {
+                    "operation_id": "members_z_password_reset_1",
+                    "operation_summary": "Password Reset Email Request",
+                    "operation_description": "비밀번호 변경 인증 이메일 요청",
+                    "responses": {
+                        status.HTTP_204_NO_CONTENT: APIResponse(
+                            description="성공시 내용 없이 204 상태코드 응답"
+                        ),
+                    },
+                },
+            ),
+            (
+                "password_reset",
+                {
+                    "operation_id": "members_z_password_reset_2",
+                    "operation_summary": "Password Reset",
+                    "operation_description": "비밀번호 변경",
+                    "responses": {
+                        status.HTTP_200_OK: UserSerializer,
                     },
                 },
             ),

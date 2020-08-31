@@ -79,7 +79,9 @@ class UserViewSet(ModelViewSet):
         user = serializer.validated_data["user"]
         user.set_password(serializer.validated_data["password"])
         user.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_object(self):
         if self.action == "profile":
