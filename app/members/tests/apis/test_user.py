@@ -118,3 +118,15 @@ class UserAPIViewTest(APITestCase):
         # Destroy요청, 허용되지 않는 요청
         response = self.client.delete(self.URL_DETAIL.format(id=user.id))
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+class UserProfileAPITest(APITestCase):
+    URL = "/v1/members/users/profile/"
+
+    def test_response_data_fields(self):
+        user = baker.make(User)
+        self.client.force_authenticate(user)
+
+        response = self.client.get(self.URL)
+        for field in ["username", "type", "name", "nickname", "email", "phone_number"]:
+            self.assertIn(field, response.data)

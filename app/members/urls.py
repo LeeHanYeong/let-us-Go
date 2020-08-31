@@ -39,7 +39,13 @@ members_router.register(
                 },
             ),
             ("destroy", {"operation_description": "사용자 삭제(탈퇴)"}),
-            ("profile", {"operation_description": "사용자 프로필 (인증된 경우)"}),
+            (
+                "profile",
+                {
+                    "operation_description": "사용자 프로필 (인증된 경우)",
+                    "responses": {status.HTTP_200_OK: UserSerializer()},
+                },
+            ),
             (
                 "available",
                 {
