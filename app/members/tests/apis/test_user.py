@@ -169,6 +169,6 @@ class UserPasswordResetAPITest(APITestCase):
                 "password": password,
             },
         )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         user.refresh_from_db()
         self.assertTrue(user.check_password(password))
