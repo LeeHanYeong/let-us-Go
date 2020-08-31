@@ -2,19 +2,21 @@
 omit =
     */migrations/*
     app/manage.py
-    app/config/wsgi/*
-    app/config/settings/dev.py
-    app/config/settings/production_dev.py
-    app/config/urls/dev.py
+
 
 [report]
 omit =
     app/config/wsgi/*
+    app/config/settings/*
+    app/config/urls/dev.py
+    app/utils/management/*
 exclude_lines =
     def __str__
     def __repr__
-    if settings.DEBUG:
-    if DEBUG:
+    if settings.DEBUG
+    if settings.LOCAL
+    if LOCAL
+    if DEBUG
     if SETTINGS_MODULE
     if not SETTINGS_MODULE
     def rest_exception_handler

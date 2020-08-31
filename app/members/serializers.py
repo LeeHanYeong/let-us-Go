@@ -111,6 +111,32 @@ class UserAttributeAvailableSerializer(serializers.Serializer):
     value = serializers.CharField()
 
 
+class UserPasswordResetRequestSerializer(serializers.ModelSerializer):
+    type = serializers.HiddenField(default=EmailVerification.TYPE_PASSWORD_RESET)
+
+    class Meta:
+        model = EmailVerification
+        fields = ("type", "email")
+
+
+class UserPasswordResetSerializer(serializers.Serializer):
+    code = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True)
+
+    def validate(self, data):
+        code = data["code"]
+        email = data["email"]
+        get_object_or_404(
+            EmailVerification,
+            type=EmailVerification.TYPE_PASSWORD_RESET,
+            email=email,
+            code=code,
+        )
+        data["user"] = get_object_or_404(User, email=email)
+        return data
+
+
 class AuthTokenSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
@@ -143,22 +169,32 @@ class GetEmailAuthTokenSerializer(serializers.Serializer):
 
 
 class EmailVerificationCheckSerializer(serializers.Serializer):
+    type = serializers.HiddenField(default=EmailVerification.TYPE_SIGNUP)
     email = serializers.CharField(required=True)
     code = serializers.CharField(required=True)
 
     def validate(self, data):
         email = data["email"]
         code = data["code"]
-        get_object_or_404(EmailVerification, email=email, code=code)
+        get_object_or_404(
+            EmailVerification,
+            type=EmailVerification.TYPE_SIGNUP,
+            email=email,
+            code=code,
+        )
         return data
 
 
 class EmailVerificationCreateSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
+    type = serializers.HiddenField(default=EmailVerification.TYPE_SIGNUP)
+    email = serializers.EmailField(required=True)
 
     class Meta:
         model = EmailVerification
-        fields = ("email",)
+        fields = (
+            "type",
+            "email",
+        )
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
@@ -166,6 +202,6 @@ class EmailVerificationCreateSerializer(serializers.ModelSerializer):
         return value
 
     def to_representation(self, instance):
-        if settings.DEBUG:
+        if settings.LOCAL:
             return EmailVerificationCheckSerializer(instance).data
         return super().to_representation(instance)

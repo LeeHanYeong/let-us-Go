@@ -281,6 +281,19 @@ version = "3.4.0"
 Django = ">=2.0"
 
 [[package]]
+category = "main"
+description = "Management commands to help backup and restore a project database and media"
+name = "django-dbbackup"
+optional = false
+python-versions = "*"
+version = "3.3.0"
+
+[package.dependencies]
+Django = ">=1.5"
+pytz = "*"
+six = "*"
+
+[[package]]
 category = "dev"
 description = "A configurable set of panels that display various debug information about the current request/response."
 name = "django-debug-toolbar"
@@ -1089,7 +1102,7 @@ secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "pyOpenSSL (>=0
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [metadata]
-content-hash = "c2cffdbc6476a5d38a30748758092c3fd408479602b5ac45587bbeb8d325daec"
+content-hash = "b32e9eb8ad06893907ad12e6436d288b0ed3c0119c5a3331f6db0af738fa6634"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -1250,6 +1263,9 @@ django-colorfield = [
 django-cors-headers = [
     {file = "django-cors-headers-3.4.0.tar.gz", hash = "sha256:f5218f2f0bb1210563ff87687afbf10786e080d8494a248e705507ebd92d7153"},
     {file = "django_cors_headers-3.4.0-py3-none-any.whl", hash = "sha256:5240062ef0b16668ce8a5f43324c388d65f5439e1a30e22c38684d5ddaff0d15"},
+]
+django-dbbackup = [
+    {file = "django-dbbackup-3.3.0.tar.gz", hash = "sha256:bb109735cae98b64ad084e5b461b7aca2d7b39992f10c9ed9435e3ebb6fb76c8"},
 ]
 django-debug-toolbar = [
     {file = "django-debug-toolbar-2.2.tar.gz", hash = "sha256:eabbefe89881bbe4ca7c980ff102e3c35c8e8ad6eb725041f538988f2f39a943"},

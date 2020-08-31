@@ -67,9 +67,7 @@ class SchemaGenerator(OpenAPISchemaGenerator):
 
     def get_operation_keys(self, subpath, method, view):
         keys = super().get_operation_keys(subpath, method, view)
-        keys = [
-            key.replace("partial_update", "update").replace("-", "_") for key in keys
-        ]
+        keys = [key.replace("partial_update", "update") for key in keys]
         return keys
 
     def get_operation(self, view, path, prefix, method, components, request):
@@ -78,9 +76,12 @@ class SchemaGenerator(OpenAPISchemaGenerator):
         )
         if operation is not None and "summary" not in operation:
             if issubclass(view.__class__, ViewSetMixin):
-                action = view.action.replace("partial_update", "update")
-                keys = [item for item in [view.basename, action]]
+                action = view.action.replace("partial_update", "update").replace(
+                    "-", "_"
+                )
+                keys = [item for item in [view.basename, *action.split("_")]]
             else:
+                operation["operationId"] = operation["operationId"].replace("-", "_")
                 if hasattr(view, "queryset") and view.queryset is not None:
                     app_label = view.queryset.model._meta.app_label
                     model_name = view.queryset.model.__name__

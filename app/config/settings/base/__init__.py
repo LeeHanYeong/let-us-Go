@@ -11,12 +11,21 @@ from .secrets import *
 from .static import *
 
 ALLOWED_HOSTS = []
+LOCAL = False
 
 # Date/Time Format
 DATE_FORMAT = "Y년 m월 d일"
 TIME_FORMAT = "H시 i분"
 DATETIME_FORMAT = f"{DATE_FORMAT} {TIME_FORMAT}"
 APPEND_SLASH = False
+
+# dbbackup
+DBBACKUP_FILENAME_TEMPLATE = "{servername}-{datetime}.{extension}"
+DBBACKUP_CONNECTORS = {
+    "default": {
+        "CONNECTOR": "dbbackup.db.postgresql.PgDumpBinaryConnector",
+    }
+}
 
 # Messages tags
 MESSAGE_TAGS = {
@@ -42,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # 3rd-party
+    "dbbackup",
     "django_cleanup.apps.CleanupConfig",
     "django_extensions",
     "django_filters",

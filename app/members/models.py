@@ -1,8 +1,11 @@
 import string
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager as BaseUserManager
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.core.mail import send_mail
+from django.db import models, transaction
+from django.template.loader import render_to_string
 from django.utils.crypto import get_random_string
 from django_aid.django.model import Manager
 from django_extensions.db.models import TimeStampedModel
@@ -12,6 +15,10 @@ __all__ = (
     "User",
     "EmailVerification",
 )
+
+from sentry_sdk import capture_exception
+
+from utils.drf.exceptions import EmailSendFailed
 
 
 class UserManager(Manager, BaseUserManager):
@@ -68,11 +75,19 @@ class EmailVerificationManager(models.Manager):
 
 
 class EmailVerification(TimeStampedModel):
+    TYPE_SIGNUP, TYPE_PASSWORD_RESET = "signup", "password_reset"
+    CHOICES_TYPE = (
+        (TYPE_SIGNUP, "회원가입 이메일 인증"),
+        (TYPE_PASSWORD_RESET, "비밀번호 찾기 인증"),
+    )
     WAIT, SUCCEED, FAILED = "wait", "succeed", "failed"
     CHOICES_STATUS = (
         (WAIT, "대기"),
         (SUCCEED, "성공"),
         (FAILED, "실패"),
+    )
+    type = models.CharField(
+        "유형", choices=CHOICES_TYPE, default=TYPE_SIGNUP, max_length=20
     )
     user = models.OneToOneField(
         User,
@@ -94,6 +109,9 @@ class EmailVerification(TimeStampedModel):
         verbose_name = "이메일 인증"
         verbose_name_plural = f"{verbose_name} 목록"
         ordering = ("-pk",)
+        indexes = [
+            models.Index(fields=["type"]),
+        ]
 
     def __str__(self):
         return "{user}{email} (발송: {send})".format(
@@ -110,3 +128,71 @@ class EmailVerification(TimeStampedModel):
     def reset_code(self):
         self.code = get_random_string(6, allowed_chars=string.digits)
         self.save()
+
+    def send(self):
+        def _send_type_signup():
+            subject = "let us: Go! 이메일 인증 코드 안내"
+            result = send_mail(
+                subject=subject,
+                message=self.code,
+                html_message=render_to_string(
+                    template_name="members/email-validation.jinja2",
+                    context={
+                        "subject": subject,
+                        "code": self.code,
+                    },
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[self.email],
+            )
+            # 해당 이메일로 마지막으로 인증요청한 항목 외에 삭제
+            EmailVerification.objects.filter(
+                type=self.TYPE_SIGNUP, email=self.email
+            ).exclude(id=self.id).delete()
+            if result == 1:
+                self.status_send = EmailVerification.SUCCEED
+                self.save()
+            elif result == 0:
+                self.status_send = EmailVerification.FAILED
+                self.save()
+                e = EmailSendFailed(f"인증 이메일 발송에 실패했습니다({self.email})")
+                capture_exception(e)
+                raise e
+            return result
+
+        def _send_type_password_reset():
+            subject = "let us: Go! 비밀번호 변경 코드"
+            result = send_mail(
+                subject=subject,
+                message=self.code,
+                html_message=render_to_string(
+                    template_name="members/email-validation.jinja2",
+                    context={
+                        "subject": subject,
+                        "code": self.code,
+                    },
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[self.email],
+            )
+            # 해당 이메일로 마지막으로 인증요청한 항목 외에 삭제
+            EmailVerification.objects.filter(
+                type=self.TYPE_PASSWORD_RESET, email=self.email
+            ).exclude(id=self.id).delete()
+            if result == 1:
+                self.status_send = EmailVerification.SUCCEED
+                self.save()
+            elif result == 0:
+                self.status_send = EmailVerification.FAILED
+                self.save()
+                e = EmailSendFailed(f"인증 이메일 발송에 실패했습니다({self.email})")
+                capture_exception(e)
+                raise e
+            return result
+
+        type_function = {
+            self.TYPE_SIGNUP: _send_type_signup,
+            self.TYPE_PASSWORD_RESET: _send_type_password_reset,
+        }
+        with transaction.atomic():
+            return type_function[self.type]()

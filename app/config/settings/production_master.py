@@ -25,6 +25,10 @@ DATABASES = SECRETS["DATABASES"]
 API_KEY_FRONT_DEPLOY = SECRETS["API_KEY_FRONT_DEPLOY"]
 SENTRY_DSN = SECRETS["SENTRY_DSN"]
 
+# dbbackup
+DBBACKUP_STORAGE = "config.storages.MediaStorage"
+DBBACKUP_STORAGE_OPTIONS = {"location": "db/"}
+
 # WSGI
 WSGI_APPLICATION = "config.wsgi.production_master.application"
 

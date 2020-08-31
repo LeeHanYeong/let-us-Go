@@ -22,4 +22,7 @@ p {
 .sc-107yc6q-0 > p {
   white-space: pre-line; }
 
+.menu-content {
+  contain: unset !important; }
+
 /*# sourceMappingURL=redoc.css.map */

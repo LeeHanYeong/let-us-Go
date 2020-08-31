@@ -1,3 +1,5 @@
+/.dbbackup
+/.dump
 db.dump
 dump.json
 .sass-cache/

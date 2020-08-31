@@ -1,5 +1,7 @@
 from .production_master import *
 
+LOCAL = False
+
 # Secrets
 AWS_SECRETS_MANAGER_SECRET_SECTION = "letusgo:ci"
 AWS_STORAGE_BUCKET_NAME = SECRETS["AWS_STORAGE_BUCKET_NAME"]

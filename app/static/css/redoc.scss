@@ -24,3 +24,7 @@ p {
 .sc-107yc6q-0 > p{
   white-space: pre-line;
 }
+// Sidebar fix
+.menu-content {
+    contain: unset !important;
+}

@@ -1,4 +1,5 @@
 from copy import deepcopy
+from unittest.mock import patch
 
 from model_bakery import baker
 from rest_framework import status
@@ -130,3 +131,44 @@ class UserProfileAPITest(APITestCase):
         response = self.client.get(self.URL)
         for field in ["username", "type", "name", "nickname", "email", "phone_number"]:
             self.assertIn(field, response.data)
+
+
+class UserPasswordResetAPITest(APITestCase):
+    URL_REQUEST = "/v1/members/users/password_reset_request/"
+    URL_CHANGE = "/v1/members/users/password_reset/"
+
+    def test_request(self):
+        email = "sample@sample.com"
+        baker.make(User, email=email)
+        response = self.client.post(self.URL_REQUEST, data={"email": email})
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_request_failed(self):
+        with patch("members.models.send_mail", return_value=0):
+            email = "sample@sample.com"
+            baker.make(User, email=email)
+            response = self.client.post(self.URL_REQUEST, data={"email": email})
+            self.assertEqual(
+                response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    def test_change(self):
+        email = "sample@sample.com"
+        password = "sample_password"
+        user = baker.make(User, email=email)
+        self.assertFalse(user.check_password(password))
+
+        ev = baker.make(
+            EmailVerification, email=email, type=EmailVerification.TYPE_PASSWORD_RESET
+        )
+        response = self.client.post(
+            self.URL_CHANGE,
+            data={
+                "code": ev.code,
+                "email": email,
+                "password": password,
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        user.refresh_from_db()
+        self.assertTrue(user.check_password(password))

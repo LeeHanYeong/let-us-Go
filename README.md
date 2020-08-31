@@ -163,3 +163,13 @@ CREATE DATABASE letusgo OWNER=lhy TEMPLATE template0 LC_COLLATE 'C';
 [github]: https://github.com/leehanyeong/let-us-go
 [made-with]: https://img.shields.io/badge/Made%20with-Django-blue
 [django]: https://www.djangoproject.com/
+
+### django-dbbackup
+
+- 비밀번호에 `!`사용불가
+
+- `pg_dump` 를 위한 Role필요
+
+  ```shell
+  grant rds_superuser to letusgo
+  ```
