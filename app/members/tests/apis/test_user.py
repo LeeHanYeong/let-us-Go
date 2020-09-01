@@ -152,6 +152,14 @@ class UserPasswordResetAPITest(APITestCase):
                 response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    def test_request_exists_email(self):
+        email = "sample@sample.com"
+        baker.make(
+            EmailVerification, type=EmailVerification.TYPE_PASSWORD_RESET, email=email
+        )
+        response = self.client.post(self.URL_REQUEST, data={"email": email})
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
     def test_change(self):
         email = "sample@sample.com"
         password = "sample_password"

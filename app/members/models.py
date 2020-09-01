@@ -97,7 +97,7 @@ class EmailVerification(TimeStampedModel):
         blank=True,
         null=True,
     )
-    email = models.EmailField("이메일", unique=True)
+    email = models.EmailField("이메일")
     code = models.CharField("인증코드", max_length=50)
     status_send = models.CharField(
         "발송상태", choices=CHOICES_STATUS, default=WAIT, max_length=10

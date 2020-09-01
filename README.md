@@ -1,9 +1,11 @@
 # let us: Go!
 
-[![github-action]][github-workflow]
-[![coverage]][codecov]
-[![github-last-commit]][github]
-[![made-with]][django]
+[![icon-github-action]][github-action]
+[![icon-codecov]][codecov]
+[![icon-github-last-commit]][github-last-commit]
+[![icon-django]][django]
+[![icon-readthedocs]][readthedocs]
+[![icon-black]][black]
 
 iOS 세미나 **`let us: Go!`** 의 API서버 애플리케이션
 
@@ -71,7 +73,7 @@ sh .scripts/ssl_renew.sh
 ### Source update & restart
 
 ```shell
-sh run.sh
+python3 update.py
 ```
 
 - 소스 업데이트 (git pull)
@@ -129,7 +131,7 @@ sudo chsh -s $(which zsh) $(whoami)
 
 
 
-### EC2에 CI완료 후 run.sh실행을 위한 설정
+### EC2에 CI완료 후 update.py실행을 위한 설정
 
 >  GitHub Action ([AWS SSM Send-Command](https://github.com/marketplace/actions/aws-ssm-send-command)) 사용
 
@@ -155,14 +157,7 @@ template0으로부터, LC_COLLATE를 따로 설정 (한글 ordering관련)
 CREATE DATABASE letusgo OWNER=lhy TEMPLATE template0 LC_COLLATE 'C';
 ```
 
-[coverage]: https://img.shields.io/codecov/c/github/LeeHanYeong/let-us-go/develop.svg
-[codecov]: https://codecov.io/github/LeeHanYeong/let-us-go
-[github-action]: https://img.shields.io/github/workflow/status/LeeHanYeong/let-us-go/CI/develop.svg
-[github-workflow]: https://github.com/leehanyeong/let-us-go/actions?query=workflow%3ACI
-[github-last-commit]: https://img.shields.io/github/last-commit/LeeHanYeong/let-us-go/develop.svg
-[github]: https://github.com/leehanyeong/let-us-go
-[made-with]: https://img.shields.io/badge/Made%20with-Django-blue
-[django]: https://www.djangoproject.com/
+
 
 ### django-dbbackup
 
@@ -173,3 +168,18 @@ CREATE DATABASE letusgo OWNER=lhy TEMPLATE template0 LC_COLLATE 'C';
   ```shell
   grant rds_superuser to letusgo
   ```
+
+
+
+[icon-codecov]: https://img.shields.io/codecov/c/github/LeeHanYeong/let-us-go/develop.svg
+[codecov]: https://codecov.io/github/LeeHanYeong/let-us-go
+[icon-github-action]: https://img.shields.io/github/workflow/status/LeeHanYeong/let-us-go/CI/develop.svg
+[github-action]: https://github.com/leehanyeong/let-us-go/actions?query=workflow%3ACI
+[icon-github-last-commit]: https://img.shields.io/github/last-commit/LeeHanYeong/let-us-go/develop.svg
+[github-last-commit]: https://github.com/leehanyeong/let-us-go
+[icon-django]: https://img.shields.io/badge/Made%20with-Django-blue
+[django]: https://www.djangoproject.com/
+[icon-readthedocs]: https://readthedocs.org/projects/let-us-go/badge/?version=latest
+[readthedocs]: https://let-us-go.readthedocs.io/en/latest/
+[icon-black]: https://img.shields.io/badge/code%20style-black-000000.svg
+[black]: https://github.com/python/black
