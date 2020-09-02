@@ -3,8 +3,8 @@
 [![icon-github-action]][github-action]
 [![icon-codecov]][codecov]
 [![icon-github-last-commit]][github-last-commit]
-[![icon-django]][django]
 [![icon-readthedocs]][readthedocs]
+[![icon-django]][django]
 [![icon-black]][black]
 
 iOS 세미나 **`let us: Go!`** 의 API서버 애플리케이션
@@ -25,7 +25,7 @@ iOS 세미나 **`let us: Go!`** 의 API서버 애플리케이션
 - pre-commit
 - black
 
-> **Poetry, pre-commit, black은 brew를 사용해 설치**
+> **Poetry, pre-commit, black은 brew를 사용해 설치**  
 > brew install poetry pre-commit black
 
 
@@ -177,9 +177,10 @@ CREATE DATABASE letusgo OWNER=lhy TEMPLATE template0 LC_COLLATE 'C';
 [github-action]: https://github.com/leehanyeong/let-us-go/actions?query=workflow%3ACI
 [icon-github-last-commit]: https://img.shields.io/github/last-commit/LeeHanYeong/let-us-go/develop.svg
 [github-last-commit]: https://github.com/leehanyeong/let-us-go
+[icon-readthedocs]:https://readthedocs.org/projects/let-us-go/badge/?version=latest
+[readthedocs]: https://let-us-go.readthedocs.io/en/latest/
+
 [icon-django]: https://img.shields.io/badge/Made%20with-Django-blue
 [django]: https://www.djangoproject.com/
-[icon-readthedocs]: https://readthedocs.org/projects/let-us-go/badge/?version=latest
-[readthedocs]: https://let-us-go.readthedocs.io/en/latest/
 [icon-black]: https://img.shields.io/badge/code%20style-black-000000.svg
 [black]: https://github.com/python/black

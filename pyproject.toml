@@ -42,14 +42,16 @@ model_bakery = "^1.1.1"
 # Error tracking
 sentry-sdk = "^0.16.3"
 
+# Docs
+sphinx-rtd-theme = "^0.5.0"
+recommonmark = "^0.6.0"
+
 # Others
 phonenumberslite = "^8.12.7"
 pillow = "^7.2"
 psycopg2-binary = "^2.8"
 gevent = "^1.4"
 gunicorn = "^20.0.4"
-sphinx-rtd-theme = "^0.5.0"
-recommonmark = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 django-debug-toolbar = "^2.2"
