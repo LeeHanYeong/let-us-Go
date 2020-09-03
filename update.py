@@ -21,4 +21,6 @@ if __name__ == "__main__":
     run(f"docker-compose stop django_{branch}")
     run(f"docker-compose up --force-recreate --remove-orphans -d django_{branch}")
     run(f"docker system prune -a --volumes -f")
+    if branch == "feature":
+        run(f"docker-compose up --force-recreate -d nginx")
     print("Update complete")
