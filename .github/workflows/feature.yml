@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - feature
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set env
+      run: |
+        branch=${GITHUB_REF##*/}
+        echo ::set-env name=BRANCH::$branch
+
+    - name: Deploy EC2 docker-compose
+      uses: peterkimzz/aws-ssm-send-command@1.0.4
+      id: ssm
+      with:
+        aws-region: ${{ secrets.AWS_REGION }}
+        aws-access-key-id: ${{ secrets.AWS_SSM_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SSM_SECRET_ACCESS_KEY }}
+        instance-ids: |
+          ${{ secrets.AWS_INSTANCE_ID }}
+
+        working-directory: /home/ubuntu/let-us-go
+        command: sudo -H -u ubuntu bash -c 'python3 update.py ${{ env.BRANCH }}'
+        comment: Executed by Github Actions

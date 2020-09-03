@@ -1,6 +1,6 @@
 daemon = False
 chdir = "/srv/app"
-bind = "0.0.0.0:8001"
+bind = "0.0.0.0:8002"
 worker_class = "gevent"
 workers = 1
 threads = 1

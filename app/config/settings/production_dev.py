@@ -32,4 +32,5 @@ if private_ip:
 else:
     ALLOWED_HOSTS += [
         "api.dev.localhost",
+        "feature.localhost",
     ]
