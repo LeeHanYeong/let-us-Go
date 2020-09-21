@@ -24,6 +24,7 @@ urlpatterns = [
     re_path(
         r"^doc/$", RedocSchemaView.as_cached_view(cache_timeout=0), name="schema-redoc"
     ),
+    re_path(r"^auth/", include("rest_framework_social_oauth2.urls")),
     path("admin/", admin.site.urls),
     path("markdownx/", include("markdownx.urls")),
     path("health/", views.HealthCheckView.as_view(), name="health-check"),

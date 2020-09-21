@@ -42,4 +42,13 @@ ADMIN_REORDER = (
             {"model": "rest_framework_api_key.APIKey", "label": "APIKey"},
         ),
     },
+    {
+        "app": "social_django",
+    },
+    {
+        "app": "oauth2_provider",
+    },
+    {
+        "app": "rest_framework_social_oauth2",
+    },
 )

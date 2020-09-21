@@ -66,6 +66,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_api_key",
+    "rest_framework_social_oauth2",
+    "oauth2_provider",
+    "social_django",
 ]
 
 MIDDLEWARE = [
@@ -106,6 +109,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
