@@ -5,6 +5,7 @@ services:
     image: traefik:latest
     command: --api.insecure=true --providers.docker
     ports:
+      - '80:80'
       - '8080:8080'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -12,6 +13,9 @@ services:
       placement:
         constraints:
           - node.role == manager
+
+  caddy:
+    image: caddy:latest
 
   django_feature:
     build:
@@ -26,6 +30,8 @@ services:
       - static-feature:/srv/.static
     env_file:
       - .env
+    labels:
+      - 'traefik.http.routers.django_feature.rule=Host(`feature.localhost`)'
 #
 #  django_develop:
 #    build:
