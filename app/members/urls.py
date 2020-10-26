@@ -9,6 +9,7 @@ from .serializers import (
     UserSerializer,
     AuthTokenSerializer,
     GetEmailAuthTokenSerializer,
+    GetSocialAuthTokenSerializer,
 )
 
 members_router = SimpleRouter()
@@ -21,7 +22,13 @@ members_router.register(
             (
                 "create",
                 {
-                    "operation_description": "사용자 생성",
+                    "operation_description": """
+사용자 생성
+
+> 가입 방식에 따라 필수 필드가 다름
+- 이메일 가입 시: `password1`, `password2`
+- 소셜 가입 시: `uid`
+""",
                     "responses": {
                         status.HTTP_200_OK: UserSerializer(),
                         status.HTTP_400_BAD_REQUEST: APIResponse(
@@ -87,10 +94,7 @@ members_router.register(
     ),
 )
 
-members_patterns = (
-    [path("", include(members_router.urls))],
-    "members",
-)
+members_patterns = ([path("", include(members_router.urls))], "members")
 
 auth_router = SimpleRouter()
 auth_router.register(
@@ -120,29 +124,36 @@ auth_router.register(
         ),
     ),
 )
-auth_patterns = (
-    [
-        path("", include(auth_router.urls)),
-        path(
-            "token/",
-            schema(
-                apis.AuthTokenAPIView,
-                [
-                    (
-                        "post",
-                        {
-                            "operation_id": "auth_get_auth_token",
-                            "operation_summary": "Get AuthToken",
-                            "operation_description": "인증정보를 사용해 사용자의 Token(key)과 User정보를 획득",
-                            "request_body": GetEmailAuthTokenSerializer,
-                            "responses": {
-                                status.HTTP_200_OK: AuthTokenSerializer(),
-                            },
-                        },
-                    ),
-                ],
-            ).as_view(),
-        ),
-    ],
-    "auth",
+auth_router.register(
+    r"token",
+    schema(
+        apis.AuthTokenViewSet,
+        [
+            (
+                "create",
+                {
+                    "operation_id": "auth_email_get_auth_token",
+                    "operation_summary": "Get EmailAuthToken",
+                    "operation_description": "인증정보를 사용해 사용자의 Token(key)과 User정보를 획득",
+                    "request_body": GetEmailAuthTokenSerializer,
+                    "responses": {
+                        status.HTTP_200_OK: AuthTokenSerializer(),
+                    },
+                },
+            ),
+            (
+                "social",
+                {
+                    "operation_id": "auth_social_get_auth_token",
+                    "operation_summary": "Get SocialAuthToken",
+                    "operation_description": "OAuth인증된 사용자 고유값을 사용해 사용자의 Token(key)과 User정보를 획득",
+                    "request_body": GetSocialAuthTokenSerializer,
+                    "responses": {
+                        status.HTTP_200_OK: AuthTokenSerializer(),
+                    },
+                },
+            ),
+        ],
+    ),
 )
+auth_patterns = ([path("", include(auth_router.urls))], "auth")

@@ -1,6 +1,7 @@
 from copy import deepcopy
 from unittest.mock import patch
 
+from django.utils.crypto import get_random_string
 from model_bakery import baker
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -9,7 +10,7 @@ from members.models import User, EmailVerification
 from members.serializers import UserSerializer
 
 
-class UserAPIViewTest(APITestCase):
+class UserAPITest(APITestCase):
     URL_LIST = "/v1/members/users/"
     URL_DETAIL = "/v1/members/users/{id}/"
 
@@ -87,6 +88,43 @@ class UserAPIViewTest(APITestCase):
         )
         self.assertEqual(response_available_false.status_code, status.HTTP_200_OK)
         self.assertEqual(response_available_false.data["exists"], False)
+
+    def test_create_email(self):
+        email = "sample@sample.com"
+        ev = baker.make(EmailVerification, email=email)
+        response = self.client.post(
+            self.URL_LIST,
+            data={
+                "email_verification_code": ev.code,
+                "password1": "SamplePassword",
+                "password2": "SamplePassword",
+                "type": User.TYPE_EMAIL,
+                "email": email,
+                "nickname": "Sample Nickname",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["email"], email)
+        self.assertEqual(response.data["type"], User.TYPE_EMAIL)
+
+    def test_create_social(self):
+        email = "sample@sample.com"
+        uid = get_random_string(length=20)
+
+        ev = baker.make(EmailVerification, email=email)
+        response = self.client.post(
+            self.URL_LIST,
+            data={
+                "email_verification_code": ev.code,
+                "type": User.TYPE_APPLE,
+                "uid": uid,
+                "email": email,
+                "nickname": "Sample Nickname",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["email"], email)
+        self.assertEqual(response.data["type"], User.TYPE_APPLE)
 
     def test_permissions(self):
         # List요청, 인증필요

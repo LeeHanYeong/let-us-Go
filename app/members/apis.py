@@ -4,7 +4,6 @@ from rest_framework import permissions, mixins, status
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from .models import User, EmailVerification
@@ -20,11 +19,12 @@ from .serializers import (
     AuthTokenSerializer,
     UserPasswordResetRequestSerializer,
     UserPasswordResetSerializer,
+    GetSocialAuthTokenSerializer,
 )
 
 __all__ = (
     "UserViewSet",
-    "AuthTokenAPIView",
+    "AuthTokenViewSet",
     "EmailVerificationViewSet",
 )
 
@@ -96,16 +96,27 @@ class UserViewSet(ModelViewSet):
         return []
 
 
-class AuthTokenAPIView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = GetEmailAuthTokenSerializer(
-            data=request.data, context={"reuqest": request}
-        )
+class AuthTokenViewSet(ViewSetMixin, GenericViewSet):
+    queryset = Token.objects.all()
+    serializer_classes = {
+        "create": GetEmailAuthTokenSerializer,
+        "social": GetSocialAuthTokenSerializer,
+    }
+
+    def _process(self, serializer_class, request):
+        serializer = serializer_class(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         token, _ = Token.objects.get_or_create(user=user)
         token_serializer = AuthTokenSerializer(token)
         return Response(token_serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        return self._process(self.get_serializer_class(), request)
+
+    @action(detail=False, methods=["post"])
+    def social(self, request, *args, **kwargs):
+        return self._process(self.get_serializer_class(), request)
 
 
 class EmailVerificationViewSet(ViewSetMixin, mixins.CreateModelMixin, GenericViewSet):

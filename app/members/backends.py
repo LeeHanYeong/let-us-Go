@@ -32,3 +32,11 @@ class SettingsBackend:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
+
+
+class SocialBackend:
+    def authenticate(self, request, type, uid):
+        try:
+            return User.objects.get(type=type, username=uid)
+        except User.DoesNotExist:
+            return

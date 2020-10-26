@@ -26,10 +26,16 @@ def rest_exception_handler(exc, context):
     return None
 
 
-class InvalidCredentials(ValidationError):
+class InvalidCredentials(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "인증정보가 올바르지 않습니다"
     default_code = "invalid_credentials"
+
+
+class OAuthUserNotRegistered(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "해당 OAuth서비스에 등록된 사용자가 없습니다"
+    default_code = "oauth_user_not_registered"
 
 
 class EmailSendFailed(APIException):

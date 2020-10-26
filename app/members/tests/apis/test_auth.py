@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from django.core import mail
+from django.utils.crypto import get_random_string
 from model_bakery import baker
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -9,7 +10,8 @@ from members.models import User, EmailVerification
 
 
 class AuthTokenAPITest(APITestCase):
-    URL = "/v1/auth/token/"
+    URL_EMAIL = "/v1/auth/token/"
+    URL_SOCIAL = "/v1/auth/token/social/"
 
     def test_auth_token_type_email(self):
         email = "sample@sample.com"
@@ -20,7 +22,7 @@ class AuthTokenAPITest(APITestCase):
             password=password,
         )
         response = self.client.post(
-            self.URL,
+            self.URL_EMAIL,
             data={
                 "email": email,
                 "password": password,
@@ -38,13 +40,37 @@ class AuthTokenAPITest(APITestCase):
             password=password,
         )
         response = self.client.post(
-            self.URL,
+            self.URL_EMAIL,
             data={
                 "email": "a" + email,
                 "password": password,
             },
             format="json",
         )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_auth_token_type_social(self):
+        type = User.TYPE_APPLE
+        email = "sample@sample.com"
+        uid = get_random_string(length=20)
+        User.objects.create_user(
+            type=type,
+            email=email,
+            uid=uid,
+        )
+        response = self.client.post(self.URL_SOCIAL, data={"type": type, "uid": uid})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_auth_token_type_social_failed(self):
+        type = User.TYPE_APPLE
+        email = "sample@sample.com"
+        uid = get_random_string(length=20)
+        User.objects.create_user(
+            type=type,
+            email=email,
+            uid=uid + "1",
+        )
+        response = self.client.post(self.URL_SOCIAL, data={"type": type, "uid": uid})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 

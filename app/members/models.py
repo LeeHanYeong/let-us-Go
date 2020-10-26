@@ -22,19 +22,30 @@ from utils.drf.exceptions import EmailSendFailed
 
 
 class UserManager(Manager, BaseUserManager):
-    def create_user(self, email, username=None, password=None, **extra_fields):
+    def create_user(
+        self, email, username=None, password=None, uid=None, **extra_fields
+    ):
         if extra_fields.get("type") == User.TYPE_EMAIL:
             username = email
-        elif username is None:
-            raise ValidationError("사용자 생성 필수값(username)이 주어지지 않았습니다")
+        else:
+            username = uid
+
+        if username is None:
+            raise ValidationError("사용자 생성 필수값이 주어지지 않았습니다")
         return super().create_user(username, email, password, **extra_fields)
 
 
 class User(AbstractUser, TimeStampedModel):
-    TYPE_KAKAO, TYPE_FACEBOOK, TYPE_EMAIL = "kakao", "facebook", "email"
+    TYPE_KAKAO, TYPE_FACEBOOK, TYPE_APPLE, TYPE_EMAIL = (
+        "kakao",
+        "facebook",
+        "apple",
+        "email",
+    )
     TYPE_CHOICES = (
         (TYPE_KAKAO, "카카오"),
         (TYPE_FACEBOOK, "페이스북"),
+        (TYPE_APPLE, "애플"),
         (TYPE_EMAIL, "이메일"),
     )
     first_name = None

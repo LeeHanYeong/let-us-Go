@@ -6,7 +6,7 @@ babel==2.8.0
 boto3==1.14.47
 botocore==1.17.47
 certifi==2020.6.20
-cffi==1.14.2
+cffi==1.14.2; platform_python_implementation == "CPython" and sys_platform == "win32"
 chardet==3.0.4
 codecov==2.1.9
 colorama==0.4.3; sys_platform == "win32"
@@ -14,12 +14,9 @@ commonmark==0.9.1
 coreapi==2.3.3
 coreschema==0.0.4
 coverage==5.2.1
-cryptography==3.1
-defusedxml==0.7.0rc1; python_version >= "3.0"
 django==3.1
 django-admin-sortable2==0.7.7
 django-aid==0.1.5
-django-braces==1.14.0
 django-cleanup==4.0.1
 django-colorfield==0.3.2
 django-cors-headers==3.4.0
@@ -28,9 +25,7 @@ django-extensions==2.2.9
 django-filter==2.3.0
 django-markdownx==3.0.1
 django-modeladmin-reorder==0.3.1
-django-oauth-toolkit==1.3.2
 django-phonenumber-field==3.0.1
-django-rest-framework-social-oauth2==1.1.0
 django-secrets-manager==0.1.13
 django-storages==1.9.1
 djangorestframework==3.11.1
@@ -55,7 +50,6 @@ markdown==3.2.2
 markupsafe==1.1.1
 model-bakery==1.1.1
 more-itertools==8.4.0
-oauthlib==3.1.0
 packaging==20.4
 phonenumberslite==8.12.8
 pillow==7.2.0
@@ -64,25 +58,20 @@ psycopg2-binary==2.8.5
 py==1.9.0
 pycparser==2.20; platform_python_implementation == "CPython" and sys_platform == "win32"
 pygments==2.6.1
-pyjwt==1.7.1
 pyparsing==2.4.7
 pytest==6.0.1
 pytest-cov==2.10.1
 pytest-django==3.9.0
 python-dateutil==2.8.1
-python3-openid==3.2.0; python_version >= "3.0"
 pytz==2020.1
 recommonmark==0.6.0
 requests==2.24.0
-requests-oauthlib==1.3.0
 ruamel.yaml==0.16.10
 ruamel.yaml.clib==0.2.0; platform_python_implementation == "CPython" and python_version < "3.9"
 s3transfer==0.3.3
 sentry-sdk==0.16.5
 six==1.15.0
 snowballstemmer==2.0.0
-social-auth-app-django==4.0.0
-social-auth-core==3.3.3
 sphinx==3.2.1
 sphinx-rtd-theme==0.5.0
 sphinxcontrib-applehelp==1.0.2

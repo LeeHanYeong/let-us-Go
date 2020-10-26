@@ -10,6 +10,7 @@ from utils.drf.exceptions import (
     EmailVerificationDoesNotExist,
     EmailVerificationCodeInvalid,
     InvalidCredentials,
+    OAuthUserNotRegistered,
 )
 from .models import User, EmailVerification
 
@@ -38,8 +39,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserCreateSerializer(serializers.ModelSerializer):
     email_verification_code = serializers.CharField(help_text="이메일 인증코드")
-    password1 = serializers.CharField(help_text="비밀번호")
-    password2 = serializers.CharField(help_text="비밀번호 확인")
+    # 소셜 가입 시
+    uid = serializers.CharField(help_text="OAuth인증된 사용자의 고유값", required=False)
+    # 이메일 가입 시
+    password1 = serializers.CharField(help_text="비밀번호", required=False)
+    password2 = serializers.CharField(help_text="비밀번호 확인", required=False)
 
     class Meta:
         model = User
@@ -50,6 +54,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "email",
             "phone_number",
             "email_verification_code",
+            "uid",
             "password1",
             "password2",
         )
@@ -59,8 +64,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
         self.fields["type"].required = True
 
     def validate(self, data):
-        if data["password1"] != data["password2"]:
-            raise ValidationError({"password2": "비밀번호와 비밀번호 확인란의 값이 다릅니다"})
+        if data["type"] == User.TYPE_EMAIL:
+            if data["password1"] != data["password2"]:
+                raise ValidationError({"password2": "비밀번호와 비밀번호 확인란의 값이 다릅니다"})
+            data["password"] = data["password2"]
+            del data["password1"]
+            del data["password2"]
+
         try:
             email_verification = EmailVerification.objects.get(
                 email=data.get("email", "")
@@ -73,10 +83,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             raise EmailVerificationDoesNotExist(
                 {"email_verification_code": "이메일 인증정보가 존재하지 않습니다"}
             )
-
-        data["password"] = data["password2"]
-        del data["password1"]
-        del data["password2"]
         return data
 
     def create(self, validated_data):
@@ -162,8 +168,28 @@ class GetEmailAuthTokenSerializer(serializers.Serializer):
             password=password,
         )
         if not user:
-            msg = "이메일 또는 비밀번호를 확인해주세요"
-            raise InvalidCredentials(msg)
+            raise InvalidCredentials
+        attrs["user"] = user
+        return attrs
+
+
+class GetSocialAuthTokenSerializer(serializers.Serializer):
+    TYPE_APPLE = "apple"
+    TYPE_CHOICES = ((TYPE_APPLE, "Apple"),)
+    type = serializers.ChoiceField(choices=TYPE_CHOICES, help_text="서비스 종류")
+    uid = serializers.CharField(help_text="해당 서비스에서의 유저 고유값")
+
+    def validate(self, attrs):
+        type = attrs["type"]
+        uid = attrs["uid"]
+
+        user = authenticate(
+            request=self.context.get("request"),
+            type=type,
+            uid=uid,
+        )
+        if not user:
+            raise OAuthUserNotRegistered
         attrs["user"] = user
         return attrs
 
@@ -172,6 +198,14 @@ class EmailVerificationCheckSerializer(serializers.Serializer):
     type = serializers.HiddenField(default=EmailVerification.TYPE_SIGNUP)
     email = serializers.CharField(required=True)
     code = serializers.CharField(required=True)
+
+    class Meta:
+        model = Token
+        fields = (
+            "type",
+            "email",
+            "code",
+        )
 
     def validate(self, data):
         email = data["email"]
