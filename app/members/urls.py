@@ -26,7 +26,7 @@ members_router.register(
 사용자 생성
 
 > 가입 방식에 따라 필수 필드가 다름
-- 이메일 가입 시: `password1`, `password2`
+- 이메일 가입 시: `password1`, `password2`, `emailVerificationCode`
 - 소셜 가입 시: `uid`
 """,
                     "responses": {

@@ -38,7 +38,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    email_verification_code = serializers.CharField(help_text="이메일 인증코드")
+    email_verification_code = serializers.CharField(
+        help_text="이메일 인증코드", required=False
+    )
     # 소셜 가입 시
     uid = serializers.CharField(help_text="OAuth인증된 사용자의 고유값", required=False)
     # 이메일 가입 시
@@ -71,27 +73,28 @@ class UserCreateSerializer(serializers.ModelSerializer):
             del data["password1"]
             del data["password2"]
 
-        try:
-            email_verification = EmailVerification.objects.get(
-                email=data.get("email", "")
-            )
-            if email_verification.code != data["email_verification_code"]:
-                raise EmailVerificationCodeInvalid(
-                    {"email_verification_code": "이메일 인증코드가 유효하지 않습니다"}
+            try:
+                email_verification = EmailVerification.objects.get(
+                    email=data.get("email", "")
                 )
-        except EmailVerification.DoesNotExist:
-            raise EmailVerificationDoesNotExist(
-                {"email_verification_code": "이메일 인증정보가 존재하지 않습니다"}
-            )
+                if email_verification.code != data["email_verification_code"]:
+                    raise EmailVerificationCodeInvalid(
+                        {"email_verification_code": "이메일 인증코드가 유효하지 않습니다"}
+                    )
+            except EmailVerification.DoesNotExist:
+                raise EmailVerificationDoesNotExist(
+                    {"email_verification_code": "이메일 인증정보가 존재하지 않습니다"}
+                )
         return data
 
     def create(self, validated_data):
         with transaction.atomic():
-            code = validated_data.pop("email_verification_code")
+            code = validated_data.pop("email_verification_code", None)
             user = User.objects.create_user(**validated_data)
-            e = EmailVerification.objects.get(code=code)
-            e.user = user
-            e.save()
+            if validated_data["type"] == User.TYPE_EMAIL:
+                e = EmailVerification.objects.get(code=code)
+                e.user = user
+                e.save()
             return user
 
     def to_representation(self, instance):

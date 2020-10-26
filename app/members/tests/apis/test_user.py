@@ -111,11 +111,9 @@ class UserAPITest(APITestCase):
         email = "sample@sample.com"
         uid = get_random_string(length=20)
 
-        ev = baker.make(EmailVerification, email=email)
         response = self.client.post(
             self.URL_LIST,
             data={
-                "email_verification_code": ev.code,
                 "type": User.TYPE_APPLE,
                 "uid": uid,
                 "email": email,
