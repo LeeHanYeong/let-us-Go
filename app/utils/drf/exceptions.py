@@ -32,6 +32,11 @@ class InvalidCredentials(APIException):
     default_code = "invalid_credentials"
 
 
+class UserCreateFailed(APIException):
+    default_detail = "유저 생성에 실패했습니다"
+    default_code = "user_create_failed"
+
+
 class OAuthUserNotRegistered(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "해당 OAuth서비스에 등록된 사용자가 없습니다"

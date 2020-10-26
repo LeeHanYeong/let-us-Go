@@ -19,7 +19,7 @@ from rest_framework.exceptions import ValidationError
 
 from sentry_sdk import capture_exception
 
-from utils.drf.exceptions import EmailSendFailed
+from utils.drf.exceptions import EmailSendFailed, UserCreateFailed
 
 
 class UserManager(Manager, BaseUserManager):
@@ -33,7 +33,11 @@ class UserManager(Manager, BaseUserManager):
 
         if username is None:
             raise ValidationError("사용자 생성 필수값이 주어지지 않았습니다")
-        return super().create_user(username, email, password, **extra_fields)
+        try:
+            return super().create_user(username, email, password, **extra_fields)
+        except Exception as e:
+            capture_exception(e)
+            raise UserCreateFailed
 
 
 class User(AbstractUser, TimeStampedModel):
