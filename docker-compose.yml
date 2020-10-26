@@ -7,28 +7,11 @@ services:
       - .config/nginx.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/lib/letsencrypt:/var/lib/letsencrypt
-      - static-feature:/srv/feature/.static
       - static-dev:/srv/dev/.static
       - static-master:/srv/master/.static
     ports:
       - '80:80'
       - '443:443'
-
-  django_feature:
-    build:
-      context: https://github.com/LeeHanYeong/let-us-Go.git#feature
-      dockerfile: Dockerfile
-      args:
-        requirements: requirements_dev.txt
-        gunicorn: /srv/.config/gunicorn_feature.py
-        wsgi: config.wsgi.production_dev
-        settings: config.settings.production_dev
-    volumes:
-      - static-feature:/srv/.static
-    expose:
-      - '8002'
-    env_file:
-      - .env
 
   django_develop:
     build:
@@ -63,6 +46,5 @@ services:
       - .env
 
 volumes:
-  static-feature:
   static-dev:
   static-master:
