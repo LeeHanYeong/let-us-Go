@@ -25,6 +25,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("markdownx/", include("markdownx.urls")),
     path("health/", views.HealthCheckView.as_view(), name="health-check"),
+    path("apple-login/", views.AppleLoginView.as_view(), name="apple-login"),
     path("", views.IndexView.as_view(), name="index"),
     path("v1/", include(urlpatterns_apis_v1)),
 ]

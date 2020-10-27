@@ -1,0 +1,65 @@
+{% extends 'base.jinja2' %}
+
+{% block head %}
+    <!-- Apple Login -->
+    <meta name="appleid-signin-client-id" content="app.letusgo">
+    <meta name="appleid-signin-scope" content="email">
+    <meta name="appleid-signin-redirect-uri" content="https://api.feature.letusgo.app/apple-login">
+    <meta name="appleid-signin-state" content="{{ csrf_token }}">
+    <meta name="appleid-signin-nonce" content="{{ csrf_token }}">
+    <meta name="appleid-signin-use-popup" content="true">
+    <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+
+    <!-- axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div>
+                    <div id="appleid-signin" data-color="black" data-border="true" data-type="sign in"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+    let parseJwt = (token) => {
+        let base64Url = token.split('.')[1];
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
+    let signUp = (email, uid) => {
+        axios.post('/v1/members/users', {
+            type: 'apple2',
+            email: email,
+            uid: uid
+        })
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
+
+    document.addEventListener('AppleIDSignInOnSuccess', (data) => {
+        console.log(data);
+        let parsedData = parseJwt(data.detail.authorization.id_token);
+        console.log(parsedData);
+        console.log('User ID:', parsedData.sub);
+        console.log('Email  :', parsedData.email);
+        signUp(parsedData.email, parsedData.sub);
+    });
+    document.addEventListener('AppleIDSignInOnFailure', (error) => {
+        console.log(error.response);
+    });
+    </script>
+{% endblock %}

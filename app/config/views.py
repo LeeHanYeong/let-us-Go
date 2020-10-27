@@ -22,3 +22,7 @@ class IndexView(TemplateView):
 class HealthCheckView(View):
     def get(self, request):
         return HttpResponse("ok")
+
+
+class AppleLoginView(TemplateView):
+    template_name = "members/apple-login.jinja2"
