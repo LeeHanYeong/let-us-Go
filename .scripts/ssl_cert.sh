@@ -1,5 +1,5 @@
 echo "Cert  | $(date +'%Y.%m.%d %H:%M:%S')" >> /home/ubuntu/ssl.txt
-export $(cat .env | xargs) && docker run --rm -it \
+export $(cat /home/ubuntu/let-us-go/.env | xargs) && docker run --rm -it \
       --env AWS_ACCESS_KEY_ID=$(echo "$AWS_ROUTE53_ACCESS_KEY_ID") \
       --env AWS_SECRET_ACCESS_KEY=$(echo "$AWS_ROUTE53_SECRET_ACCESS_KEY") \
       -v '/etc/letsencrypt:/etc/letsencrypt' \
