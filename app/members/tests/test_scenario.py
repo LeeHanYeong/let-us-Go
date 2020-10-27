@@ -65,4 +65,4 @@ class MembersScenarioTest(APITestCase):
         user = User.objects.get(id=response.data["id"])
         self.assertEqual(user.username, uid)
         self.assertEqual(user.email, email)
-        self.assertEqual(user.email_verification.code, code)
+        self.assertFalse(hasattr(user, "email_verification"))
