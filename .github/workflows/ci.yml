@@ -32,7 +32,7 @@ jobs:
     - name: Set env
       run: |
         branch=${GITHUB_REF##*/}
-        echo ::set-env name=BRANCH::$branch
+        echo "BRANCH=$branch" >> $GITHUB_ENV
 
     - name: Install dependencies
       run: |

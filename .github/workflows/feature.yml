@@ -13,7 +13,7 @@ jobs:
     - name: Set env
       run: |
         branch=${GITHUB_REF##*/}
-        echo ::set-env name=BRANCH::$branch
+        echo "BRANCH=$branch" >> $GITHUB_ENV
 
     - name: Deploy EC2 docker-compose
       uses: peterkimzz/aws-ssm-send-command@1.0.4
