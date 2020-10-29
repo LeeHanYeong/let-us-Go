@@ -80,14 +80,18 @@ class EmailVerificationAPITest(APITestCase):
 
     def test_create(self):
         email = "sample@sample.com"
-        response = self.client.post(self.URL, data={"email": email}, format="json")
+        response = self.client.post(
+            self.URL, data={"type": EmailVerification.TYPE_SIGNUP, "email": email}
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(mail.outbox[0].subject, "let us: Go! 이메일 인증 코드 안내")
 
     def test_create_failed(self):
         with patch("members.models.send_mail", return_value=0):
             email = "sample@sample.com"
-            response = self.client.post(self.URL, data={"email": email}, format="json")
+            response = self.client.post(
+                self.URL, data={"type": EmailVerification.TYPE_SIGNUP, "email": email}
+            )
             self.assertEqual(
                 response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR
             )
@@ -96,15 +100,23 @@ class EmailVerificationAPITest(APITestCase):
     def test_create_type_signup_failed_when_user_email_exists(self):
         email = "sample@sample.com"
         baker.make(User, email=email)
-        response = self.client.post(self.URL, data={"email": email})
+        response = self.client.post(
+            self.URL, data={"type": EmailVerification.TYPE_SIGNUP, "email": email}
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data[0]["message"], f"해당 이메일({email})은 이미 사용중입니다")
+        self.assertEqual(
+            response.data["email"][0]["message"], f"해당 이메일({email})은 이미 사용중입니다"
+        )
 
     def test_multi_create_only_remain_one(self):
         email = "sample@sample.com"
-        response1 = self.client.post(self.URL, data={"email": email}, format="json")
+        response1 = self.client.post(
+            self.URL, data={"type": EmailVerification.TYPE_SIGNUP, "email": email}
+        )
         self.assertEqual(response1.status_code, status.HTTP_201_CREATED)
-        response2 = self.client.post(self.URL, data={"email": email}, format="json")
+        response2 = self.client.post(
+            self.URL, data={"type": EmailVerification.TYPE_SIGNUP, "email": email}
+        )
         self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
         self.assertEqual(EmailVerification.objects.filter(email=email).count(), 1)
 

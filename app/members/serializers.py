@@ -76,7 +76,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
             try:
                 email_verification = EmailVerification.objects.get(
-                    type=data["type"], email=data.get("email", "")
+                    type=EmailVerification.TYPE_SIGNUP, email=data.get("email", "")
                 )
             except EmailVerification.DoesNotExist:
                 raise EmailVerificationDoesNotExist(
@@ -235,8 +235,8 @@ class EmailVerificationCheckSerializer(serializers.Serializer):
 
 
 class EmailVerificationCreateSerializer(serializers.ModelSerializer):
-    type = serializers.HiddenField(default=EmailVerification.TYPE_SIGNUP)
-    email = serializers.EmailField(required=True)
+    type = serializers.CharField(required=True)
+    email = serializers.CharField(required=True)
 
     class Meta:
         model = EmailVerification
@@ -244,6 +244,17 @@ class EmailVerificationCreateSerializer(serializers.ModelSerializer):
             "type",
             "email",
         )
+
+    def validate(self, attrs):
+        # 회원가입으로 이메일인증을 생성하려는데, 이미 해당 이메일을 사용하는 유저가 있는 경우
+        ev_type = attrs["type"]
+        email = attrs["email"]
+        if (
+            ev_type == EmailVerification.TYPE_SIGNUP
+            and User.objects.filter(email=email).exists()
+        ):
+            raise ValidationError({"email": f"해당 이메일({email})은 이미 사용중입니다"})
+        return attrs
 
     def to_representation(self, instance):
         if settings.LOCAL:

@@ -59,7 +59,7 @@ class EmailVerificationCreateSerializerTest(TestCase):
         email = "sample@sample.com"
         baker.make(User, email=email)
 
-        data = {"email": email}
+        data = {"type": EmailVerification.TYPE_SIGNUP, "email": email}
         with self.assertRaises(ValidationError) as cm:
             serializer = EmailVerificationCreateSerializer(data=data)
             serializer.is_valid(raise_exception=True)
