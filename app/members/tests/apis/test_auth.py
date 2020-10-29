@@ -93,12 +93,20 @@ class EmailVerificationAPITest(APITestCase):
             )
             self.assertEqual(len(mail.outbox), 0)
 
-    def test_multi_create(self):
+    def test_create_type_signup_failed_when_user_email_exists(self):
+        email = "sample@sample.com"
+        baker.make(User, email=email)
+        response = self.client.post(self.URL, data={"email": email})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data[0]["message"], f"해당 이메일({email})은 이미 사용중입니다")
+
+    def test_multi_create_only_remain_one(self):
         email = "sample@sample.com"
         response1 = self.client.post(self.URL, data={"email": email}, format="json")
         self.assertEqual(response1.status_code, status.HTTP_201_CREATED)
         response2 = self.client.post(self.URL, data={"email": email}, format="json")
         self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(EmailVerification.objects.filter(email=email).count(), 1)
 
     def test_check(self):
         email = "sample@sample.com"

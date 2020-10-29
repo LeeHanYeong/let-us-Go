@@ -136,9 +136,21 @@ class EmailVerification(TimeStampedModel):
             send=self.get_status_send_display(),
         )
 
+    def clean(self):
+        # 회원가입으로 이메일인증을 생성하려는데, 이미 해당 이메일을 사용하는 유저가 있는 경우
+        if (
+            self.type == self.TYPE_SIGNUP
+            and User.objects.filter(email=self.email).exists()
+        ):
+            raise ValidationError(f"해당 이메일({self.email})은 이미 사용중입니다")
+
     def save(self, **kwargs):
+        self.clean()
         if not self.code:
             self.code = get_random_string(6, allowed_chars=string.digits)
+
+        # 해당 이메일로 이미 존재하던 인증 삭제
+        EmailVerification.objects.filter(type=self.type, email=self.email).delete()
         super().save(**kwargs)
 
     def reset_code(self):

@@ -5,6 +5,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
+from sentry_sdk import capture_exception
 
 from utils.drf.exceptions import (
     EmailVerificationDoesNotExist,
@@ -75,16 +76,27 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
             try:
                 email_verification = EmailVerification.objects.get(
-                    email=data.get("email", "")
+                    type=data["type"], email=data.get("email", "")
                 )
-                if email_verification.code != data["email_verification_code"]:
-                    raise EmailVerificationCodeInvalid(
-                        {"email_verification_code": "이메일 인증코드가 유효하지 않습니다"}
-                    )
             except EmailVerification.DoesNotExist:
                 raise EmailVerificationDoesNotExist(
                     {"email_verification_code": "이메일 인증정보가 존재하지 않습니다"}
                 )
+            except EmailVerification.MultipleObjectsReturned as e:
+                # 여러개가 온다면, 로직상 문제가 있으므로 점검
+                capture_exception(e)
+
+                ev_list = EmailVerification.objects.filter(
+                    type=data["type"], email=data.get("email", "")
+                ).order_by("-pk")
+                email_verification = ev_list[0]
+                ev_list.exclude(pk=email_verification.pk).delete()
+
+            if email_verification.code != data["email_verification_code"]:
+                raise EmailVerificationCodeInvalid(
+                    {"email_verification_code": "이메일 인증코드가 유효하지 않습니다"}
+                )
+
         return data
 
     def create(self, validated_data):
@@ -232,11 +244,6 @@ class EmailVerificationCreateSerializer(serializers.ModelSerializer):
             "type",
             "email",
         )
-
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise ValidationError(f'"{value}"은(는) 이미 사용중인 이메일입니다')
-        return value
 
     def to_representation(self, instance):
         if settings.LOCAL:
