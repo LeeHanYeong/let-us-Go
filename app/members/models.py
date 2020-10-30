@@ -224,4 +224,10 @@ class EmailVerification(TimeStampedModel):
             self.TYPE_PASSWORD_RESET: _send_type_password_reset,
         }
         with transaction.atomic():
+            if self.type not in type_function.keys():
+                raise ValueError(
+                    '이메일인증의 유형은 "{types}"중 하나여야 합니다'.format(
+                        types=", ".join(type_function.keys())
+                    )
+                )
             return type_function[self.type]()

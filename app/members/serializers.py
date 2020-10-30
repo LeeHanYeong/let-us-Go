@@ -209,13 +209,11 @@ class GetSocialAuthTokenSerializer(serializers.Serializer):
         return attrs
 
 
-class EmailVerificationCheckSerializer(serializers.Serializer):
-    type = serializers.HiddenField(default=EmailVerification.TYPE_SIGNUP)
-    email = serializers.CharField(required=True)
+class EmailVerificationCheckSerializer(serializers.ModelSerializer):
     code = serializers.CharField(required=True)
 
     class Meta:
-        model = Token
+        model = EmailVerification
         fields = (
             "type",
             "email",
@@ -235,7 +233,6 @@ class EmailVerificationCheckSerializer(serializers.Serializer):
 
 
 class EmailVerificationCreateSerializer(serializers.ModelSerializer):
-    type = serializers.CharField(required=True)
     email = serializers.CharField(required=True)
 
     class Meta:
