@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 
 from members.urls import members_patterns, auth_patterns
 from .. import views, apis

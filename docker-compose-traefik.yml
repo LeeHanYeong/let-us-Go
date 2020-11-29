@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
       args:
         requirements: requirements_dev.txt
-        gunicorn: /srv/.config/gunicorn_dev.py
+        gunicorn: /srv/.deploy/gunicorn_dev.py
         wsgi: config.wsgi.production_dev
         settings: config.settings.production_dev
     volumes:
@@ -39,7 +39,7 @@ services:
 #      dockerfile: Dockerfile
 #      args:
 #        requirements: requirements_dev.txt
-#        gunicorn: /srv/.config/gunicorn_dev.py
+#        gunicorn: /srv/.deploy/gunicorn_dev.py
 #        wsgi: config.wsgi.production_dev
 #        settings: config.settings.production_dev
 #    volumes:
@@ -53,7 +53,7 @@ services:
 #      dockerfile: Dockerfile
 #      args:
 #        requirements: requirements.txt
-#        gunicorn: /srv/.config/gunicorn_master.py
+#        gunicorn: /srv/.deploy/gunicorn_master.py
 #        wsgi: config.wsgi.production_master
 #        settings: config.settings.production_master
 #    volumes:

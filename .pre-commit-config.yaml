@@ -3,7 +3,10 @@ repos:
     rev: v2.4.0
     hooks:
       - id: trailing-whitespace
+
       - id: check-yaml
+        exclude: .*docker-compose.*?y(am|m)l
+
       - id: check-added-large-files
 
   - repo: https://github.com/psf/black
@@ -14,10 +17,20 @@ repos:
 
   - repo: local
     hooks:
-      - id: poetry-export
-        name: Poetry export
-        description: Poetry export requirements.txt
-        entry: python .scripts/pre_commit.py
-        always_run: true
+      - id: make-dockerfile
+        name: Make Dockerfile.deploy
         language: system
-        types: [python]
+        entry: bash -c '
+          .scripts/make_dockerfile.py &&
+          git add Dockerfile.deploy'
+        files: Dockerfile|.scripts/make_dockerfile.py
+
+      - id: poetry-export
+        name: Poetry export requirements
+        language: system
+        description: Poetry export requirements.txt
+        entry: bash -c '
+          poetry export --without-hashes -o requirements.txt &&
+          poetry export --without-hashes --dev -o requirements_dev.txt &&
+          git add requirements*.txt'
+        files: pyproject.toml|poetry.lock

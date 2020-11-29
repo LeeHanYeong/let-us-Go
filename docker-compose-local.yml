@@ -4,7 +4,7 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - .config/nginx_dev.conf:/etc/nginx/conf.d/default.conf
+      - .deploy/nginx_dev.conf:/etc/nginx/conf.d/default.conf
       - static-feature:/srv/feature/.static
       - static-dev:/srv/dev/.static
       - static-master:/srv/master/.static
@@ -19,7 +19,7 @@ services:
       dockerfile: Dockerfile
       args:
         requirements: requirements_dev.txt
-        gunicorn: /srv/.config/gunicorn_dev.py
+        gunicorn: /srv/.deploy/gunicorn_dev.py
         wsgi: config.wsgi.production_dev
         settings: config.settings.production_dev
     volumes:
@@ -33,7 +33,7 @@ services:
       dockerfile: Dockerfile
       args:
         requirements: requirements_dev.txt
-        gunicorn: /srv/.config/gunicorn_dev.py
+        gunicorn: /srv/.deploy/gunicorn_dev.py
         wsgi: config.wsgi.production_dev
         settings: config.settings.production_dev
     volumes:
@@ -47,7 +47,7 @@ services:
       dockerfile: Dockerfile
       args:
         requirements: requirements.txt
-        gunicorn: /srv/.config/gunicorn_master.py
+        gunicorn: /srv/.deploy/gunicorn_master.py
         wsgi: config.wsgi.production_master
         settings: config.settings.production_master
     volumes:

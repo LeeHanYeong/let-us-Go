@@ -10,7 +10,7 @@ RUN         ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/ti
 COPY        .deploy/pgdg.list /tmp/
 ADD         https://www.postgresql.org/media/keys/ACCC4CF8.asc /tmp/
 
-RUN         --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
+RUN         \
             apt -y update &&\
             apt -y install gnupg &&\
             apt-key add /tmp/ACCC4CF8.asc &&\
@@ -27,9 +27,9 @@ RUN         cp /tmp/pgdg.list /etc/apt/sources.list.d/ &&\
 ARG         requirements
 COPY        $requirements /tmp/$requirements
 
-RUN         --mount=type=cache,targ et=/root/.cache/pip \
-            pip install supervisor &&\
-            pip install -r /tmp/$requirements
+RUN         \
+            pip install --no-cache-dir supervisor &&\
+            pip install --no-cache-dir -r /tmp/$requirements
 
 # Log folders
 RUN         mkdir /var/log/gunicorn &&\
