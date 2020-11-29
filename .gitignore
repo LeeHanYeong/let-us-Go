@@ -4,6 +4,7 @@ db.dump
 dump.json
 .sass-cache/
 *.ipynb
+/.secrets
 
 # ignore directories
 /.static
