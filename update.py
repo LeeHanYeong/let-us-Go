@@ -19,8 +19,10 @@ if __name__ == "__main__":
     run(f"sudo cp -f .scripts/ssl_renew.sh /etc/cron.monthly")
     run(f"docker-compose build django_{branch}")
     run(f"docker-compose stop django_{branch}")
-    run(f"docker-compose up --force-recreate --remove-orphans -d django_{branch}")
+    run(
+        f"docker-compose -p letusgo up --force-recreate --remove-orphans -d django_{branch}"
+    )
     run(f"docker system prune -a --volumes -f")
     if branch == "feature":
-        run(f"docker-compose up --force-recreate -d nginx")
+        run(f"docker-compose -p letusgo up --force-recreate -d nginx")
     print("Update complete")

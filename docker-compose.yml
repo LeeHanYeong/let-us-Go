@@ -17,7 +17,7 @@ services:
   django_feature:
     build:
       context: https://github.com/LeeHanYeong/let-us-Go.git#feature
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.deploy
       args:
         requirements: requirements_dev.txt
         gunicorn: /srv/.deploy/gunicorn_dev.py
@@ -34,7 +34,7 @@ services:
   django_develop:
     build:
       context: https://github.com/LeeHanYeong/let-us-Go.git#develop
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.deploy
       args:
         requirements: requirements_dev.txt
         gunicorn: /srv/.deploy/gunicorn_dev.py
@@ -48,7 +48,7 @@ services:
   django_master:
     build:
       context: https://github.com/LeeHanYeong/let-us-Go.git#master
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.deploy
       args:
         requirements: requirements.txt
         gunicorn: /srv/.deploy/gunicorn_master.py
