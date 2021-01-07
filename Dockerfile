@@ -27,7 +27,7 @@ RUN         cp /tmp/pgdg.list /etc/apt/sources.list.d/ &&\
 ARG         requirements
 COPY        $requirements /tmp/$requirements
 
-RUN         --mount=type=cache,targ et=/root/.cache/pip \
+RUN         --mount=type=cache,target=/root/.cache/pip \
             pip install supervisor &&\
             pip install -r /tmp/$requirements
 

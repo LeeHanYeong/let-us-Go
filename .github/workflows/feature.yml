@@ -25,6 +25,6 @@ jobs:
         instance-ids: |
           ${{ secrets.AWS_INSTANCE_ID }}
 
-        working-directory: /home/ubuntu/let-us-go
+        working-directory: /home/lhy/projects/letusgo/backend
         command: sudo -H -u ubuntu bash -c 'python3 update.py ${{ env.BRANCH }}'
         comment: Executed by Github Actions
