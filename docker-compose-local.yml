@@ -26,6 +26,9 @@ services:
       - static-feature:/srv/.static
     env_file:
       - .env
+    command: bash -c '
+      python manage.py collectstatic --noinput &&
+      gunicorn -c /srv/.deploy/gunicorn_dev.py config.wsgi.production_dev'
 
   django_develop:
     build:

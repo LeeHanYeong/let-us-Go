@@ -32,6 +32,13 @@ RUN         --mount=type=cache,target=/root/.cache/pip \
             pip install supervisor &&\
             pip install -r /tmp/$requirements
 
+ARG         wsgi
+ENV         wsgi ${wsgi}
+ARG         gunicorn
+ENV         gunicorn ${gunicorn}
+ARG         settings
+ENV         DJANGO_SETTINGS_MODULE ${settings}
+
 # Log folders
 RUN         mkdir /var/log/gunicorn &&\
             mkdir /var/log/celery
@@ -41,4 +48,6 @@ COPY        .   /srv/
 WORKDIR     /srv/app
 
 EXPOSE      8000
-CMD         python manage.py shell_plus --plain
+CMD         python manage.py collectstatic --noinput &&\
+            python manage.py migrate --noinput &&\
+            gunicorn -c ${gunicorn} ${wsgi}
