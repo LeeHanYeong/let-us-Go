@@ -50,7 +50,6 @@ recommonmark = "^0.6.0"
 phonenumberslite = "^8.12.7"
 pillow = "^7.2"
 psycopg2-binary = "^2.8"
-gevent = "^1.4"
 gunicorn = "^20.0.4"
 
 [tool.poetry.dev-dependencies]

@@ -6,7 +6,6 @@ babel==2.9.0; python_version >= "3.5" and python_full_version < "3.0.0" or pytho
 boto3==1.16.50; python_version > "3.5"
 botocore==1.19.50; python_version > "3.5"
 certifi==2020.12.5; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
-cffi==1.14.4; platform_python_implementation == "CPython" and sys_platform == "win32" and (python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0")
 chardet==4.0.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 codecov==2.1.11; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.4.0")
 colorama==0.4.4; python_version >= "3.6" and python_full_version < "3.0.0" and sys_platform == "win32" or python_full_version >= "3.5.0" and python_version >= "3.6" and sys_platform == "win32"
@@ -38,8 +37,6 @@ docutils==0.16; python_version >= "3.5" and python_full_version < "3.0.0" or pyt
 drf-writable-nested==0.5.4
 drf-yasg==1.20.0; python_version >= "3.6"
 easy-thumbnails==2.7.1; python_version >= "3.5"
-gevent==1.5.0; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0")
-greenlet==0.4.17; python_version >= "2.7" and python_full_version < "3.0.0" and platform_python_implementation == "CPython" or python_full_version >= "3.5.0" and platform_python_implementation == "CPython"
 gunicorn==20.0.4; python_version >= "3.4"
 idna==2.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 imagesize==1.2.0; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.5"
@@ -57,7 +54,6 @@ pillow==7.2.0; python_version >= "3.5"
 pluggy==0.13.1; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 psycopg2-binary==2.8.6; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.4.0")
 py==1.10.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
-pycparser==2.20; python_version >= "2.7" and python_full_version < "3.0.0" and platform_python_implementation == "CPython" and sys_platform == "win32" and (python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0") or platform_python_implementation == "CPython" and sys_platform == "win32" and (python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0") and python_full_version >= "3.4.0"
 pygments==2.7.3; python_version >= "3.5"
 pyparsing==2.4.7; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.7"
 pytest-cov==2.10.1; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0")
