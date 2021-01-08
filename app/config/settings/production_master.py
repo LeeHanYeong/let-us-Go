@@ -40,6 +40,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
+# Sentry
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[DjangoIntegration()],
+    environment=ENV,
+    send_default_pii=True,
+)
+
 
 def is_ec2_linux():
     """
@@ -78,15 +86,3 @@ if private_ip:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = True
-
-    # Sentry
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[DjangoIntegration()],
-        send_default_pii=True,
-    )
-else:
-    DEBUG = True
-    ALLOWED_HOSTS += [
-        "api.localhost",
-    ]

@@ -8,7 +8,10 @@ DEBUG = True
 AWS_SECRETS_MANAGER_SECRET_SECTION = "letusgo:production_dev"
 AWS_STORAGE_BUCKET_NAME = SECRETS["AWS_STORAGE_BUCKET_NAME"]
 
-ALLOWED_HOSTS += SECRETS["ALLOWED_HOSTS"]
+ALLOWED_HOSTS = [
+    "api.dev.letusgo.app",
+    "api.feature.letusgo.app",
+]
 DATABASES = SECRETS["DATABASES"]
 API_KEY_FRONT_DEPLOY = SECRETS["API_KEY_FRONT_DEPLOY"]
 SENTRY_DSN = SECRETS["SENTRY_DSN"]
@@ -22,15 +25,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 # WSGI
 WSGI_APPLICATION = "config.wsgi.production_dev.application"
 
-if private_ip:
-    # Sentry
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[DjangoIntegration()],
-        send_default_pii=True,
-    )
-else:
-    ALLOWED_HOSTS += [
-        "api.dev.letusgo.app",
-        "api.feature.letusgo.app",
-    ]
+# Sentry
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[DjangoIntegration()],
+    environment=ENV,
+    send_default_pii=True,
+)

@@ -12,6 +12,7 @@ from .static import *
 
 ALLOWED_HOSTS = []
 LOCAL = False
+ENV = os.environ.get("DJANGO_SETTINGS_MODULE", "config.settings.dev").rsplit(".", 1)[-1]
 
 # Date/Time Format
 DATE_FORMAT = "Y년 m월 d일"
