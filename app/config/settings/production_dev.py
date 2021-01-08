@@ -31,6 +31,6 @@ if private_ip:
     )
 else:
     ALLOWED_HOSTS += [
-        "api.dev.localhost",
-        "api.feature.localhost",
+        "api.dev.letusgo.app",
+        "api.feature.letusgo.app",
     ]
