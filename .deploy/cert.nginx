@@ -1,0 +1,12 @@
+server {
+  listen        80;
+  server_name   letusgo.app api.letusgo.app www.letusgo.app api.dev.letusgo.app;
+  server_tokens off;
+
+  access_log  /var/log/nginx/access.log;
+  error_log   /var/log/nginx/error.log;
+
+  location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+  }
+}
