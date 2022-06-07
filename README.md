@@ -9,7 +9,7 @@
 
 iOS 세미나 **`let us: Go!`** 의 API서버 애플리케이션
 
->  API문서: https://api.dev.letusgo.app/doc
+>  API문서: https://api-dev.letusgo.app/doc
 
 ## Requirements
 
@@ -25,7 +25,7 @@ iOS 세미나 **`let us: Go!`** 의 API서버 애플리케이션
 - pre-commit
 - black
 
-> **Poetry, pre-commit, black은 brew를 사용해 설치**  
+> **Poetry, pre-commit, black은 brew를 사용해 설치**
 > brew install poetry pre-commit black
 
 

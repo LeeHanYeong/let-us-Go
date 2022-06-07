@@ -3,7 +3,7 @@ BASIC_DESCRIPTION = """
 base64로 인코딩된 **사용자ID/비밀번호** 쌍을 Header에 전달\n
 HTTP Request의 Header `Authorization`에
 `Basic <base64로 인코딩된 "username:password" 문자열>`값을 넣어 전송\n
-**개발서버에서만 편의를 위해 제공(api.dev.letusgo.app)**
+**개발서버에서만 편의를 위해 제공(api-dev.letusgo.app)**
 
 ```
 Authorization: Basic ZGVmYXVsdF9jb21wYW55QGxoeS5rcjpkbGdrc2R1ZA==

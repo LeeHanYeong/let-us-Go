@@ -1,37 +1,15 @@
 version: '3'
 
 services:
-  nginx-letusgo-backend:
+  letusgo:
     image: nginx:alpine
     volumes:
       - .deploy/nginx.conf:/etc/nginx/conf.d/default.conf
-      - /etc/letsencrypt:/etc/letsencrypt
-      - /var/lib/letsencrypt:/var/lib/letsencrypt
-      - static-feature:/srv/feature/.static
       - static-dev:/srv/dev/.static
       - static-master:/srv/master/.static
     networks:
       - default
       - proxy
-
-  django_feature:
-    build:
-      context: https://github.com/LeeHanYeong/let-us-Go.git#feature
-      dockerfile: Dockerfile.deploy
-      args:
-        requirements: requirements_dev.txt
-        gunicorn: /srv/.deploy/gunicorn_dev.py
-        wsgi: config.wsgi.production_dev
-        settings: config.settings.production_dev
-    volumes:
-      - static-feature:/srv/.static
-    env_file:
-      - .env
-    command: bash -c '
-      python manage.py collectstatic --noinput &&
-      gunicorn -c /srv/.deploy/gunicorn_dev.py config.wsgi.production_dev'
-    networks:
-      - default
 
   django_develop:
     build:
@@ -68,7 +46,6 @@ services:
 volumes:
   static-dev:
   static-master:
-  static-feature:
 
 networks:
   default:

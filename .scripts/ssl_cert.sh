@@ -6,7 +6,7 @@ export $(cat /home/lhy/projects/letusgo/backend/.env | xargs) && docker run --rm
       -v '/var/lib/letsencrypt:/var/lib/letsencrypt' \
       certbot/dns-route53 certonly --dns-route53 \
       -d '*.letusgo.app' \
-      -d api.dev.letusgo.app \
+      -d api-dev.letusgo.app \
       -d api.feature.letusgo.app \
       -d letusgo.app \
       --agree-tos

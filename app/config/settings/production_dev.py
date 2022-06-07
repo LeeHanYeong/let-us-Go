@@ -9,8 +9,7 @@ AWS_SECRETS_MANAGER_SECRET_SECTION = "letusgo:production_dev"
 AWS_STORAGE_BUCKET_NAME = SECRETS["AWS_STORAGE_BUCKET_NAME"]
 
 ALLOWED_HOSTS = [
-    "api.dev.letusgo.app",
-    "api.feature.letusgo.app",
+    "api-dev.letusgo.app",
 ]
 DATABASES = SECRETS["DATABASES"]
 API_KEY_FRONT_DEPLOY = SECRETS["API_KEY_FRONT_DEPLOY"]
